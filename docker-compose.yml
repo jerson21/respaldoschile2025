@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  php:
+    build: .
+    container_name: php-app
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  
+  db:
+    image: mariadb:10.5
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cre61650_agenda
+      MYSQL_USER: cre61650_respaldos21
+      MYSQL_PASSWORD: respaldos21/
+    volumes:
+      - db_data:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+      - UPLOAD_LIMIT=100M
+      - MEMORY_LIMIT=256M
+      - MAX_EXECUTION_TIME=300
+    volumes:
+      - ./phpmyadmin-uploads.ini:/usr/local/etc/php/conf.d/phpmyadmin-uploads.ini
+      
+volumes:
+  db_data:
