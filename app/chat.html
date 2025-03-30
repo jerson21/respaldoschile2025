@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat en tiempo real</title>
+</head>
+<body>
+    <div id="chat"></div>
+    <form>
+        <input type="text" id="message" placeholder="Escribe tu mensaje aquí">
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        var conn = new WebSocket('wss://18.236.137.26:3000');
+
+        conn.onopen = function(e) {
+            console.log("Conectado al servidor!");
+        };
+
+        conn.onmessage = function(e) {
+            $('#chat').append('<p>' + e.data + '</p>');
+        };
+
+        $('form').submit(function() {
+            var message = $('#message').val();
+            conn.send(message);
+            $('#message').val('');
+            return false;
+        });
+    </script>
+</body>
+</html>

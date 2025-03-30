@@ -1,0 +1,13 @@
+{
+    "require": {
+        "axiom/rivescript": "^0.3.0",
+         "cboden/ratchet": "^0.4.3",
+        "react/socket": "1.7",
+        "microsoft/signalr": "^3.1"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    }
+}

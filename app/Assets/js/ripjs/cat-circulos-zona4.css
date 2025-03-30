@@ -1,0 +1,88 @@
+@font-face {
+  font-family: "Gotham-Bold";
+  src: url(https://minisitios.ripley.cl/minisitios/estatico/fonts/font-gotham/Gotham-Bold.woff);
+}
+
+#lo_tenemos_todo {
+  text-align: center;
+  font-family: "Gotham-Bold";
+  max-width: 1140px;
+  margin: auto;
+  margin-top: 60px;
+  font-size: 16px;
+}
+
+#lo_tenemos_todo {
+}
+
+
+.titulo-ol {
+  width: 100%;
+  max-height: 60px;
+}
+
+.titulo-ol-2 {
+  display: none;
+}
+
+#lo_tenemos_todo h2 {
+  font-family: "Gotham-Bold";
+  font-size: 1.2em !important;
+  color: #000000 !important;
+}
+
+#lo_tenemos_todo p {
+  font-family: "Gotham-Bold";
+  color: #000000 !important;
+  font-size: 1em !important;
+}
+
+.carrusel-ol img {
+  width: 100%;
+}
+
+#carrusel_OL .splide__pagination {
+  bottom: -1.5em;
+}
+#carrusel_OL .splide__pagination__page.is-active {
+  background: gray;
+}
+
+.titulo-ol2 {
+  display: none;
+}
+
+#lo_tenemos_todo .splide__arrow {
+  top: 40%;
+}
+
+@media (min-width: 768px) {
+  #lo_tenemos_todo .splide__arrow {
+    top: 50%;
+  }
+  .titulo_ol {
+    width: 66%;
+  }
+  #lo_tenemos_todo h2 {
+    font-size: 1.5em !important;
+  }
+  .titulo-ol2 {
+    display: block;
+  }
+
+  .titulo-ol-2 {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: block;
+    padding: 0 20px;
+    font-family: "Gotham-Bold";
+  }
+
+  #splide_1 .splide__arrow--prev {
+    left: -1em;
+  }
+  #splide_1 .splide__arrow--next {
+    right: -1em;
+  }
+}

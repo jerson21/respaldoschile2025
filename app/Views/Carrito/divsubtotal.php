@@ -1,0 +1,4 @@
+<?php   
+headerTienda($data);
+
+?>

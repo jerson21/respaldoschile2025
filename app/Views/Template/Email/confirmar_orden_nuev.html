@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Orden</title>
+	<style type="text/css">
+		p{
+			font-family: arial;letter-spacing: 1px;color: #7f7f7f;font-size: 12px;
+		}
+		hr{border:0; border-top: 1px solid #CCC;}
+		h4{font-family: arial; margin: 0;}
+		table{width: 100%; max-width: 600px; margin: 10px auto; border: 1px solid #CCC; border-spacing: 0;}
+		table tr td, table tr th{padding: 5px 10px;font-family: arial; font-size: 12px;}
+		#detalleOrden tr td{border: 1px solid #CCC;}
+		.table-active{background-color: #CCC;}
+		.text-center{text-align: center;}
+		.text-right{text-align: right;}
+
+		@media screen and (max-width: 470px) {
+			.logo{width: 90px;}
+			p, table tr td, table tr th{font-size: 9px;}
+		}
+
+		
+	</style>
+</head>
+<body style="">
+
+
+
+
+
+	<div style="">
+		<br>
+		<table style="border:none;">
+			<td class="text-center" >   
+					<img class="logo" src="https://tienda2.respaldoschile.cl/Assets/tienda/images/logo2.png" width="30%" alt="Logo">
+					<p style=" margin: 0; text-align: center;  background-color: #ffffff; color: #263238;   font-family: 'Speedee',Arial; font-size: 36px; font-weight: bold;">Gracias, nombre!<br>Tu pedido fue confirmado</p>
+					<p>
+							
+
+				</td>
+
+				</table>
+		<p class="text-center"> <td></td>
+							No. Orden: <strong><?= $orden['idpedido'] ?></strong><br>
+                            Fecha: <?= $orden['fecha'] ?><br>
+                            <?php 
+								if($orden['tipopagoid'] == 1){
+							 ?>
+                            Método Pago: <?= $orden['tipopago'] ?> <br>
+                            Transacción: <?= $orden['idtransaccionpaypal'] ?>
+                        <?php }else{ ?>
+                        	Método Pago: Por Pagar <br>
+							Tipo Pago: <?= $orden['tipopago'] ?>
+                        <?php } ?>
+
+						<td></td><td></td></p>
+						<p class="text-center" style="color: black;"> <td></td>
+ <?php 
+								if($orden['tipopagoid'] == 1){
+							 ?>
+                           
+                        <?php }else{ ?>
+                        								A continuación encontrarás los datos para que realices la transferencia antes de 48 horas, después de ese periodo se anulara el pedido.<br>
+Para asistencia sobre el pago o dudas del producto, por favor contáctenos por whatsapp al  <?= TELEMPRESA ?> o al mail <?= EMAIL_EMPRESA ?>, en horario de atención de tienda (lunes a viernes de 09:00 a 18:00 hrs.).<br>
+
+En el caso que la transacción se realice un día viernes, fin de semana o feriado el tiempo de despacho contara desde el dia habil siguiente. <br><br>
+<b>Respaldos Chile SPA<br>
+Banco de Crédito e inversiones(BCI)<br>
+Tipo de cuenta: Cuenta Corriente<br>
+Cuenta: 46328157<br>
+RUT: 77.186.031-1<br>
+Monto:<br>
+Correo: contacto@respaldoschile.cl <b><br>
+                        <?php } ?>
+
+
+
+
+						<td></td><td></td></p>
+
+<p class="text-center"> 
+
+						<img class="logo" src="https://tienda2.respaldoschile.cl/Assets/images/comprobado.png" width="5%" alt="Logo"></p>
+
+		<br>
+		<hr>
+		<br>
+		<td width="33.33%">
+					
+
+				</td>
+		<table style="border:none;">
+			
+			<tr >
+				
+				
+						
+			</tr>
+		</table>
+		<table>
+			<tr>
+		    	<td width="140">Nombre:</td>
+		    	<td><?= $_SESSION['userData']['nombres'].' '.$_SESSION['userData']['apellidos'] ?></td>
+		    </tr>
+		    <tr>
+		    	<td>Teléfono</td>
+		    	<td><?= $_SESSION['userData']['telefono'] ?></td>
+		    </tr>
+		    <tr>
+		    	<td>Dirección de envío:</td>
+		    	<td><?= $orden['direccion_envio'] ?></td>
+
+		    </tr>
+
+		</table>
+		<table>
+		  <thead >
+
+		  	<td><h1>Detalle del pedido</h1></td>
+		   
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		      <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		      <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		      <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		      <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		    <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		    <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      
+		    </tr>
+		    <tr>
+		      <td>Teclado USB 200 100 1 <hr></td>
+		      <hr>
+		    </tr>
+		  </tbody>
+		  <tfoot>
+		  		<tr>
+		  			<th colspan="3" class="text-right">Subtotal:</th>
+		  			<td class="text-right">200</td>
+		  		</tr>
+		  		<tr>
+		  			<th colspan="3" class="text-right">Envío:</th>
+		  			<td class="text-right">10</td>
+		  		</tr>
+		  		<tr>
+		  			<th colspan="3" class="text-right">Total:</th>
+		  			<td class="text-right">200</td>
+		  		</tr>
+		  </tfoot>
+		</table>
+		<div class="text-center">
+			 <p>Muy pronto estaremos en contacto para coordinar la entrega.</p>
+  <p>Puedes ver el estado de tu pedido en la sección pedidos de tu usuario.</p>
+			<h4>¡Gracias por tu compra!</h4>			
+		</div>
+	</div>									
+</body>
+</html>

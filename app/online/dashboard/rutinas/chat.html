@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ratchet Chat Example</title>
+</head>
+<body>
+    <input type="text" id="message" placeholder="Enter a message">
+    <button onclick="send()">Send</button>
+    <ul id="messages"></ul>
+    <script>
+        var conn = new WebSocket('wss://respaldoschile.herokuapp.com');
+        conn.onopen = function() {
+            console.log('Connected');
+        };
+        conn.onmessage = function(e) {
+            var messageList = document.getElementById('messages');
+            var messageItem = document.createElement('li');
+            messageItem.innerHTML = e.data;
+            messageList.appendChild(messageItem);
+        };
+        function send() {
+            var messageInput = document.getElementById('message');
+            var message = messageInput.value;
+            messageInput.value = '';
+            conn.send(message);
+        }
+    </script>
+</body>
+</html>

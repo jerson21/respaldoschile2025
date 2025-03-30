@@ -1,0 +1,797 @@
+[2024-07-10 20:05:56] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertCliente
+    [rut] => 18693008-8
+    [nombre] => Jerson
+    [apellido] => Santibañez
+    [telefono] => 956344617
+    [correo] => jerson.cra@gmail.com
+)
+ Respuesta: 
+[2024-07-10 20:05:56] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertPedido
+    [rut_cliente] => 18693008-8
+    [fecha_ingreso] => 2024-07-10 20:05:56
+    [despacho] => 4990
+    [total_pagado] => 59990
+    [vendedor] => PAGINAWEB
+    [metodo_entrega] => Despacho
+    [estado] => Pendiente
+    [orden_ext] => 10423
+)
+ Respuesta: Nuevo pedido creado con éxito
+[2024-07-10 20:05:56] Solicitud exitosa a https://respaldoschile.cl/tienda2/respaldoschile/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10423
+    [nombre_producto] => Botone Madrid
+    [tamano] => 2 plazas
+    [color] => AZUL PETROLEO
+    [tipo_tela] => Felpa
+    [altura_base] => 60
+    [precio] => 55000
+    [cantidad] => 1
+    [mododepoago] => Transferencia
+    [direccion] => barcelona
+    [numero] => 161
+    [dpto] => 1102
+    [metodo_entrega] => Despacho
+    [detalle_entrega] => dejar en conserjeria
+    [region] => Región Metropolitana de Santiago
+    [comuna] => La Florida
+)
+ Respuesta: 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>RedecoMuebles</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+		<meta property="og:locale" 		content='es_ES'/>
+	<meta property="og:type"        content="website" />
+	<meta property="og:site_name"	content="RedecoMuebles"/>
+	<meta property="og:description" content="Tienda de productos para el hogar." />
+	<meta name="description" content="Haz tus compras online en Respaldoschile y encuentra las mejores ofertas en respaldos de cama, muebles, hogar, bases de cama, living y más.">
+	<meta property="og:title"       content="RedecoMuebles" />
+	<meta property="og:url"         content="https://www.respaldoschile.cl/tienda2" />
+	<meta property="og:image"       content="https://www.respaldoschile.cl/tienda2/Assets/images/portada.jpg"/>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4RZF9JS7BR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4RZF9JS7BR');
+</script>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '577277577445142');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=577277577445142&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/images/favicon.png"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"  href="https://www.respaldoschile.cl/tienda2/Assets/tienda/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/fonts/iconic/css/material-design-iconic-font.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+
+
+<link rel="stylesheet" href="https://www.respaldoschile.cl/tienda2/Assets/css/floating/floating-wpp.css">
+
+
+
+
+
+
+
+
+<style type="text/css">
+	@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v139/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+</style>
+
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/fonts/linearicons-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/slick/slick.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/MagnificPopup/magnific-popup.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/css/util.css">
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/tienda/css/main.css?v1">
+	<link rel="stylesheet" type="text/css" href="https://www.respaldoschile.cl/tienda2/Assets/css/style.css">
+	
+
+<!--===============================================================================================-->
+</head>
+<!-- Hotjar Tracking Code for https://www.respaldoschile.cl -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:3248367,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+
+<body class="animsition" >
+
+<div id="myButton" style="position: fixed; z-index: 9999;"></div>   
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalAyuda" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Preguntas frecuentes</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      		<div class="page-content">
+	        		<ol> <li><strong>&iquest;Cu&aacute;l es el tiempo de entrega de los producto?&nbsp;</strong>El compromiso que hacemos con nuestros clientes es entregar el producto desde 3 a 10 dias habiles. Algunos modelos o productos tienen un tiempo adicional de fabricaci&oacute;n pero se le indica al momento de agendar su compra.&nbsp;</li> <li><strong>&iquest;C&oacute;mo es la forma de env&iacute;o de los productos?</strong> Ofrecemos un servicio de despacho directo en Santiago, mientras que para env&iacute;os a regiones utilizamos agencias de env&iacute;o. Retiros de producto tienen costo segun comuna.</li> <li><strong>&iquest;Puedo ir directamente a la sala de ventas? </strong>Claro que si, puedes visitarnos en Av Gabriela 02861, La Pintana. Puedes realizar compras directamente Siguiendo las medidas sanitarias actuales.&nbsp;<strong><br /></strong></li> <li><strong>&iquest;Tienen garant&iacute;a? </strong>Todos nuestros productos cuentan con garant&iacute;a por fallas de fabricaci&oacute;n. Te recomendamos que revises el producto antes de recibirlo, ya que la garant&iacute;a se hace efectiva directamente en la f&aacute;brica.</li> <li><strong>&iquest;Puedo realizar un cambio?</strong>&nbsp;<br /> <p>En nuestra empresa, nos especializamos en la fabricaci&oacute;n de productos a medida seg&uacute;n las especificaciones proporcionadas por el cliente. Antes de despachar el producto, enviamos una confirmaci&oacute;n de entrega detallada para asegurarnos de que todo est&eacute; en orden y de que se cumplan las especificaciones requeridas.</p> <p>Es importante que el cliente revise minuciosamente el producto una vez que lo reciba para asegurarse de que est&eacute; en perfectas condiciones y de que se ajuste a las especificaciones acordadas. Si por alguna raz&oacute;n el cliente no est&aacute; satisfecho con el <strong>color</strong> del producto, debe ser rechazado <strong>en el momento de la entrega</strong> y solicitar un nuevo producto.</p> <p>Sin embargo, tenga en cuenta que si el cliente solicita un nuevo producto debido a un problema con el color, se cobrar&aacute; un costo adicional. Esto es necesario para cubrir los costos asociados con el procesamiento y env&iacute;o del nuevo producto.</p> <p><strong><span style="color: #e03e2d;">Nuestra pol&iacute;tica de devoluciones excluye los productos fabricados a medida y color a solicitud del cliente, as&iacute; como los productos informados como outlet, reacondicionados, open box o segunda selecci&oacute;n. A menos que exista un defecto de fabricaci&oacute;n o de calidad que no haya sido informado (en el caso de los productos de segunda selecci&oacute;n), estos productos no son elegibles para devoluci&oacute;n o cambio.</span></strong></p> <div id="main-right-RichText-6afcd317-a5a0-4065-94cf-1d7b67579b23" class="col-md-12 pt-md-5"> <div class="RichText-module_rich-text__JJC63 d-none d-sm-none d-md-block" data-testid="desktop-rich-text">&nbsp;</div> </div> <br /><span style="color: #e03e2d;"><strong>RespaldosChile no se hace responsable si usted env&iacute;a a un tercero a recibir el producto.</strong></span></li> </ol> <p>&nbsp;</p> <p>Otras preguntas</p> <ul> <li><strong>&iquest;Qu&eacute; formas de pago aceptan? </strong><span style="color: #666666; font-family: Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">Debito,Credito, Efectivo y Transferencia Bancaria.<br /></span></li> </ul>	      		</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div id="divLoading" >
+      <div>
+        <img src="https://www.respaldoschile.cl/tienda2/Assets/images/loading.svg" alt="Loading">
+      </div>
+    </div>
+	<!-- Header -->
+	<header>
+		<!-- Header desktop -->
+		<div class="container-menu-desktop">
+			<!-- Topbar -->
+			<div class="top-bar">
+				<div class="content-topbar flex-sb-m h-full container">
+					<div class="left-top-bar">
+											</div>
+
+					<div class="right-top-bar flex-w h-full">
+						<a href="#" class="flex-c-m trans-04 p-lr-25" data-toggle="modal" data-target="#modalAyuda" >
+							Ayuda
+						</a>
+												<a href="https://www.respaldoschile.cl/tienda2/login" class="flex-c-m trans-04 p-lr-25">
+							Iniciar Sesión
+						</a>
+											</div>
+				</div>
+
+			</div>
+
+	
+
+
+	
+
+
+
+			<div class="wrap-menu-desktop">
+
+				<nav class="limiter-menu-desktop container">
+					
+					<!-- Logo desktop -->		
+					<a href="https://www.respaldoschile.cl/tienda2/" class="logo">
+						<img src="https://www.respaldoschile.cl/tienda2/Assets/tienda/images/logo2.png" alt="Tienda Virtual">
+					</a>
+
+					<!-- Menu desktop -->
+					<div class="menu-desktop">
+						<ul class="main-menu">
+							<li class="active-menu">
+								<a href="https://www.respaldoschile.cl/tienda2/">Inicio</a>
+							</li>
+
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/tienda">Tienda</a>
+							</li>
+
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/promociones">Remates</a>
+							</li>
+
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/carrito">Carrito</a>
+							</li>
+							
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/nosotros">Nosotros</a>
+							</li>
+
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/sucursales">Sucursales</a>
+							</li>
+
+							<li>
+								<a href="https://www.respaldoschile.cl/tienda2/contacto">Contacto</a>
+							</li>
+						</ul>
+					</div>	
+
+					<!-- Icon header -->
+					<div class="wrap-icon-header flex-w flex-r-m">
+						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+							<i class="zmdi zmdi-search"></i>
+						</div>
+												<div class="cantCarrito icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="0 ">
+							<i class="zmdi zmdi-shopping-cart"></i>
+						</div>
+											</div>
+				</nav>
+			</div>	
+		</div>
+
+		<!-- Header celular -->
+		<div class="wrap-header-mobile">
+			<!-- Logo moblie -->		
+			<div class="logo-mobile">
+				<a href="https://www.respaldoschile.cl/tienda2/"><img src="https://www.respaldoschile.cl/tienda2/Assets/tienda/images/logo2.png" alt="Tienda Virtual"></a>
+			</div>
+
+			<!-- Icono header -->
+			<div class="wrap-icon-header flex-w flex-r-m m-r-15">
+				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
+					<i class="zmdi zmdi-search"></i>
+				</div>
+								<div class="cantCarrito icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="0">
+					<i class="zmdi zmdi-shopping-cart"></i>
+				</div>
+							</div>
+
+			<!-- Button mostrar menu -->
+			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+				<span class="hamburger-box">
+					<span class="hamburger-inner"></span>
+				</span>
+			</div>
+		</div>
+
+
+		<!-- Menu celular -->
+		<div class="menu-mobile">
+			<ul class="topbar-mobile">
+				<li>
+					<div class="left-top-bar">
+											</div>
+				</li>
+
+				<li>
+					<div class="right-top-bar flex-w h-full">
+						<a href="#" class="flex-c-m p-lr-10 trans-04" data-toggle="modal" data-target="#modalAyuda">
+							Ayuda
+						</a>
+												<a href="https://www.respaldoschile.cl/tienda2/login" class="flex-c-m trans-04 p-lr-25">
+							Iniciar Sesión
+						</a>
+											</div>
+				</li>
+			</ul>
+
+			<ul class="main-menu-m">
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/">Inicio</a>
+				</li>
+
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/tienda">Tienda</a>
+				</li>
+
+					<li>
+					<a href="https://www.respaldoschile.cl/tienda2/promociones">Promociones</a>
+				</li>
+
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/carrito">Carrito</a>
+				</li>
+
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/nosotros">Nosotros</a>
+				</li>
+
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/sucursales">Sucursales</a>
+				</li>
+
+				<li>
+					<a href="https://www.respaldoschile.cl/tienda2/contacto">Contacto</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Modal buscar -->
+		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
+			<div class="container-search-header">
+				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
+					<img src="https://www.respaldoschile.cl/tienda2/Assets/tienda/images/icons/icon-close2.png" alt="CLOSE">
+				</button>
+
+				<form class="wrap-search-header flex-w p-l-15" method="get" action="https://www.respaldoschile.cl/tienda2/tienda/search" >
+					<button class="flex-c-m trans-04">
+						<i class="zmdi zmdi-search"></i>
+					</button>
+					<input type="hidden" name="p" value="1">
+					<input class="plh3" type="text" name="s" placeholder="Buscar...">
+				</form>
+			</div>
+		</div>
+	</header>
+	<!-- Cart -->
+	<div class="wrap-header-cart js-panel-cart">
+		<div class="s-full js-hide-cart"></div>
+		<div class="header-cart flex-col-l p-l-65 p-r-25">
+			<div class="header-cart-title flex-w flex-sb-m p-b-8">
+				<span class="mtext-103 cl2">
+					Tu carrito
+				</span>
+
+				<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
+					<i class="zmdi zmdi-close"></i>
+				</div>
+			</div>
+			<div id="productosCarrito" class="header-cart-content flex-w js-pscroll">
+							</div>
+		</div>
+	</div>
+
+
+	<script>
+  document.querySelector('header').classList.add('header-v4');
+</script>
+<div class="container text-center">
+	<main class="app-content">
+      <div class="page-error tile">
+        <h1>Error 404: P&aacute;gina no encontrada</h1> <p>No se encuentra la p&aacute;gina que ha solicitado.</p>        <p><a class="btn btn-dark" href="javascript:window.history.back();">Regresar</a></p>
+      </div>
+    </main>
+</div>
+		<!-- Footer -->
+	<footer class="bg3 p-t-75 p-b-32">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-lg-4 p-b-50">
+					<h4 class="stext-301 cl0 p-b-30">
+						Categorías
+					</h4>
+										<ul>
+												<li class="p-b-10">
+							<a href="https://www.respaldoschile.cl/tienda2/tienda/categoria/1/respaldos-de-cama" class="stext-107 cl7 hov-cl1 trans-04">
+								Respaldos de cama							</a>
+						</li>
+												<li class="p-b-10">
+							<a href="https://www.respaldoschile.cl/tienda2/tienda/categoria/2/living-y-sofas" class="stext-107 cl7 hov-cl1 trans-04">
+								Living y Sofas							</a>
+						</li>
+												<li class="p-b-10">
+							<a href="https://www.respaldoschile.cl/tienda2/tienda/categoria/3/bases-de-cama" class="stext-107 cl7 hov-cl1 trans-04">
+								Bases de cama							</a>
+						</li>
+												<li class="p-b-10">
+							<a href="https://www.respaldoschile.cl/tienda2/tienda/categoria/4/veladores" class="stext-107 cl7 hov-cl1 trans-04">
+								Veladores							</a>
+						</li>
+												<li class="p-b-10">
+							<a href="https://www.respaldoschile.cl/tienda2/tienda/categoria/5/colchones" class="stext-107 cl7 hov-cl1 trans-04">
+								Colchones							</a>
+						</li>
+											</ul>
+									</div>
+
+				<div class="col-sm-6 col-lg-4 p-b-50">
+					<h4 class="stext-301 cl0 p-b-30">
+						Contacto
+					</h4>
+
+					<p class="stext-107 cl7 size-201">
+						Av Gabriela 02861, La Pintana, Santiago <br>
+						Tel: <a class="linkFooter" href="tel:+56979941253">+56979941253</a><br>
+						Email: <a class="linkFooter" href="mailto:contacto@respaldoschile.cl">contacto@respaldoschile.cl</a>
+					</p>
+
+					<div class="p-t-27">
+						<a href="" target="_blanck" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-facebook"></i>
+						</a>
+
+						<a href="https://www.instagram.com/respaldoschile" target="_blanck"  class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-instagram"></i>
+						</a>
+
+						<a href="https://wa.me/+56979941253" target="_blanck"  class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fab fa-whatsapp"></i>
+						</a>
+					</div>
+				</div>
+
+				<div class="col-sm-6 col-lg-4 p-b-50">
+					<h4 class="stext-301 cl0 p-b-30">
+						Suscríbete
+					</h4>
+
+					<form id="frmSuscripcion" name="frmSuscripcion">
+						<div class="wrap-input1 w-full p-b-4">
+							<input class="input1 bg-none plh1 stext-107 cl7" type="text" id="nombreSuscripcion" name="nombreSuscripcion" placeholder="Nombre completo" required>
+							<div class="focus-input1 trans-04"></div>
+						</div>
+						<br>
+						<div class="wrap-input1 w-full p-b-4">
+							<input class="input1 bg-none plh1 stext-107 cl7" type="email" id="emailSuscripcion" name="emailSuscripcion" placeholder="email@email.com" required >
+							<div class="focus-input1 trans-04"></div>
+						</div>
+
+						<div class="p-t-18">
+							<button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
+								Suscribirme
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="p-t-40">
+				<p class="stext-107 cl6 txt-center">
+					
+					RedecoMuebles 2024 | www.respaldoschile.cl 
+					
+				</p>
+			</div>
+		</div>
+	</footer>
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+	<script>
+	    const base_url = "https://www.respaldoschile.cl/tienda2";
+		const smony = "$";
+	</script>
+
+
+
+
+
+
+
+
+
+	
+<!--===============================================================================================-->	
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/bootstrap/js/popper.js"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/daterangepicker/moment.min.js"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/slick/slick.min.js"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/js/slick-custom.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/parallax100/parallax100.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script><!--===============================================================================================-->
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+	    <script type="text/javascript" src="https://www.respaldoschile.cl/tienda2/Assets/css/floating/floating-wpp.js"></script>
+<!--===============================================================================================-->
+
+<script type="text/javascript">
+    $(function () {
+        $('#myButton').floatingWhatsApp({
+            phone: '56979941253',
+            popupMessage: 'Hola, en que te podemos ayudar?',
+            message: "",
+            showPopup: true,
+            showOnIE: false,
+            headerTitle: 'Ejecutivo Virtual Respaldos Chile!',
+            headerColor: 'rgb(9, 94, 84)',
+            backgroundColor: 'Green',
+            buttonImage: '<img src="https://www.respaldoschile.cl/tienda2/Assets/css/floating/whatsapp.svg" />'
+        });
+    });</script>
+
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/js/fontawesome.js?v1"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/js/main.js?v1"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/js/functions_admin.js?v1"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/js/functions_login.js?v1"></script>
+	<script src="https://www.respaldoschile.cl/tienda2/Assets/tienda/js/functions.js?v3"></script>
+
+	
+</body>
+</html>
+
+[2024-07-10 21:19:31] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertCliente
+    [rut] => 18693008-8
+    [nombre] => Jerson
+    [apellido] => Santibañez
+    [telefono] => 956344617
+    [correo] => jerson.cra@gmail.com
+)
+ Respuesta: 
+[2024-07-10 21:19:31] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertPedido
+    [rut_cliente] => 18693008-8
+    [fecha_ingreso] => 2024-07-10 21:19:31
+    [despacho] => 0
+    [total_pagado] => 45000
+    [vendedor] => PAGINAWEB
+    [metodo_entrega] => Despacho
+    [estado] => Pendiente
+    [orden_ext] => 10410
+)
+ Respuesta: Nuevo pedido creado con éxito
+[2024-07-10 21:19:31] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10410
+    [nombre_producto] => Botone Madrid
+    [tamano] => 1 plaza
+    [color] => AZUL PETROLEO
+    [tipo_tela] => Felpa
+    [altura_base] => 60
+    [precio] => 45000
+    [cantidad] => 1
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Despacho
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxito
+[2024-09-30 13:06:24] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertCliente
+    [rut] => 18693008-8
+    [nombre] => Jerson
+    [apellido] => Santibañez
+    [telefono] => 956344617
+    [correo] => jerson.cra@gmail.com
+)
+ Respuesta: 
+[2024-09-30 13:06:24] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertPedido
+    [rut_cliente] => 18693008-8
+    [fecha_ingreso] => 2024-09-30 13:06:24
+    [despacho] => 0
+    [total_pagado] => 50970
+    [vendedor] => PAGINAWEB
+    [metodo_entrega] => Retiro en tienda
+    [estado] => Pendiente
+    [orden_ext] => 10411
+)
+ Respuesta: Nuevo pedido creado con éxito
+[2024-09-30 13:06:25] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10411
+    [nombre_producto] => ALMOHADA ROYAL SUPREME BY CANNON PREMIUM
+    [tamano] => undefined
+    [color] => undefined
+    [tipo_tela] => undefined
+    [altura_base] => 
+    [precio] => 16990
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
+[2024-09-30 13:06:25] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10411
+    [nombre_producto] => ALMOHADA ROYAL SUPREME BY CANNON PREMIUM
+    [tamano] => undefined
+    [color] => undefined
+    [tipo_tela] => undefined
+    [altura_base] => 
+    [precio] => 16990
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
+[2024-09-30 13:06:25] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10411
+    [nombre_producto] => ALMOHADA ROYAL SUPREME BY CANNON PREMIUM
+    [tamano] => undefined
+    [color] => undefined
+    [tipo_tela] => undefined
+    [altura_base] => 
+    [precio] => 16990
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
+[2024-09-30 19:56:21] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertCliente
+    [rut] => 18693008-8
+    [nombre] => Jerson
+    [apellido] => Santibañez
+    [telefono] => 956344617
+    [correo] => jerson.cra@gmail.com
+)
+ Respuesta: 
+[2024-09-30 19:56:21] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertPedido
+    [rut_cliente] => 18693008-8
+    [fecha_ingreso] => 2024-09-30 19:56:21
+    [despacho] => 0
+    [total_pagado] => 150000
+    [vendedor] => PAGINAWEB
+    [metodo_entrega] => Retiro en tienda
+    [estado] => Pendiente
+    [orden_ext] => 10412
+)
+ Respuesta: Nuevo pedido creado con éxito
+[2024-09-30 19:56:21] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10412
+    [nombre_producto] => Botone Madrid
+    [tamano] => 1 1/2
+    [color] => AZUL MARINO
+    [tipo_tela] => Felpa
+    [altura_base] => 60
+    [precio] => 50000
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
+[2024-09-30 19:56:21] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10412
+    [nombre_producto] => Botone Madrid
+    [tamano] => 1 1/2
+    [color] => AZUL MARINO
+    [tipo_tela] => Felpa
+    [altura_base] => 60
+    [precio] => 50000
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
+[2024-09-30 19:56:21] Solicitud exitosa a https://respaldoschile.cl/tienda2/online/insert_ecommerce_pedido.php con datos: Array
+(
+    [action] => insertDetalle
+    [pedidoid] => 10412
+    [nombre_producto] => Botone Madrid
+    [tamano] => 1 1/2
+    [color] => AZUL MARINO
+    [tipo_tela] => Felpa
+    [altura_base] => 60
+    [precio] => 50000
+    [cantidad] => 3
+    [mododepoago] => Transferencia
+    [direccion] => Retiro en local
+    [numero] => 
+    [dpto] => 
+    [metodo_entrega] => Retiro en tienda
+    [detalle_entrega] => 
+    [region] => 
+    [comuna] => 
+)
+ Respuesta: Nuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxitoNuevo detalle de pedido creado con éxito
