@@ -1,0 +1,265 @@
+-- Creación de Base de Datos
+CREATE DATABASE IF NOT EXISTS sistema_control;
+USE sistema_control;
+
+-- Tabla de Categorías de Gastos
+CREATE TABLE IF NOT EXISTS categorias_gastos (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255),
+    color VARCHAR(20),
+    icono VARCHAR(50),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Tabla de Empleados
+CREATE TABLE IF NOT EXISTS empleados (
+    id_empleado INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    id_departamento INT,
+    cargo VARCHAR(100),
+    fecha_contratacion DATE,
+    sueldo_base DECIMAL(10, 2),
+    activo BOOLEAN DEFAULT TRUE,
+    email VARCHAR(100),
+    telefono VARCHAR(20),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de Departamentos
+CREATE TABLE IF NOT EXISTS departamentos (
+    id_departamento INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255),
+    responsable_id INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Tabla de Gastos
+CREATE TABLE IF NOT EXISTS gastos (
+    id_gasto INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATE NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    monto DECIMAL(10, 2) NOT NULL,
+    id_categoria INT,
+    id_responsable INT,
+    comprobante VARCHAR(255),
+    notas TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_categoria) REFERENCES categorias_gastos(id_categoria),
+    FOREIGN KEY (id_responsable) REFERENCES empleados(id_empleado)
+);
+
+-- Tabla de Productos
+CREATE TABLE IF NOT EXISTS productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    costo_unitario DECIMAL(10, 2) NOT NULL,
+    precio_venta DECIMAL(10, 2) NOT NULL,
+    stock INT DEFAULT 0,
+    id_categoria INT,
+    codigo_sku VARCHAR(50),
+    imagen VARCHAR(255),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Tabla de Historial de Costos
+CREATE TABLE IF NOT EXISTS historial_costos (
+    id_historial INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto INT NOT NULL,
+    fecha DATE NOT NULL,
+    costo_anterior DECIMAL(10, 2),
+    costo_nuevo DECIMAL(10, 2) NOT NULL,
+    razon_cambio VARCHAR(255),
+    id_usuario INT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+-- Tabla de Sueldos (Nómina Mensual)
+CREATE TABLE IF NOT EXISTS nomina (
+    id_nomina INT AUTO_INCREMENT PRIMARY KEY,
+    id_empleado INT NOT NULL,
+    fecha_nomina DATE NOT NULL,
+    sueldo_base DECIMAL(10, 2) NOT NULL,
+    extras DECIMAL(10, 2) DEFAULT 0,
+    bonos DECIMAL(10, 2) DEFAULT 0,
+    deducciones DECIMAL(10, 2) DEFAULT 0,
+    total DECIMAL(10, 2) NOT NULL,
+    observaciones TEXT,
+    fecha_pago DATE,
+    estado VARCHAR(20) DEFAULT 'Pendiente',
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
+);
+
+-- Tabla de Presupuestos
+CREATE TABLE IF NOT EXISTS presupuestos (
+    id_presupuesto INT AUTO_INCREMENT PRIMARY KEY,
+    categoria VARCHAR(50) NOT NULL,
+    monto_anual DECIMAL(12, 2) NOT NULL,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    descripcion TEXT,
+    responsable_id INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Tabla de Ejecución Presupuestaria
+CREATE TABLE IF NOT EXISTS ejecucion_presupuesto (
+    id_ejecucion INT AUTO_INCREMENT PRIMARY KEY,
+    id_presupuesto INT NOT NULL,
+    mes INT NOT NULL,
+    anio INT NOT NULL,
+    monto_ejecutado DECIMAL(10, 2) NOT NULL,
+    variacion_porcentual DECIMAL(5, 2),
+    observaciones TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_presupuesto) REFERENCES presupuestos(id_presupuesto)
+);
+
+-- Inserción de datos de ejemplo para Categorías de Gastos
+INSERT INTO categorias_gastos (nombre, descripcion, color, icono) VALUES
+('Servicios', 'Gastos en servicios básicos como luz, internet, agua, etc.', '#3498db', 'fa-bolt'),
+('Marketing', 'Gastos en publicidad, promociones y marketing', '#e74c3c', 'fa-ad'),
+('Mantenimiento', 'Gastos en mantenimiento de equipos e instalaciones', '#2ecc71', 'fa-tools'),
+('Insumos', 'Compras de materiales e insumos para la operación', '#f39c12', 'fa-shopping-cart'),
+('Sueldos', 'Pagos de nómina y compensaciones', '#9b59b6', 'fa-users'),
+('Viáticos', 'Gastos de viaje y representación', '#16a085', 'fa-plane'),
+('Tecnología', 'Compra y mantención de equipos tecnológicos', '#3498db', 'fa-laptop'),
+('Otros', 'Otros gastos no categorizados', '#34495e', 'fa-file-invoice-dollar');
+
+-- Inserción de datos de ejemplo para Departamentos
+INSERT INTO departamentos (nombre, descripcion) VALUES
+('Ventas', 'Departamento de ventas y atención a clientes'),
+('Desarrollo', 'Equipo de desarrollo de software'),
+('Administración', 'Finanzas y administración general'),
+('Marketing', 'Equipo de publicidad y marketing'),
+('Atención al Cliente', 'Servicio y soporte a clientes');
+
+-- Inserción de datos de ejemplo para Empleados
+INSERT INTO empleados (nombre, apellido, id_departamento, cargo, fecha_contratacion, sueldo_base, email, telefono) VALUES
+('María', 'González', 1, 'Gerente', '2023-01-15', 2800.00, 'maria.gonzalez@empresa.com', '555-1234'),
+('Juan', 'Pérez', 2, 'Programador Sr.', '2023-02-20', 2500.00, 'juan.perez@empresa.com', '555-2345'),
+('Ana', 'Martínez', 3, 'Contadora', '2023-03-10', 2200.00, 'ana.martinez@empresa.com', '555-3456'),
+('Carlos', 'Vega', 4, 'Diseñador', '2023-04-05', 1800.00, 'carlos.vega@empresa.com', '555-4567'),
+('Marta', 'Sánchez', 5, 'Soporte', '2023-05-12', 1500.00, 'marta.sanchez@empresa.com', '555-5678');
+
+-- Inserción de datos de ejemplo para Gastos
+INSERT INTO gastos (fecha, descripcion, monto, id_categoria, id_responsable) VALUES
+('2025-03-15', 'Pago servicios de internet', 850.00, 1, 3),
+('2025-03-12', 'Campaña publicitaria redes sociales', 1200.00, 2, 4),
+('2025-03-10', 'Compra material de oficina', 350.00, 4, 5),
+('2025-03-07', 'Reparación equipos de refrigeración', 780.00, 3, 2),
+('2025-03-03', 'Viáticos representantes de ventas', 920.00, 6, 1),
+('2025-02-28', 'Licencias software', 1500.00, 7, 2),
+('2025-02-25', 'Pago servicios eléctricos', 620.00, 1, 3),
+('2025-02-20', 'Compra de suministros', 480.00, 4, 5),
+('2025-02-18', 'Mantenimiento vehículos', 350.00, 3, 1),
+('2025-02-15', 'Seminario de capacitación', 750.00, 8, 4);
+
+-- Inserción de datos de ejemplo para Productos
+INSERT INTO productos (nombre, descripcion, costo_unitario, precio_venta, stock, codigo_sku) VALUES
+('Laptop Pro X3', 'Laptop de alto rendimiento para profesionales', 450.00, 899.00, 24, 'LP-X3-001'),
+('Monitor UltraWide', 'Monitor panorámico de 34 pulgadas', 180.00, 329.00, 18, 'MW-34-002'),
+('Teclado Mecánico', 'Teclado mecánico con retroiluminación RGB', 28.00, 59.00, 45, 'TM-RGB-003'),
+('Mouse Inalámbrico', 'Mouse ergonómico sin cables', 12.00, 29.00, 62, 'MI-ERG-004'),
+('Auriculares Bluetooth', 'Auriculares con cancelación de ruido', 35.00, 79.00, 31, 'AB-NC-005');
+
+-- Inserción de datos de ejemplo para Historial de Costos
+INSERT INTO historial_costos (id_producto, fecha, costo_anterior, costo_nuevo, razon_cambio) VALUES
+(1, '2024-10-15', 420.00, 450.00, 'Incremento de precios del proveedor'),
+(2, '2024-11-10', 165.00, 180.00, 'Actualización de modelo'),
+(3, '2024-12-05', 25.00, 28.00, 'Nuevos aranceles de importación'),
+(4, '2025-01-20', 12.00, 12.00, 'Revisión de costos sin cambios'),
+(5, '2025-02-15', 32.00, 35.00, 'Cambio de proveedor');
+
+-- Inserción de datos de ejemplo para Nómina
+INSERT INTO nomina (id_empleado, fecha_nomina, sueldo_base, extras, bonos, deducciones, total) VALUES
+(1, '2025-03-01', 2800.00, 450.00, 0.00, 0.00, 3250.00),
+(2, '2025-03-01', 2500.00, 300.00, 0.00, 0.00, 2800.00),
+(3, '2025-03-01', 2200.00, 0.00, 0.00, 0.00, 2200.00),
+(4, '2025-03-01', 1800.00, 200.00, 0.00, 0.00, 2000.00),
+(5, '2025-03-01', 1500.00, 180.00, 0.00, 0.00, 1680.00),
+(1, '2025-02-01', 2800.00, 450.00, 0.00, 0.00, 3250.00),
+(2, '2025-02-01', 2500.00, 300.00, 0.00, 0.00, 2800.00),
+(3, '2025-02-01', 2200.00, 0.00, 0.00, 0.00, 2200.00),
+(4, '2025-02-01', 1800.00, 200.00, 0.00, 0.00, 2000.00),
+(5, '2025-02-01', 1500.00, 0.00, 0.00, 0.00, 1500.00);
+
+-- Inserción de datos de ejemplo para Presupuestos
+INSERT INTO presupuestos (categoria, monto_anual, fecha_inicio, fecha_fin, descripcion) VALUES
+('Salarios', 120000.00, '2025-01-01', '2025-12-31', 'Presupuesto anual para salarios'),
+('Marketing', 35000.00, '2025-01-01', '2025-12-31', 'Presupuesto para campañas publicitarias'),
+('Operaciones', 48000.00, '2025-01-01', '2025-12-31', 'Gastos operativos generales'),
+('Tecnología', 22000.00, '2025-01-01', '2025-12-31', 'Inversión en equipos y software'),
+('Capacitación', 12000.00, '2025-01-01', '2025-12-31', 'Formación y desarrollo de personal'),
+('Infraestructura', 8000.00, '2025-01-01', '2025-12-31', 'Mantenimiento de instalaciones'),
+('Imprevistos', 5000.00, '2025-01-01', '2025-12-31', 'Fondo para gastos no planificados');
+
+-- Inserción de datos de ejemplo para Ejecución Presupuestaria
+INSERT INTO ejecucion_presupuesto (id_presupuesto, mes, anio, monto_ejecutado, variacion_porcentual) VALUES
+(1, 1, 2025, 10000.00, 0.00),
+(1, 2, 2025, 10000.00, 0.00),
+(1, 3, 2025, 10000.00, 0.00),
+(2, 1, 2025, 3200.00, 9.71),
+(2, 2, 2025, 3500.00, 0.00),
+(2, 3, 2025, 3800.00, 8.57),
+(3, 1, 2025, 4000.00, 0.00),
+(3, 2, 2025, 4200.00, 5.00),
+(3, 3, 2025, 4000.00, -4.76),
+(4, 1, 2025, 5000.00, 36.36),
+(4, 2, 2025, 4500.00, -10.00),
+(4, 3, 2025, 5000.00, 11.11),
+(5, 1, 2025, 1000.00, 0.00),
+(5, 2, 2025, 2000.00, 100.00),
+(5, 3, 2025, 1500.00, -25.00),
+(6, 1, 2025, 500.00, -25.00),
+(6, 2, 2025, 750.00, 50.00),
+(6, 3, 2025, 500.00, -33.33),
+(7, 1, 2025, 300.00, -28.00),
+(7, 2, 2025, 700.00, 133.33),
+(7, 3, 2025, 400.00, -42.86);
+
+-- Agregar clave foránea a empleados para relacionar con departamentos
+ALTER TABLE empleados
+ADD CONSTRAINT fk_empleado_departamento
+FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento);
+
+-- Agregar clave foránea a departamentos para relacionar con el responsable
+ALTER TABLE departamentos
+ADD CONSTRAINT fk_departamento_responsable
+FOREIGN KEY (responsable_id) REFERENCES empleados(id_empleado) ON DELETE SET NULL;
+
+-- Agregar columna de id_categoria a productos y relación con categoría
+-- Primero creamos una tabla simple de categorías de productos si no existe
+CREATE TABLE IF NOT EXISTS categorias_productos (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Insertar algunas categorías de productos
+INSERT INTO categorias_productos (nombre, descripcion) VALUES
+('Electrónicos', 'Productos electrónicos y tecnológicos'),
+('Muebles', 'Mobiliario para oficina y hogar'),
+('Ropa', 'Vestimenta y accesorios'),
+('Alimentos', 'Productos alimenticios'),
+('Otros', 'Otros productos');
+
+-- Ahora actualizamos los productos para asignar categorías
+UPDATE productos SET id_categoria = 1;
+
+-- Agregar la clave foránea para productos
+ALTER TABLE productos
+ADD CONSTRAINT fk_producto_categoria
+FOREIGN KEY (id_categoria) REFERENCES categorias_productos(id_categoria);

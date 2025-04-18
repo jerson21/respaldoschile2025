@@ -1,5 +1,7 @@
 <?php 
-	const BASE_URL = "http://localhost/respaldoschile";
+	//const BASE_URL = "http://localhost/respaldoschile";
+	const BASE_URL = "http://localhost:8080";
+	
 	//http://localhost:8000/respaldoschile
 	//const BASE_URL = "https://abelosh.com/tiendavirtual"; 
 	//const BASE_URL = "https://respaldoschile.cl";

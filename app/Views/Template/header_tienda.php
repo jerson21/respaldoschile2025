@@ -41,6 +41,7 @@
 	<meta property="og:url"         content="<?= $urlWeb; ?>" />
 	<meta property="og:image"       content="<?= $urlImg; ?>"/>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RZF9JS7BR"></script>
