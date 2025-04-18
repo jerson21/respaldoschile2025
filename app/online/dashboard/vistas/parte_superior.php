@@ -1,1007 +1,537 @@
 <?php
-if (!isset($_SESSION)) {
-  session_start();
-}
+// Asumimos sesión iniciada y variables disponibles
+$usuario = $_SESSION["s_usuario"] ?? 'Usuario';
+$privilegios = $_SESSION["privilegios"] ?? -1;
 
-$_SESSION['nombre_user'] = $_SESSION["s_usuario"];
+// Paleta de colores corporativos (Mantenida)
+$azulPrimario = '#2C3E50'; // Midnight Blue
+$azulSecundario = '#34495E'; // Wet Asphalt
+$grisClaro = '#ECF0F1'; // Clouds
+$grisMedio = '#BDC3C7'; // Silver
+$textoClaro = '#FFFFFF'; // White
+$textoOscuro = '#34495E'; // Wet Asphalt (for text)
+$bordeActivo = '#f6c23e'; // Amarillo/Dorado para resaltar activo/hover
 
-
-
-if ($_SESSION["s_usuario"] === null) {
-
-  header("Location: ../index.php");
-}
-
+// === Definir Anchos del Sidebar ===
+$sidebarWidth = '14rem'; // Ancho estándar (224px)
+$sidebarWidthToggled = '6.5rem'; // Ancho colapsado (104px)
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<style>
+    /* === Estilos Navbar Lateral "2025" (Fijo, Espaciado Reducido, Scroll Estilizado) === */
 
-<head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>RespaldosChile - Dashboard</title>
-
-  <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
-
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
-
-
-  <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.js"></script>
-
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
-
-  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAy1me0GgrNwevFOTCa8MQo2gNNt79JizI"></script>
-
-  <link rel="stylesheet" type="text/css" href="css/design_respaldoschile.css">
-
-
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-  <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
-
-
-  <style type="text/css">
-    #parpadea {
-
-      animation-name: parpadeo;
-      animation-duration: 1s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-
-
-      -webkit-animation-name: parpadeo;
-      -webkit-animation-duration: 1s;
-      -webkit-animation-timing-function: linear;
-      -webkit-animation-iteration-count: infinite;
+    /* Base Sidebar: Fijo */
+    .sidebar.navbar-nav {
+        position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000;
+        background-color: <?php echo $azulPrimario; ?>;
+        width: <?php echo $sidebarWidth; ?>;
+        overflow-x: hidden; transition: width 0.3s ease; overflow-y: auto;
+     
     }
 
-    @-moz-keyframes parpadeo {
-      0% {}
+    /* --- Estilos para Scrollbar del Sidebar --- */
+    .sidebar.navbar-nav::-webkit-scrollbar { width: 6px; height: 6px; }
+    .sidebar.navbar-nav::-webkit-scrollbar-track { background: transparent; margin: 2px; }
+    .sidebar.navbar-nav::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+    .sidebar.navbar-nav::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.4); }
+    .sidebar.navbar-nav { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.2) transparent; }
+    /* --- Fin Estilos Scrollbar --- */
 
-      50% {
-        opacity: 0.5;
-      }
 
-      100% {
-        background-color: #0096FF;
-      }
+    /* Ajuste del Contenido Principal */
+    #content-wrapper { padding-left: <?php echo $sidebarWidth; ?>; transition: padding-left 0.3s ease; }
 
+    /* --- Estilos para Sidebar Colapsado (.toggled) --- */
+    .sidebar.navbar-nav.toggled { width: <?php echo $sidebarWidthToggled; ?>; overflow: visible; }
+    #wrapper.sidebar-toggled #content-wrapper { padding-left: <?php echo $sidebarWidthToggled; ?>; }
+    .sidebar.navbar-nav.toggled .sidebar-brand-text,
+    .sidebar.navbar-nav.toggled .sidebar-heading,
+    .sidebar.navbar-nav.toggled .nav-item .nav-link span,
+    .sidebar.navbar-nav.toggled .nav-item .nav-link[data-bs-toggle="collapse"]::after { display: none; }
+    .sidebar.navbar-nav.toggled .sidebar-brand { padding: 1.25rem 0.5rem; }
+    .sidebar.navbar-nav.toggled .sidebar-brand-icon img { width: 35px; }
+    .sidebar.navbar-nav.toggled .nav-item .nav-link { padding: 0.7rem 0.5rem; justify-content: center; border-left-width: 0; }
+    .sidebar.navbar-nav.toggled .nav-item .nav-link i { margin-right: 0; font-size: 1rem; }
+    .sidebar.navbar-nav.toggled #sidebarToggle { width: auto; margin-left: auto; margin-right: auto; }
+
+    /* --- Resto de estilos --- */
+    .sidebar .sidebar-brand { height: auto; padding: 1.25rem 1rem; text-align: center; }
+    .sidebar .sidebar-brand-icon img { width: 45px; margin: 0 auto; animation: mover 1.5s infinite alternate; -webkit-animation: mover 1.5s infinite alternate; }
+    .sidebar .sidebar-brand-text { margin-top: 0.5rem; font-size: 0.9rem; font-weight: 600; color: <?php echo $textoClaro; ?>; font-family: 'Montserrat', sans-serif; }
+    hr.sidebar-divider { border-top: 1px solid rgba(236, 240, 241, 0.1); margin: 0.3rem 1rem; }
+    hr.sidebar-divider.my-0 { margin: 0 1rem; }
+    .sidebar-dark .sidebar-heading {
+    color: rgba(236, 240, 241, 0.5);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    /* Padding actual: 0.35rem arriba/abajo, 1rem derecha, 1.25rem izquierda */
+    padding: 0.35rem 1rem 0.35rem 1.25rem;
+    /* Margen superior actual: 0.15rem */
+    margin-top: -0.5rem;
+    font-weight: 600;
+}    .sidebar-dark .nav-item { position: relative; }
+    .sidebar-dark .nav-item .nav-link { color: rgba(236, 240, 241, 0.75); padding: 0.7rem 1rem 0.7rem 1.25rem; display: flex; align-items: center; transition: all 0.2s ease-in-out; border-left: 3px solid transparent; }
+    .sidebar-dark .nav-item .nav-link span { flex-grow: 1; font-size: 0.85rem; }
+    .sidebar-dark .nav-item .nav-link i { color: rgba(236, 240, 241, 0.5); margin-right: 0.75rem; width: 20px; text-align: center; font-size: 0.9rem; transition: color 0.2s ease-in-out; }
+    .sidebar-dark .nav-item .nav-link:hover { color: <?php echo $textoClaro; ?>; background-color: rgba(255, 255, 255, 0.05); border-left-color: <?php echo $bordeActivo; ?>; }
+    .sidebar.toggled .nav-item .nav-link:hover { border-left-color: transparent; }
+    .sidebar-dark .nav-item .nav-link:hover i { color: rgba(255, 255, 255, 0.8); }
+    .sidebar-dark .nav-item.active .nav-link { color: <?php echo $textoClaro; ?>; font-weight: 500; background-color: rgba(0, 0, 0, 0.1); border-left-color: <?php echo $bordeActivo; ?>; }
+    .sidebar.toggled .nav-item.active .nav-link { border-left-color: transparent; }
+    .sidebar-dark .nav-item.active .nav-link i { color: <?php echo $textoClaro; ?>; }
+    .sidebar-dark .nav-item .nav-link[data-bs-toggle="collapse"]::after { font-family: 'Font Awesome 5 Free'; font-weight: 900; content: '\f0da'; margin-left: auto; transition: transform 0.2s ease-in-out; font-size: 0.8rem; opacity: 0.5; }
+    .sidebar-dark .nav-item .nav-link[data-bs-toggle="collapse"]:not(.collapsed)::after { transform: rotate(90deg); opacity: 1; }
+
+    /* === Menú Colapsable - Fondo Claro === */
+    .sidebar-dark .collapse { border-left: 3px solid transparent; }
+    .sidebar-dark .collapse-inner {
+        background-color: <?php echo $textoClaro; ?>; /* Fondo blanco */
+        padding: 0.5rem 0; /* Ajustar padding si es necesario */
+        margin: 0.25rem 0.75rem; /* Ajustar margen si es necesario */
+        border-radius: 5px;
+        box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15); /* Sombra suave */
     }
-
-    @-webkit-keyframes parpadeo {
-      0% {}
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        background-color: #0096FF;
-      }
+    .sidebar-dark .collapse-inner .collapse-header {
+        color: <?php echo $grisMedio; ?>; /* Color de encabezado gris */
+        font-size: 0.7rem;
+        font-weight: 700; /* Más peso */
+        text-transform: uppercase;
+        padding: 0.5rem 1.5rem; /* Ajustar padding */
+        margin: 0; /* Sin margen extra */
     }
-
-    @keyframes parpadeo {
-      0% {}
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        background-color: #0096FF;
-      }
+    .sidebar-dark .collapse-inner .collapse-item {
+        color: <?php echo $textoOscuro; ?>; /* Texto oscuro */
+        padding: 0.5rem 1.5rem; /* Padding ajustado */
+        font-size: 0.82rem; /* Ligeramente más grande */
+        transition: all 0.2s ease-in-out;
+        border-radius: 3px; /* Bordes redondeados */
+        margin: 0 0.5rem; /* Margen horizontal */
     }
-
-    #parpadea_ {
-
-      animation-name: parpadeo_;
-      animation-duration: 1s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-
-
-      -webkit-animation-name: parpadeo_;
-      -webkit-animation-duration: 1s;
-      -webkit-animation-timing-function: linear;
-      -webkit-animation-iteration-count: infinite;
+    .sidebar-dark .collapse-inner .collapse-item:hover,
+    .sidebar-dark .collapse-inner .collapse-item.active {
+        background-color: <?php echo $grisClaro; ?>; /* Fondo gris claro en hover/active */
+        color: <?php echo $azulPrimario; ?>; /* Texto azul oscuro */
+        font-weight: 500;
     }
-
-    @-moz-keyframes parpadeo_ {
-      0% {}
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        background-color: #FFCE33;
-      }
-
-    }
-
-    @-webkit-keyframes parpadeo_ {
-      0% {}
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        background-color: #FFCE33;
-      }
-    }
-
-    @keyframes parpadeo_ {
-      0% {}
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        background-color: #FFCE33;
-      }
-    }
-
-
-    .subir {
-      border: 1px solid #7F9EEE;
-      padding: 20px;
-      width: auto;
-      border-radius: 15px;
-      min-height: 150px;
-      margin: auto;
-      background: #C0E1F9;
-      margin-bottom: 5px;
-    }
-
-    .archivos {
-      border: 1px solid #89EA53;
-      padding: 10px;
-      width: auto;
-      min-height: 150px;
-      border-radius: 15px;
-      margin: auto;
-      background: #CCF8B4;
-    }
-  </style>
-
-
-  <style type="text/css">
-    #imagenes img {
-      -webkit-transition: all 1s ease;
-      /* Safari and Chrome */
-      -moz-transition: all 1s ease;
-      /* Firefox */
-      -ms-transition: all 1s ease;
-      /* IE 9 */
-      -o-transition: all 1s ease;
-      /* Opera */
-      transition: all 1s ease;
-    }
-
-    #imagenes:hover img {
-      -webkit-transform: scale(1.5);
-      /* Safari and Chrome */
-      -moz-transform: scale(1.5);
-      /* Firefox */
-      -ms-transform: scale(1.5);
-      /* IE 9 */
-      -o-transform: scale(1.5);
-      /* Opera */
-      transform: scale(1.5);
-    }
-
-    @-webkit-keyframes mover {
-      0% {
-        transform: translateY(0);
-      }
-
-      100% {
-        transform: translateY(-15px);
-      }
-    }
-
-    @keyframes mover {
-      0% {
-        transform: translateY(0);
-      }
-
-      100% {
-        transform: translateY(-15px);
-      }
-    }
-  </style>
-  <?php
-  $num_orden = "";
-
-  if (isset($_GET['num_orden'])) {
-    $num_orden = $_GET['num_orden'];
-  } ?>
-
-  <script type="text/javascript">
-    function mostrar(id) {
-      // SE DEBEN VINCULAR LOS EVENTOS Y FUNCIONES YA QUE ES DINAMICA LA CARGA DEL FORMULARIO. 
-      if (id == "respaldo") {
-        $("#formularios").load('formularios/respaldoform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "colchon") {
-        $("#formularios").load('formularios/colchonform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      
-      }
-      if (id == "base") {
-        $("#formularios").load('formularios/baseform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "patas") {
-        $("#formularios").load('formularios/patasform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "respaldo2") {
-        $("#formularios").load('formularios/respaldoform2.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "banquetas") {
-        $("#formularios").load('formularios/banquetaform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "fundas") {
-        $("#formularios").load('formularios/fundasform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "living") {
-        $("#formularios").load('formularios/livingform.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "velador") {
-        $("#formularios").load('formularios/velador_form.php?num_orden=<?php echo $num_orden; ?>', function() {
-          // Esta función callback se ejecuta después de que el contenido se ha cargado
-          $("#formularios").show();
-          vincularEventosASelect();
-        });
-
-      }
-      if (id == "") {
-
-        $("#formularios").hide();
-      }
-
-
-    }
-
-    function mostrarprod(id) {
-
-      if (id == "respaldo") {
-        $("#formularios").load('administracion/formagregarcosto.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "colchon") {
-        $("#formularios").load('formularios/colchonform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "base") {
-        $("#formularios").load('formularios/baseform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "patas") {
-        $("#formularios").load('formularios/patasform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "respaldo2") {
-        $("#formularios").load('formularios/respaldoform2.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "banquetas") {
-        $("#formularios").load('formularios/banquetaform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "fundas") {
-        $("#formularios").load('formularios/fundasform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "living") {
-        $("#formularios").load('formularios/livingform.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-      if (id == "velador") {
-        $("#formularios").load('formularios/velador_form.php?num_orden=<?php echo $num_orden; ?>');
-        $("#formularios").show();
-      }
-    }
-  </script>
-
-</head>
-
-<body id="page-top">
-
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-dark p-1 sidebar sidebar-dark accordion" id="accordionSidebar">
-
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-right" href="index.php">
-        <div>
-          <!-- <i class="fas fa-laugh-wink"></i> -->
-
-
-          <img style="  margin-top: 20%;  width: 35%;  -webkit-animation: mover 2s infinite alternate;
-  animation: mover 1s infinite alternate;
-" src="img/logoblanco.png" width="80">
-
-          <span class="text-warning" style="font-family: 'Montserrat', sans-serif;"> RespaldosChile</span>
-        </div>
-
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-
-      <!-- Nav Item - Dashboard -->
-      <?php if ($_SESSION["privilegios"] >= "20") { ?>
-
-
-        <li class="nav-item active">
-          <a class="nav-link" href="dashboard2024.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-        </li>
-
-
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Interface
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo10" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa-solid fa-cube text-success"></i>
-
-            <span>BODEGA</span>
-          </a>
-          <div id="collapseTwo10" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-
-              <a class="collapse-item" href="productos.php">Ver Stock</a>
-              <a class="collapse-item" href="escanear.php">Ingresar Producto</a>
-              <a class="collapse-item" href="escanear_telas.php">Ingresar Telas</a>
-              <a class="collapse-item" href="esc_stock_telas.php">Ingresar costuras</a>
-
-
-
-              <a class="collapse-item" href="mover.php">Mover de Lugar</a>
-
-
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-bars text-warning" aria-hidden="true"></i>
-
-            <span>Pedidos</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-
-
-            <!--  <a class="collapse-item" href="validarpagos.php">Validar Pagos</a>-->
-              <a class="collapse-item" href="validar_pagos2024.php">Validar Pagos</a>
-
-
-
-          <!--  <a class="collapse-item" href="agregarpedido.php">Agregar Pedido</a>      -->
-              <a class="collapse-item" href="addpedido.php">Agregar Pedido</a>
-
-              <a class="collapse-item" href="todoslospedidos.php">Todos los Pedidos</a>
-              <a class="collapse-item" href="pedidoseliminados.php">Pedidos Eliminados</a>
-            </div>
-          </div>
-        </li>
-<style>.disabled-link {
-    pointer-events: none;  /* Deshabilita clic y otros eventos del mouse */
-    color: grey;  /* Cambia el color para dar aspecto de desactivado */
+    /* === Fin Estilos Menú Colapsable === */
+
+    .sidebar-dark #sidebarToggle { background-color: rgba(255, 255, 255, 0.1); }
+    .sidebar-dark #sidebarToggle:hover { background-color: rgba(255, 255, 255, 0.2); }
+    .sidebar #sidebarToggle::before { font-family: 'Font Awesome 5 Free'; font-weight: 900; content: '\f337'; color: rgba(255, 255, 255, 0.5); }
+    .sidebar.toggled #sidebarToggle::before { content: '\f338'; }
+    @-webkit-keyframes mover { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
+    @keyframes mover { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
+    .disabled-link { pointer-events: none; opacity: 0.4; position: relative; }
+    .disabled-link:hover::after { content: "En Proceso"; position: absolute; left: 105%; top: 50%; transform: translateY(-50%); background-color: #333; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; white-space: nowrap; z-index: 10; }
+    .nav-item .nav-link .text-success { color: #1cc88a !important; }
+    .nav-item .nav-link .text-warning { color: #f6c23e !important; }
+    .nav-item .nav-link .text-info { color: #36b9cc !important; }
+    .btn-primary-corp { color: <?php echo $textoClaro; ?>; background-color: <?php echo $azulPrimario; ?>; border-color: <?php echo $azulPrimario; ?>; }
+    .btn-primary-corp:hover { color: <?php echo $textoClaro; ?>; background-color: #1A252F; border-color: #151E26; }
+    .img-profile { height: 2.5rem; width: 2.5rem; }
+    .topbar .nav-item .nav-link { height: 4.375rem; display: flex; align-items: center; }
+    .topbar .topbar-divider { width: 0; border-right: 1px solid #e3e6f0; height: calc(4.375rem - 2rem); margin: auto 1rem; }
+/* === Estilos Móviles (Ejemplo con Media Query para < 768px) === */
+@media (max-width: 767.98px) { /* Breakpoint 'md' de Bootstrap */
+
+.sidebar.navbar-nav {
+    position: fixed;
+    top: 0;
+    left: 0; /* O usar transform: translateX(-100%); */
+    bottom: 0;
+    z-index: 1045; /* Asegurar que esté sobre el contenido y posible backdrop */
+    width: 250px; /* O un ancho fijo o % que funcione bien */
+    background-color: <?php echo $azulPrimario; ?>;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out; /* Transición para el deslizamiento */
+    transform: translateX(-100%); /* Oculto por defecto */
+    /* Quitar estilos .toggled específicos de ancho si no se usan en off-canvas */
 }
 
-.disabled-link:hover::after {
-    content: "En Proceso";
-    position: absolute;
-    left: 100%;  /* Ajusta según necesidad */
-    top: 0;  /* Ajusta según necesidad */
-    background-color: black;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    white-space: nowrap;  /* Evita que el texto se rompa en varias líneas */
-} </style>
-      <!--   <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo15" aria-expanded="true" aria-controls="collapseTwo15">
-            <i class="fa fa-asterisk   text-warning" aria-hidden="true"></i>
+.sidebar.navbar-nav.active { /* Usar una clase 'active' o 'show' en lugar de 'toggled' para claridad */
+    transform: translateX(0); /* Mostrar */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Sombra opcional */
+}
 
-            <span>Stock Telas</span>
-          </a>
-          <div id="collapseTwo15" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+#content-wrapper {
+    padding-left: 0 !important; /* Sin padding cuando el menú está oculto */
+    transition: none; /* No necesita transición de padding en móvil */
+}
+
+/* Opcional: Si quieres que el menú empuje el contenido */
+/* body.sidebar-active #content-wrapper {
+    padding-left: 250px;
+    transition: padding-left 0.3s ease-in-out;
+} */
+
+/* Opcional: Backdrop para cerrar menú al tocar fuera */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040; /* Debajo del sidebar pero sobre el contenido */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+body.sidebar-active .sidebar-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Ocultar el toggle de escritorio en móvil (ya está hecho con d-md-inline) */
+/* .sidebar #sidebarToggle { display: none; } */
+
+/* Asegurar que el toggle de móvil esté visible (ya está hecho con d-md-none) */
+/* .topbar #sidebarToggleTop { display: block; } */
+
+/* Ajustes menores al Topbar si es necesario para que quepa todo */
+.topbar .nav-item .nav-link {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+.topbar .dropdown {
+     position: static; /* Puede ayudar si los dropdowns se cortan */
+}
+.topbar .dropdown-menu {
+     width: auto; /* O un ancho específico si es necesario */
+     right: 0;
+     left: auto;
+}
+}
+
+/* Estilos para pantallas más grandes (mantener los actuales) */
+@media (min-width: 768px) {
+ /* Aquí van (o se quedan) los estilos originales para el sidebar fijo y colapsable */
+ .sidebar.navbar-nav {
+     position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000;
+     background-color: <?php echo $azulPrimario; ?>;
+     width: <?php echo $sidebarWidth; ?>;
+     overflow-x: hidden; transition: width 0.3s ease; overflow-y: auto;
+     transform: none !important; /* Asegurar que no herede el transform móvil */
+ }
+
+ #content-wrapper {
+     padding-left: <?php echo $sidebarWidth; ?>;
+     transition: padding-left 0.3s ease;
+ }
+
+ .sidebar.navbar-nav.toggled {
+     width: <?php echo $sidebarWidthToggled; ?>;
+     overflow: visible; /* O hidden si prefieres */
+ }
+ #wrapper.sidebar-toggled #content-wrapper {
+      padding-left: <?php echo $sidebarWidthToggled; ?>;
+ }
+ /* ... (resto de estilos .toggled para desktop) ... */
+
+ /* Ocultar el backdrop en desktop */
+ .sidebar-backdrop { display: none; }
+}
+</style>
+
+<div id="wrapper"> <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"> <a class="sidebar-brand" href="index.php">
+             <div class="sidebar-brand-icon">
+                <img src="img/logoblanco.png" alt="RespaldosChile Logo">
+             </div>
+             <div class="sidebar-brand-text">RespaldosChile</div>
+        </a>
+
+        <hr class="sidebar-divider my-0">
+
+        <?php if ($privilegios >= 20) : ?>
+            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'dashboard2024.php' ? 'active' : ''); ?>">
+                <a class="nav-link" href="dashboard2024.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($privilegios >= 20 && ($privilegios >= 20 || $privilegios == 4 || $privilegios == 0 || $privilegios == 5)) : ?>
+            <hr class="sidebar-divider">
+        <?php endif; ?>
 
 
-              <a class="collapse-item" href="validar_pagos2024.php">Ver Stock</a>
+        <?php if ($privilegios >= 20 || $privilegios == 4) : ?>
+            <div class="sidebar-heading">Ventas</div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVentas"
+                   aria-expanded="false" aria-controls="collapseVentas">
+                   <i class="fas fa-fw fa-cash-register text-warning"></i> <span>Gestión Ventas</span>
+                </a>
+                <div id="collapseVentas" class="collapse" aria-labelledby="headingVentas" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="agregarpedido_sala.php">Ventas Sala</a>
+                        <a class="collapse-item" href="stock.php">Stock Sala</a>
+                        <a class="collapse-item" href="reimprimir.php">Re-imprimir</a>
+                        <a class="collapse-item" href="retiro.php">Retiro Cliente</a>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
 
 
+        <?php if ($privilegios >= 20) : ?>
+            <?php if (!($privilegios >= 20 || $privilegios == 4)) : ?> <hr class="sidebar-divider"> <?php endif; ?>
+            <div class="sidebar-heading">Pedidos</div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePedidos"
+                   aria-expanded="false" aria-controls="collapsePedidos">
+                   <i class="fas fa-fw fa-clipboard-list text-warning"></i> <span>Gestión Pedidos</span>
+                </a>
+                <div id="collapsePedidos" class="collapse" aria-labelledby="headingPedidos" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="validar_pagos2024.php">Validar Pagos</a>
+                        <a class="collapse-item" href="addpedido.php">Agregar Pedido</a>
+                        <a class="collapse-item" href="todoslospedidos.php">Todos los Pedidos</a>
+                        <a class="collapse-item" href="pedidoseliminados.php">Pedidos Eliminados</a>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
 
-              <a class="collapse-item" href="addpedido.php">Agregar Stock</a>
 
-             
-            </div>
-          </div>
-        </li> -->
-        <li class="nav-item">
-    <a class="nav-link disabled-link" href="#" aria-expanded="false">
-        <i class="fa fa-asterisk text-warning" aria-hidden="true"></i>
-        <span>Stock Telas</span>
-    </a>
-    <div id="collapseTwo15" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="validar_pagos2024.php">Ver Stock</a>
-            <a class="collapse-item" href="addpedido.php">Agregar Stock</a>
+        <?php if ($privilegios == 0 || $privilegios == 5 || $privilegios >= 20) : ?>
+            <?php if (!($privilegios >= 20)) : ?> <hr class="sidebar-divider"> <?php endif; ?>
+             <div class="sidebar-heading">Producción</div>
+            <li class="nav-item">
+                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProduccion"
+                   aria-expanded="false" aria-controls="collapseProduccion">
+                   <i class="fas fa-fw fa-industry <?php echo ($privilegios >= 20) ? 'text-warning' : ''; ?>"></i> <span>Control Producción</span>
+                </a>
+                <div id="collapseProduccion" class="collapse" aria-labelledby="headingProduccion" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <?php if ($privilegios == 0) : ?>
+                             <a class="collapse-item" href="produccion_tapiceros.php">Ver Mi Producción</a>
+                        <?php elseif ($privilegios == 5) : ?>
+                             <a class="collapse-item" href="vista_produccion.php">Vista General</a>
+                             <a class="collapse-item" href="cortar_telas.php">Cortar Telas</a>
+                             <a class="collapse-item" href="cortar_estructuras.php">Cortar Esqueletos</a>
+                        <?php elseif ($privilegios >= 20) : ?>
+                            <a class="collapse-item" href="registro_esqueletos.php">Ingreso Esqueletos</a>
+                            <a class="collapse-item" href="prod_tapiceros.php">Asignar Producción</a>
+                            <a class="collapse-item" href="produccion_tapiceros.php">Ver Toda Producción</a>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($privilegios >= 20 || $privilegios == 5) : ?>
+                         <div class="collapse-inner rounded mt-1"> <h6 class="collapse-header">Corte:</h6>
+                            <?php if ($privilegios >= 20) : ?> <a class="collapse-item" href="metraje.php">Ver Metrajes</a> <?php endif; ?>
+                            <a class="collapse-item" href="cortar_telas.php">Cortar Telas</a>
+                            <a class="collapse-item" href="cortar_estructuras.php">Cortar Esqueletos</a>
+                         </div>
+                    <?php endif; ?>
+                </div>
+            </li>
+        <?php endif; ?>
+
+
+        <?php if ($privilegios >= 20) : ?>
+             <?php if (!($privilegios == 0 || $privilegios == 5 || $privilegios >= 20)) : ?> <hr class="sidebar-divider"> <?php endif; ?>
+            <div class="sidebar-heading">Bodega & Stock</div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBodega"
+                   aria-expanded="false" aria-controls="collapseBodega">
+                   <i class="fas fa-fw fa-warehouse text-success"></i> <span>Control Bodega</span>
+                </a>
+                <div id="collapseBodega" class="collapse" aria-labelledby="headingBodega" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="productos.php">Ver Stock General</a>
+                        <a class="collapse-item" href="escanear.php">Ingresar Producto</a>
+                        <a class="collapse-item" href="escanear_telas.php">Ingresar Telas</a>
+                        <a class="collapse-item" href="esc_stock_telas.php">Ingresar Costuras</a>
+                        <a class="collapse-item" href="mover.php">Mover de Lugar</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStockProd"
+                   aria-expanded="false" aria-controls="collapseStockProd">
+                   <i class="fas fa-fw fa-boxes text-info"></i> <span>Stock Terminados</span>
+                </a>
+                <div id="collapseStockProd" class="collapse" aria-labelledby="headingStockProd" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="stock_productos.php">Ingresar Producto</a>
+                        <a class="collapse-item" href="stock_productos.php">Ver Stock</a>
+                        <a class="collapse-item" href="vender_stock.php">Venta Stock</a>
+                    </div>
+                </div>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link disabled-link" href="#" aria-expanded="false">
+                    <i class="fas fa-fw fa-scroll text-warning"></i> <span>Stock Telas</span>
+                </a>
+            </li>
+        <?php endif; ?>
+
+
+        <?php if ($privilegios >= 20) : ?>
+            <hr class="sidebar-divider"> <div class="sidebar-heading">Logística</div>
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRutas"
+                   aria-expanded="false" aria-controls="collapseRutas">
+                   <i class="fas fa-fw fa-route text-warning"></i> <span>Rutas Despacho</span>
+                </a>
+                <div id="collapseRutas" class="collapse" aria-labelledby="headingRutas" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="crear_rutas.php">Crear Ruta</a>
+                        <a class="collapse-item" href="seleccionar_ruta.php">Ver Rutas</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStarken"
+                   aria-expanded="false" aria-controls="collapseStarken">
+                   <i class="fas fa-fw fa-truck text-success"></i> <span>Starken</span>
+                </a>
+                <div id="collapseStarken" class="collapse" aria-labelledby="headingStarken" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="consultastarken.php">Cotizar Envío</a>
+                        <a class="collapse-item" href="consultastarken.php">Seguimiento</a>
+                        <a class="collapse-item" href="consultastarken.php">Ingresar Orden</a>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+
+
+        <?php if ($privilegios >= 20) : ?>
+            <hr class="sidebar-divider"> <div class="sidebar-heading">Administración</div>
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClientes"
+                   aria-expanded="false" aria-controls="collapseClientes">
+                   <i class="fas fa-fw fa-users text-warning"></i> <span>Clientes</span>
+                </a>
+                <div id="collapseClientes" class="collapse" aria-labelledby="headingClientes" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="verclientes.php">Ver Clientes</a>
+                    </div>
+                </div>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseColores"
+                   aria-expanded="false" aria-controls="collapseColores">
+                   <i class="fas fa-fw fa-palette text-warning"></i> <span>Colores</span>
+                </a>
+                <div id="collapseColores" class="collapse" aria-labelledby="headingColores" data-bs-parent="#accordionSidebar">
+                    <div class="collapse-inner rounded"> <a class="collapse-item" href="agregar_colores.php">Agregar Colores</a>
+                    </div>
+                </div>
+            </li>
+            <?php if ($privilegios >= 21) : ?>
+                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCostos"
+                       aria-expanded="false" aria-controls="collapseCostos">
+                       <i class="fas fa-fw fa-dollar-sign text-warning"></i> <span>Costos</span>
+                    </a>
+                    <div id="collapseCostos" class="collapse" aria-labelledby="headingCostos" data-bs-parent="#accordionSidebar">
+                        <div class="collapse-inner rounded"> <a class="collapse-item" href="productos_inventario.php">Costos Producción</a>
+                        </div>
+                    </div>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContabilidad"
+                       aria-expanded="false" aria-controls="collapseContabilidad">
+                       <i class="fas fa-fw fa-calculator text-warning"></i> <span>Contabilidad</span>
+                    </a>
+                    <div id="collapseContabilidad" class="collapse" aria-labelledby="headingContabilidad" data-bs-parent="#accordionSidebar">
+                        <div class="collapse-inner rounded"> <a class="collapse-item" href="contabilidad.php">Contabilidad</a>
+                            <a class="collapse-item" href="pagos.php">Pagos</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+             <hr class="sidebar-divider d-none d-md-block">
+        <?php endif; ?>
+
+
+        <div class="text-center d-none d-md-inline mt-3 mb-3">
+             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-    </div>
-</li>
-
-
-         <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo9" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fa fa-cubes text-info" aria-hidden="true"></i>
-
-          <span>Stock Productos</span>
-          </a>
-          <div id="collapseTwo9" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-
-
-            <a class="collapse-item" href="stock_productos.php">Ingresar Producto</a>
-            <a class="collapse-item" href="stock_productos.php">Ver Stock</a>
-            <a class="collapse-item" href="vender_stock.php">Venta Stock</a>
-
-
-
-
-          </div>
-          </div>
-        </li> 
-
-
-
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-location-arrow text-warning" aria-hidden="true"></i>
-
-            <span>Rutas</span>
-          </a>
-          <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-              <a class="collapse-item" href="crear_rutas.php">Crear Ruta</a>
-              <a class="collapse-item" href="seleccionar_ruta.php">Ver Rutas</a>
-
-              <!-- <a class="collapse-item" href="asignacion_ruta.php">Asignar a Ruta</a> -->
-
-            </div>
-          </div>
-        </li>
-      <?php } ?>
-
-
-      <?php if ($_SESSION["privilegios"] == 0) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Produccion</span>
-          </a>
-          <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-
-
-              <a class="collapse-item" href="produccion_tapiceros.php">Ver Produccion</a>
-
-            </div>
-
-
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-
-      <?php if ($_SESSION["privilegios"] == 5) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Produccion</span>
-          </a>
-          <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-
-
-              <a class="collapse-item" href="vista_produccion.php">Ver Produccion</a>
-              <a class="collapse-item" href="cortar_telas.php">Cortar Telas</a>
-              <a class="collapse-item" href="cortar_estructuras.php">Cortar Esqueletos</a>
-            </div>
-
-
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-
-
-
-
-
-      <?php if ($_SESSION["privilegios"] >= 20) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog text-warning"></i>
-            <span>Produccion</span>
-          </a>
-          <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-              <a class="collapse-item" href="registro_esqueletos.php">Ingreso Esqueletos</a>
-              <a class="collapse-item" href="prod_tapiceros.php">Asignar Produccion</a>
-
-
-              <a class="collapse-item" href="produccion_tapiceros.php">Ver Produccion</a>
-            </div>
-
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Telas:</h6>
-
-              <a class="collapse-item" href="metraje.php">Ver Metrajes</a>
-              <?php if ($_SESSION["privilegios"] >= 20) { ?>
-
-                <a class="collapse-item" href="cortar_telas.php">Cortar Telas</a>
-                <a class="collapse-item" href="cortar_estructuras.php">Cortar Esqueletos</a>
-
-
-
-              <?php } ?>
-            </div>
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-
-
-      <?php
-      /* SECCION DE STARKEN */
-      if ($_SESSION["privilegios"] >= 20) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo8" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-location-arrow  text-success"></i>
-            <span>Starken</span><span style="font-size: 9px; margin-top:0; color:RED;"> </span>
-          </a>
-          <div id="collapseTwo8" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Funciones:</h6>
-
-
-              <a class="collapse-item" href="consultastarken.php">Cotizar envío</a>
-              <a class="collapse-item" href="consultastarken.php">Consulta Segumiento</a>
-              <a class="collapse-item" href="consultastarken.php">Ingresar Orden</a>
-            </div>
-
-
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-
-
-
-
-
-      <?php if ($_SESSION["privilegios"] >= "20") { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo5" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-address-book text-warning" aria-hidden="true"></i>
-
-            <span>Clientes</span>
-          </a>
-          <div id="collapseTwo5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-              <a class="collapse-item" href="verclientes.php">Clientes</a>
-
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo6" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-bullseye text-warning" aria-hidden="true"></i>
-
-
-            <span>Colores</span>
-          </a>
-          <div id="collapseTwo6" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-              <a class="collapse-item" href="agregar_colores.php">Agregar Colores</a>
-
-            </div>
-          </div>
-        </li>
-      <?php } ?>
-      <?php if ($_SESSION["privilegios"] >= 21) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo411" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-book text-warning" aria-hidden="true"></i>
-            <span>Costos</span>
-          </a>
-          <div id="collapseTwo411" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-
-
-              <a class="collapse-item" href="productos_inventario.php">Costos Produccion</a>
-
-
-            </div>
-
-
-
-
-
-
-
-          </div>
-        </li>
-
-
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo4" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-book text-warning" aria-hidden="true"></i>
-            <span>Contabilidad</span>
-          </a>
-          <div id="collapseTwo4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-
-
-              <a class="collapse-item" href="contabilidad.php">Contabilidad</a>
-              <a class="collapse-item" href="pagos.php">Pagos</a>
-
-
-            </div>
-
-
-
-
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-      <?php if ($_SESSION["privilegios"] >= 20 or $_SESSION["privilegios"] == 4) { ?>
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo7" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa fa-keyboard text-warning" aria-hidden="true"></i>
-            <span>Ventas</span>
-          </a>
-          <div id="collapseTwo7" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Metodos:</h6>
-
-
-
-
-              <a class="collapse-item" href="agregarpedido_sala.php">Ventas</a>
-              <a class="collapse-item" href="stock.php">Stock</a>
-              <a class="collapse-item" href="reimprimir.php">Re-impirmir</a>
-              <a class="collapse-item" href="retiro.php">Retiro</a>
-
-
-            </div>
-
-
-
-
-
-
-
-          </div>
-        </li>
-      <?php } ?>
-
-
-
-
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
-
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
 
     </ul>
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-          <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button>
-
-
-
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
-
-            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
-              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
-              </a>
-              <!-- Dropdown - Messages -->
-              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                  <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                      </button>
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3">
+                    <i class="fa fa-bars" style="color: <?php echo $azulPrimario; ?>;"></i>
+                </button>
+                <form class="d-none d-sm-inline-block form-inline me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." aria-label="Search">
+                        <button class="btn btn-primary-corp" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
                     </div>
-                  </div>
                 </form>
-              </div>
-            </li>
-
-            <!-- Nav Item - Alerts -->
-
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                  Notificaciones
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown no-arrow d-sm-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-search fa-fw text-gray-600"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <form class="form-inline me-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." aria-label="Search">
+                                    <button class="btn btn-primary-corp" type="button"><i class="fas fa-search fa-sm"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw text-gray-600"></i>
+                            <span class="badge bg-danger badge-counter">3+</span>
+                        </a>
+                        <div class="dropdown-list dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header" style="background-color: <?php echo $azulPrimario; ?>; border-color: <?php echo $azulPrimario; ?>;">Notificaciones</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="me-3"><div class="icon-circle bg-primary"><i class="fas fa-file-alt text-white"></i></div></div>
+                                <div><div class="small text-gray-500">Mayo, 2022</div><span class="font-weight-bold">Mantener Lugar de trabajo limpio!</span></div>
+                            </a>
+                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-envelope fa-fw text-gray-600"></i>
+                            <span class="badge bg-warning text-dark badge-counter">7</span>
+                        </a>
+                        <div class="dropdown-list dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="messagesDropdown">
+                             <h6 class="dropdown-header" style="background-color: <?php echo $azulPrimario; ?>; border-color: <?php echo $azulPrimario; ?>;">Centro de Mensajes</h6>
+                             <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image me-3"><img class="rounded-circle" src="img/chapon.jpg" alt="Chapon"><div class="status-indicator bg-success"></div></div>
+                                <div class="font-weight-bold"><div class="text-truncate">Verificar Chapon.</div><div class="small text-gray-500">Diciembre</div></div>
+                            </a>
+                             <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                        </div>
+                    </li>
+                    <div class="topbar-divider d-none d-sm-block"></div>
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="me-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($usuario); ?></span>
+                             <img class="img-profile rounded-circle" src="img/user.png" alt="User Icon">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>Profile</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Settings</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>Activity Log</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>Cerrar Sesión</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">¿Listo para Salir?</h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Selecciona "Cerrar Sesión" abajo si estás listo para terminar tu sesión actual.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                            <a class="btn btn-primary-corp" href="bd/logout.php">Cerrar Sesión</a>
+                        </div>
                     </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">Mayo, 2022</div>
-                    <span class="font-weight-bold">Mantener Lugar de trabajo limpio!</span>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for your account.
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-              </div>
-            </li>
+                </div>
+            </div>
 
-            <!-- Nav Item - Messages -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
-                <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter">7</span>
-              </a>
-              <!-- Dropdown - Messages -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
-                <h6 class="dropdown-header">
-                  Centro de Mensajes
-                </h6>
-
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/chapon.jpg" alt="">
-                    <div class="status-indicator bg-success"></div>
-                  </div>
-                  <div class="font-weight-bold">
-                    <div class="text-truncate">Verificar Chapon.</div>
-                    <div class="small text-gray-500">Diciembre</div>
-                  </div>
-                </a>
-
-
-
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/espuma.jpg" alt="">
-                    <div class="status-indicator"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">Verificar Espuma</div>
-                    <div class="small text-gray-500">Todas las densidades</div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/tafetan.jpg" alt="">
-                    <div class="status-indicator bg-warning"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">Verificar Tafetan</div>
-                    <div class="small text-gray-500"></div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/corchetes.jpg" alt="">
-                    <div class="status-indicator bg-success"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">Verificar Corchetes</div>
-                    <div class="small text-gray-500">71 12 - 14 45</div>
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-              </div>
-            </li>
-
-            <div class="topbar-divider d-none d-sm-block"></div>
-
-            <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                  <?php echo $usuario = $_SESSION["s_usuario"]; ?>
-                </span>
-                <!--                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">-->
-                <img class="img-profile rounded-circle" src="img/user.png">
-              </a>
-              <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Cerrar Sesión
-                </a>
-              </div>
-            </li>
-
-          </ul>
-
-        </nav>
-        <!-- End of Topbar -->
+            

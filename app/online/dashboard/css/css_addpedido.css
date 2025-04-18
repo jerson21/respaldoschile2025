@@ -1,0 +1,199 @@
+ .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+    }
+
+ 
+
+    .overlay-iframe {
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        margin-top: 10px;
+        /* Ajusta según necesidad para alinear con el input de dirección */
+    }
+
+    /* Ajustes para mejorar la responsividad en dispositivos más pequeños */
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+        }
+
+        .form-group {
+            padding: 0;
+        }
+    }
+
+    .container2 {
+        max-width: 1000px;
+        padding-right: calc(var(--bs-gutter-x)* .5);
+        padding-left: calc(var(--bs-gutter-x)* .5);
+        margin-right: auto;
+        margin-left: auto;
+        padding: 25px;
+        background-color: white;
+        /* Contenedor blanco */
+        border: 10px solid rgba(255, 255, 255, 0);
+        /* Borde blanco transparente */
+        box-sizing: border-box;
+        /* incluir el borde en el tamaño total del contenedor */
+        border-radius: 5px;
+        /* redondea las esquinas */
+
+    }
+
+    .outer-border {
+        max-width: 1000px;
+        margin-right: auto;
+        margin-left: auto;
+        /* ancho del contenedor + el doble del ancho del borde */
+        box-sizing: border-box;
+        /* incluir el borde en el tamaño total del contenedor */
+
+        /* alto del contenedor + el doble del ancho del borde */
+        border: 10px solid rgba(255, 255, 255, 0.5);
+        /* Borde blanco con transparencia */
+        border-radius: 5px;
+        /* redondea las esquinas */
+        top: -10px;
+        /* Mueve el contenedor hacia arriba para que el borde inferior esté alineado con el borde del contenedor */
+        left: -10px;
+        /* Mueve el contenedor hacia la izquierda para que el borde derecho esté alineado con el borde del contenedor */
+        right: -25px;
+        /* Mueve el contenedor hacia la derecha para que el borde izquierdo esté alineado con el borde del contenedor */
+        bottom: -25px;
+        margin-bottom: 15px;
+    }
+
+    #formular fieldset:not(:first-of-type) {
+        display: none;
+    }
+
+    .pedido-agregado {
+        display: flex;
+        justify-content: flex-start;
+        /* Alinea el contenido al inicio */
+        align-items: flex-start;
+        /* Alinea los items al inicio */
+        border: 1px solid #e0e0e0;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: auto;
+        /* Ajusta esto según necesites */
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+
+    .pedido-precios {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .pedido-detalle h4,
+    .pedido-detalle p,
+    .pedido-precios .form-group {
+        margin: 2px 0;
+    }
+
+    .pedido-detalle h4 {
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    .pedido-detalle p,
+    .form-group label {
+        font-size: 0.9em;
+        color: black;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 5px;
+        margin-bottom: 20px; /* Ajusta este valor según lo que necesites */
+    }
+    
+
+    .pedido-precios .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        height: 30px;
+        /* Hace los inputs más pequeños */
+        padding: 5px;
+        font-size: 0.8em;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    /* Ajuste adicional para reducir el ancho de los inputs y permitir más control */
+    .pedido-precios .form-group {
+        width: 80%;
+        /* Reducir el ancho de los inputs del precio y envío */
+    }
+
+    /* Para no expandir el div a todo el ancho */
+    .pedido-agregado {
+        max-width: 80%;
+        /* Ajusta este valor según prefieras */
+    }
+
+    .label {
+        white-space: nowrap;
+        /* Evita que la etiqueta se divida en líneas */
+        overflow: hidden;
+        /* Oculta el contenido que excede el ancho del elemento */
+        text-overflow: ellipsis;
+        /* Muestra puntos suspensivos si el texto es demasiado largo */
+    }
+
+    .form-control {
+        flex-grow: 1;
+        /* Permite que el input ocupe el espacio restante */
+    }
+
+    .cerrar-pedido {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+        font-weight: bold;
+        color: #333;
+        /* Puedes añadir más estilos para hacerlo más atractivo o visible */
+    }
+
+    .pedido-agregado {
+        position: relative;
+        /* Necesario para posicionar absolutamente el botón de cierre */
+        /* El resto de tus estilos */
+    }
+
+    .pedido-resumen {
+        max-width: 400px;
+        /* Ajusta esto según tus necesidades */
+        margin: 0 auto;
+        /* Centra el contenedor */
+        padding: 20px;
+        /* Espacio interior para que no esté pegado al borde */
+        background-color: #f9f9f9;
+        /* Fondo ligeramente gris para destacarlo, opcional */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* Sombra suave para darle profundidad, opcional */
+        border-radius: 5px;
+        /* Bordes redondeados, opcional */
+    }
+
+    .pedido-despacho,
+    .pedido-total {
+        margin-bottom: 15px;
+        /* Espacio entre los inputs */
+    }

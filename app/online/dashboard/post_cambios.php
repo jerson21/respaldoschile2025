@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php include "vistas/parte_superior.php"?>
 <style type="text/css">
     ody {

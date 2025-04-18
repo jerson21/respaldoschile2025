@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php require_once "vistas/parte_superior.php";
 error_reporting(E_ALL);
 include_once 'bd/conexion.php';

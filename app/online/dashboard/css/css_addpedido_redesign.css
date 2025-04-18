@@ -1,0 +1,466 @@
+/* css/css_addpedido_redesign.css */
+
+/* General Styles */
+body {
+    font-family: 'Inter', 'Nunito', sans-serif;
+    background-color: #f8f9fc; /* Light gray background consistent with SB Admin */
+    color: #5a5c69; /* Default text color */
+}
+
+#wrapper #content-wrapper {
+   background-color: #f8f9fc; /* Ensure content wrapper matches */
+   min-height: 100vh;
+}
+
+.container-fluid.main-content {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+/* Form Step Card */
+.form-step-card {
+    margin-bottom: 2rem;
+    border: none;
+    border-radius: 0.75rem; /* Rounded corners */
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); /* SB Admin shadow */
+    overflow: hidden; /* Contain progress bar */
+}
+
+.form-step-card .card-header {
+    background-color: #4e73df; /* Primary color */
+    color: white;
+    font-weight: 500; /* Slightly bolder */
+    border-bottom: none;
+    padding: 1rem 1.5rem;
+}
+ .form-step-card .card-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+ }
+
+.form-step-card .card-body {
+    padding: 2rem;
+}
+
+/* Progress Bar */
+.progress {
+    height: 8px; /* Slimmer progress bar */
+    border-radius: 0;
+    background-color: #eaecf4; /* Lighter background */
+}
+.progress-bar {
+    background-color: #1cc88a; /* Success color */
+    transition: width 0.4s ease-in-out;
+    font-size: 0.6rem; /* Smaller percentage text */
+    line-height: 8px; /* Align text vertically */
+    color: white;
+    text-align: center;
+}
+
+/* Form Steps */
+.form-step {
+    display: none; /* Hide steps by default */
+    animation: fadeIn 0.5s ease-in-out; /* Add fade animation */
+}
+.form-step.active-step {
+    display: block;
+}
+
+.form-step h4 {
+    color: #4e73df; /* Primary color for step titles */
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+.form-step hr {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid #e3e6f0; /* Lighter separator */
+}
+
+/* Form Elements */
+.form-label {
+    font-weight: 500; /* Slightly bolder labels */
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 0.375rem; /* Consistent rounded corners */
+    border-color: #d1d3e2; /* Standard border color */
+}
+.form-control:focus, .form-select:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.form-control.is-invalid, .form-select.is-invalid {
+    border-color: #e74a3b; /* Danger color */
+}
+.form-control.is-valid, .form-select.is-valid {
+    border-color: #1cc88a; /* Success color */
+}
+
+.invalid-feedback {
+    font-size: 0.8rem;
+}
+.form-text {
+    font-size: 0.8rem;
+    color: #858796; /* Muted text color */
+}
+
+/* Input group for RUT validation */
+.input-group-rut .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+ .input-group-rut .input-group-text {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: #f8f9fc; /* Light background for icon area */
+    width: 45px; /* Fixed width */
+    justify-content: center;
+    border-color: #d1d3e2;
+ }
+.input-group-rut .validation-icon {
+    font-size: 1rem;
+    display: none; /* Hidden by default */
+    transition: color 0.2s ease;
+}
+.input-group-rut .form-control.is-valid ~ .input-group-text .fa-check {
+    display: inline;
+    color: #1cc88a; /* Success */
+}
+ .input-group-rut .form-control.is-invalid ~ .input-group-text .fa-times {
+    display: inline;
+    color: #e74a3b; /* Danger */
+ }
+
+ /* Address/Map Section */
+ #direccionYMapaContainer, #detalleRetiroContainer {
+    margin-top: 1.5rem;
+ }
+ .map-container {
+    height: 300px;
+    border-radius: 0.375rem;
+    overflow: hidden;
+    border: 1px solid #d1d3e2;
+    background-color: #eaecf4; /* Placeholder background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.map-container iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+#address-feedback {
+    font-weight: 500;
+}
+#verificar_cobertura_btn i {
+    color: #4e73df;
+}
+
+/* Product Selection */
+#productTypeSelect {
+    font-weight: 500;
+}
+#formulariosContainer {
+    margin-top: 1.5rem;
+}
+#formulariosContent {
+    border: 1px dashed #d1d3e2;
+    padding: 1.5rem;
+    border-radius: 0.375rem;
+    background-color: #f8f9fc;
+    min-height: 150px; /* Ensure it has some height */
+}
+#formLoadingIndicator .spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Order Summary Styling */
+#pedidosAgregadosContainer {
+    margin-top: 1rem;
+}
+#no-products-message {
+    padding: 1rem;
+    background-color: #f8f9fc;
+    border: 1px dashed #d1d3e2;
+    border-radius: 0.375rem;
+}
+
+.pedido-agregado-card {
+    background-color: #fff;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem; /* More padding */
+    position: relative;
+    box-shadow: 0 0.1rem 0.5rem rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s ease;
+}
+.pedido-agregado-card:hover {
+     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.08);
+}
+
+.pedido-agregado-card h5 {
+    font-size: 1.1rem; /* Slightly larger product title */
+    font-weight: 600;
+    color: #5a5c69;
+    margin-bottom: 0.5rem;
+}
+ .pedido-agregado-card p {
+    font-size: 0.85rem; /* Smaller detail text */
+    margin-bottom: 0.25rem;
+    color: #6e707e; /* Slightly lighter text */
+ }
+ .pedido-agregado-card p strong {
+    color: #5a5c69; /* Darker label */
+ }
+
+.pedido-agregado-card .cerrar-pedido {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    cursor: pointer;
+    color: #e74a3b; /* Danger color */
+    font-weight: bold;
+    font-size: 1.5rem; /* Larger X */
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.pedido-agregado-card .cerrar-pedido:hover {
+    color: #c73423;
+}
+.pedido-agregado-card .form-label.small {
+    font-size: 0.75rem; /* Even smaller labels for price/qty */
+    color: #858796;
+    font-weight: 400;
+}
+.pedido-agregado-card .form-control-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+.pedido-agregado-card .input-group-sm .input-group-text {
+     padding: 0.25rem 0.5rem;
+     font-size: 0.875rem;
+     border-radius: 0.25rem;
+}
+
+
+.pedido-resumen-card {
+     background-color: #f8f9fc;
+     border: 1px solid #e3e6f0;
+     border-radius: 0.375rem;
+     padding: 1.5rem;
+     margin-top: 2rem; /* More space before summary */
+}
+ .pedido-resumen-card .card-title {
+    font-weight: 600;
+    color: #4e73df;
+ }
+ .pedido-resumen-card .row > div {
+    margin-bottom: 1rem;
+ }
+ .pedido-resumen-card label {
+     font-weight: 500;
+     color: #5a5c69;
+     margin-bottom: 0.25rem;
+     display: block;
+     font-size: 0.9rem;
+ }
+ .pedido-resumen-card .form-control[disabled] {
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #36b9cc; /* Info color for total */
+    font-size: 1.1rem; /* Larger total */
+ }
+ .pedido-resumen-card small {
+     font-size: 0.8rem;
+     color: #858796;
+ }
+
+/* Step Buttons */
+.step-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2.5rem; /* More space above buttons */
+    padding-top: 1.5rem; /* Space between form fields and buttons */
+    border-top: 1px solid #e3e6f0; /* Separator line */
+}
+.step-buttons .btn {
+    min-width: 120px; /* Wider buttons */
+    border-radius: 0.375rem;
+    padding: 0.6rem 1.2rem; /* Larger padding */
+    font-weight: 500;
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between icon and text */
+}
+.step-buttons .btn:disabled {
+    background-color: #eaecf4;
+    border-color: #eaecf4;
+    color: #b7b9cc;
+    cursor: not-allowed;
+}
+.step-buttons .btn-info {
+     background-color: #36b9cc;
+     border-color: #36b9cc;
+     color: white;
+}
+ .step-buttons .btn-info:hover {
+     background-color: #2c9faf;
+     border-color: #2a96a5;
+     color: white;
+ }
+ .step-buttons .btn-secondary {
+     background-color: #858796;
+     border-color: #858796;
+     color: white;
+ }
+.step-buttons .btn-secondary:hover {
+     background-color: #717384;
+     border-color: #6b6d7d;
+     color: white;
+ }
+ .step-buttons .btn-success {
+     background-color: #1cc88a;
+     border-color: #1cc88a;
+     color: white;
+ }
+.step-buttons .btn-success:hover {
+     background-color: #17a673;
+     border-color: #169b6b;
+     color: white;
+ }
+
+ /* Final Step styling */
+ #confirmation-step {
+    text-align: center;
+    padding: 2rem 0;
+ }
+ #confirmation-step h4 { /* Style the step title */
+    color: #1cc88a; /* Success color for the final step title */
+ }
+ #confirmation-step h2 {
+    color: #1cc88a; /* Success color */
+    margin-bottom: 1rem;
+    font-weight: 600;
+ }
+ #confirmation-step .icon-success {
+    font-size: 5rem; /* Larger icon */
+    color: #1cc88a;
+    margin-bottom: 1.5rem;
+    display: block; /* Center icon */
+    margin-left: auto;
+    margin-right: auto;
+ }
+ #confirmation-step p {
+    font-size: 1.1rem;
+    color: #5a5c69;
+ }
+ #order-details-summary {
+    max-width: 400px;
+    margin: 1.5rem auto;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    background-color: #f8f9fc; /* Light background for details */
+    border: 1px solid #e3e6f0;
+ }
+  #confirmation-step .btn {
+    margin: 0.5rem; /* Space buttons */
+  }
+   #confirmation-step .btn i {
+    margin-right: 0.3rem;
+   }
+
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+     /* Adjust columns for address/map on medium screens */
+    #direccionYMapaContainer .col-lg-7, #direccionYMapaContainer .col-lg-5 {
+        width: 100%;
+    }
+     .map-container {
+         margin-top: 1.5rem;
+         height: 250px;
+     }
+}
+
+@media (max-width: 768px) {
+    .form-step-card .card-body {
+        padding: 1.5rem;
+    }
+     .form-step h4 {
+        font-size: 1.1rem;
+     }
+     .map-container {
+        height: 200px;
+    }
+    /* Stack buttons vertically */
+    .step-buttons {
+        flex-direction: column-reverse;
+        gap: 0.5rem; /* Space between stacked buttons */
+        border-top: none; /* Remove top border on small screens */
+        padding-top: 0;
+        margin-top: 1.5rem;
+    }
+    .step-buttons .btn {
+        width: 100%;
+    }
+    /* Adjust summary card layout */
+    .pedido-resumen-card .row > div {
+        margin-bottom: 0.75rem;
+    }
+    .pedido-resumen-card .col-md-6, .pedido-resumen-card .col-md-3 {
+         width: 100%;
+    }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Ensure required asterisk is visible */
+.form-label .text-danger {
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+/* Style Flatpickr input */
+input.flatpickr-input {
+    background-color: #fff !important; /* Override potential conflicts */
+     cursor: pointer;
+}
+
+/* SweetAlert Customizations (Optional) */
+.swal2-popup {
+    font-family: 'Inter', sans-serif;
+    border-radius: 0.5rem;
+}
+.swal2-title {
+    font-weight: 600;
+}
+
+/* Style for loaded forms if needed */
+/* Example: Ensure consistent spacing within loaded forms */
+#formulariosContent .form-group,
+#formulariosContent .mb-3 {
+    margin-bottom: 1rem !important;
+}
+#formulariosContent .form-row { /* If form-row is used */
+     margin-left: -0.5rem;
+     margin-right: -0.5rem;
+}
+#formulariosContent .form-row > [class*="col-"] {
+     padding-left: 0.5rem;
+     padding-right: 0.5rem;
+}

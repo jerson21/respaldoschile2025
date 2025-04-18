@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php
 
 include_once 'bd/conexion.php';

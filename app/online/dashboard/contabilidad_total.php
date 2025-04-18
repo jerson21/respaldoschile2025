@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php require_once "vistas/parte_superior.php"?>
 
 <!--INICIO del cont principal-->
@@ -140,7 +141,7 @@
                 <div class="card-body p-0">
                 	<form action="" method="GET">
                 	<?php 
-include_once 'bd/conexion.php';
+require_once 'bd/conexion.php';
 $objeto1 = new Conexion();
 $conexion = $objeto1->Conectar();
 
@@ -249,74 +250,79 @@ $meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"
                                     <tr>
                                     	<?php 
                                     	
-
-                                    	$ruta = $_GET['ruta'];
+                                    	$ruta = isset($_GET['ruta']) ? $_GET['ruta'] : 0;
                                     	$objeto = new Conexion();
-$conexion = $objeto->Conectar();
+                                        $conexion = $objeto->Conectar();
                                     	$consultar = "SELECT * FROM pedidos WHERE ruta_asignada = $ruta";
-        $resultado2 = $conexion->prepare($consultar);
-        $resultado2->execute();
+                                        $resultado2 = $conexion->prepare($consultar);
+                                        $resultado2->execute();
 
-        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach($data as $dat) { 
-                echo "<tr>";
-                echo "<td>".$dat['id']."</td>";
-                echo "<td>".$dat['modelo']."</td>";
-               	echo "<td>".$dat['plazas']."</td>";
-              	echo "<td>".$dat['cantidad']."</td>";
-              	echo "<td>$".$dat['precio']."</td>";
-              	echo "<td>".$dat['mododepago']."</td>";
-                
-                echo "</tr>";
-                $total +=$dat['precio'];
-                if($dat['mododepago'] == "debito" || $dat['mododepago'] == "credito"){
-                	$debito +=$dat['precio'];
+                                        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
+                                        $total = 0;
+                                        $debito = 0;
+                                        $transferencia = 0;
+                                        $efectivo = 0;
+                                        
+                                        foreach($data as $dat) { 
+                                                echo "<tr>";
+                                                echo "<td>".$dat['id']."</td>";
+                                                echo "<td>".$dat['modelo']."</td>";
+                                                echo "<td>".$dat['plazas']."</td>";
+                                                echo "<td>".$dat['cantidad']."</td>";
+                                                echo "<td>$".$dat['precio']."</td>";
+                                                echo "<td>".$dat['mododepago']."</td>";
+                                                
+                                                echo "</tr>";
+                                                $total +=$dat['precio'];
+                                                if($dat['mododepago'] == "debito" || $dat['mododepago'] == "credito"){
+                                                    $debito +=$dat['precio'];
 
-                }
-                if($dat['mododepago'] == "transferencia"){
-                	$transferencia +=$dat['precio'];
+                                                }
+                                                if($dat['mododepago'] == "transferencia"){
+                                                    $transferencia +=$dat['precio'];
 
-                }
-                if($dat['mododepago'] == "efectivo"){
-                	$efectivo +=$dat['precio'];
+                                                }
+                                                if($dat['mododepago'] == "efectivo"){
+                                                    $efectivo +=$dat['precio'];
 
-                }
+                                                }
 
-        }
-        ?>
+                                        }
+                                        ?>
                   
 
-                  <?php 
-                                        
+                                        <?php 
+                                        $totales = 0;
+                                        $debitos = 0;
+                                        $transferencias = 0;
+                                        $efectivos = 0;
 
-                                        $ruta = $_GET['ruta'];
                                         $objeto = new Conexion();
-$conexion = $objeto->Conectar();
+                                        $conexion = $objeto->Conectar();
                                         $consultar = "SELECT * FROM pedidos as p inner join rutas as r on p.ruta_asignada = r.id where MONTH(r.fecha)=MONTH(CURDATE()) order by mododepago";
-        $resultado2 = $conexion->prepare($consultar);
-        $resultado2->execute();
+                                        $resultado2 = $conexion->prepare($consultar);
+                                        $resultado2->execute();
 
-        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach($data as $dat) { 
-               //echo $dat['fecha'].' '.$dat['precio'].' '.$dat['mododepago'].' <br>';
-                $totales +=$dat['precio'];
-                if($dat['mododepago'] == "debito" || $dat['mododepago'] == "credito"){
-                    $debitos +=$dat['precio'];
+                                        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        foreach($data as $dat) { 
+                                            //echo $dat['fecha'].' '.$dat['precio'].' '.$dat['mododepago'].' <br>';
+                                            $totales +=$dat['precio'];
+                                            if($dat['mododepago'] == "debito" || $dat['mododepago'] == "credito"){
+                                                $debitos +=$dat['precio'];
 
-                }
-                if($dat['mododepago'] == "transferencia"){
-                    $transferencias +=$dat['precio'];
+                                            }
+                                            if($dat['mododepago'] == "transferencia"){
+                                                $transferencias +=$dat['precio'];
 
-                }
-                if($dat['mododepago'] == "efectivo"){
-                    $efectivos +=$dat['precio'];
+                                            }
+                                            if($dat['mododepago'] == "efectivo"){
+                                                $efectivos +=$dat['precio'];
 
-                }
+                                            }
 
-        }
-        ?>                     
+                                        }
+                                        ?>                     
                                         
                                 </tbody>
                             </table>
@@ -327,8 +333,9 @@ $conexion = $objeto->Conectar();
                         <div class="py-3 px-5 text-right">
                             <div class="mb-2">Total</div>
                             <div class="h2 font-weight-light"><?php 
-setlocale(LC_MONETARY, 'es_CL');
-echo money_format('%i', $total) ?></div>
+                                setlocale(LC_MONETARY, 'es_CL');
+                                echo money_format('%i', $total) ?>
+                            </div>
                         </div>
 
                         <div class="py-3 px-4 text-right">
@@ -356,8 +363,9 @@ echo money_format('%i', $total) ?></div>
                         <div class="py-3 px-5 text-right">
                             <div class="mb-2">Total</div>
                             <div class="h2 font-weight-light"><?php 
-setlocale(LC_MONETARY, 'es_CL');
-echo money_format('%i', $totales) ?></div>
+                                setlocale(LC_MONETARY, 'es_CL');
+                                echo money_format('%i', $totales) ?>
+                            </div>
                         </div>
 
                         <div class="py-3 px-4 text-right">
@@ -400,302 +408,233 @@ echo money_format('%i', $totales) ?></div>
                                         </div>
                                     </form>
                                     </div>
-
-                                 
-                                        
-
-                                       
-                                 
-                                    <!-- <div class="col-md-6">
-                                        
-                                        
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option class="hidden"  selected disabled>Please select your Sequrity Question</option>
-                                                <option>What is your Birthdate?</option>
-                                                <option>What is Your old Phone Number</option>
-                                                <option>What is your Pet Name?</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="`Answer *" value="" />
-                                        </div>
-                                        <input type="submit" class="btnRegister"  value="Register"/>
-                                    </div> -->
-
-                                     
                                 </div>
-
                             </div>
 
 
-								<div class="tab-pane fade show" id="precios" role="tabpanel" aria-labelledby="precios-tab">
+                            <div class="tab-pane fade show" id="precios" role="tabpanel" aria-labelledby="precios-tab">
                                 <h3  class="register-heading">Precios</h3>
                                 <div class="row register-form">
                                    
                                     <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Producto</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">1 plaza</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Full</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">2 plazas</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Queen</th>
-                                         <th class="border-0 text-uppercase small font-weight-bold">King</th>
-                                          <th class="border-0 text-uppercase small font-weight-bold">Super King</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <?php 
-                                        
+                                        <thead>
+                                            <tr>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Producto</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">1 plaza</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Full</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">2 plazas</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Queen</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">King</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Super King</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <?php 
+                                                $objeto = new Conexion();
+                                                $conexion = $objeto->Conectar();
+                                                $consultar = "SELECT * FROM productos";
+                                                $resultado2 = $conexion->prepare($consultar);
+                                                $resultado2->execute();
 
-                                        
-                                        $objeto = new Conexion();
-$conexion = $objeto->Conectar();
-                                        $consultar = "SELECT * FROM productos";
-        $resultado2 = $conexion->prepare($consultar);
-        $resultado2->execute();
+                                                $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
+                                                
+                                                foreach($data as $dat) { 
+                                                        echo "<tr>";
+                                                        echo "<td>".$dat['id']."</td>";
+                                                        echo "<td>".$dat['nombre']."</td>";
+                                                        echo "<td>$".$dat['unaplaza']."</td>";
+                                                        echo "<td>$".$dat['full']."</td>";
+                                                        echo "<td>$".$dat['dosplazas']."</td>";
+                                                        echo "<td>$".$dat['queen']."</td>";
+                                                        echo "<td>$".$dat['king']."</td>";
+                                                        echo "<td>$".$dat['superking']."</td>";
+                                                        
+                                                        echo "</tr>";
+                                                      
 
-        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach($data as $dat) { 
-                echo "<tr>";
-                echo "<td>".$dat['id']."</td>";
-                echo "<td>".$dat['nombre']."</td>";
-                echo "<td>$".$dat['unaplaza']."</td>";
-                echo "<td>$".$dat['full']."</td>";
-                echo "<td>$".$dat['dosplazas']."</td>";
-                echo "<td>$".$dat['queen']."</td>";
-                echo "<td>$".$dat['king']."</td>";
-                echo "<td>$".$dat['superking']."</td>";
-                
-                echo "</tr>";
-              
-
-        }
-        ?>
-                                       
-                                        
-                                </tbody>
-                            </table>
-
-
-
+                                                }
+                                                ?>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
-<br>
-                             <div class="tab-pane fade show" id="resumen" role="tabpanel" aria-labelledby="resumen-tab">
+                            <br>
+                            <div class="tab-pane fade show" id="resumen" role="tabpanel" aria-labelledby="resumen-tab">
                                 <h3  class="register-heading">Resumen de Gastos</h3>
                                 <div class="row register-form" style="width: 100%">
                                     <div class="col-md-15">
                                       <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Detalle</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Monto</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Fecha</th>
-                                        
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <?php                                        
+                                        <thead>
+                                            <tr>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Detalle</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Monto</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Fecha</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <?php                                        
+                                                $objeto = new Conexion();
+                                                $conexion = $objeto->Conectar();
+                                                $consultar = "SELECT * FROM gastos";
+                                                $resultado2 = $conexion->prepare($consultar);
+                                                $resultado2->execute();
 
-                                    
-                                        $consultar = "SELECT * FROM gastos";
-        $resultado2 = $conexion->prepare($consultar);
-        $resultado2->execute();
+                                                $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
+                                                $suma = 0;
+                                                foreach($data as $dat) { 
+                                                        echo "<tr>";
+                                                        echo "<td>".$dat['id']."</td>";
+                                                        echo "<td>".$dat['detalle']."</td>";
+                                                        echo "<td>$".$dat['monto']."</td>";
+                                                        $suma+=$dat['monto'];
+                                                        echo "<td>".$dat['fecha']."</td>";
+                                                        
+                                                        
+                                                        echo "</tr>";
+                                                      
 
-        $data = $resultado2->fetchAll(PDO::FETCH_ASSOC);
-        $suma = 0;
-        foreach($data as $dat) { 
-                echo "<tr>";
-                echo "<td>".$dat['id']."</td>";
-                echo "<td>".$dat['detalle']."</td>";
-                echo "<td>$".$dat['monto']."</td>";
-                $suma+=$dat['monto'];
-                echo "<td>".$dat['fecha']."</td>";
-                
-                
-                echo "</tr>";
-              
-
-        }
-        ?>
-                                       
-                                        
-                                </tbody>
-                            </table>
-
-                                       
-                                 
-                                    <!-- <div class="col-md-6">
-                                        
-                                        
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option class="hidden"  selected disabled>Please select your Sequrity Question</option>
-                                                <option>What is your Birthdate?</option>
-                                                <option>What is Your old Phone Number</option>
-                                                <option>What is your Pet Name?</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="`Answer *" value="" />
-                                        </div>
-                                        <input type="submit" class="btnRegister"  value="Register"/>
-                                    </div> -->
-
-                                     
+                                                }
+                                                ?>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
 <!--FIN del cont principal-->
  <?php setlocale(LC_MONETARY, 'es_CL');
+       echo "<b>Total de Gastos $".number_format($suma)."</b>"; ?>  
+</div>
 
-                                  
-                                  echo "<b>Total de Gastos $".number_format($suma)."</b>"; ?>  
-                                    </div>
-
-                                 
-                                     
 <?php 
+require_once 'bd/conexion.php';
+$objeto = new Conexion();
+$conexion = $objeto->Conectar();
+
 $id = 1;
-$BD_SERVIDOR = "localhost";
-$BD_USUARIO ="cre61650_respaldos21";
-$BD_PASSWORD = "respaldos21/";
-$BD_NOMBRE = "cre61650_agenda";
-
-
-
-
-
-$mysqli = new mysqli($BD_SERVIDOR, $BD_USUARIO, $BD_PASSWORD, $BD_NOMBRE);
-
-$mysqli -> set_charset("utf8");
+$sumasueldos = 0;
 
 while ($id < 3){
     $dias_trabajados=0;
     $total_final=0;
-$resultadoas = $mysqli->query("SELECT * FROM usuarios WHERE id='$id'");
-
-    $rowss = mysqli_fetch_assoc($resultadoas);
-$resultadoa = $mysqli->query("SELECT * FROM pedidos where tapicero_id =$id and  MONTH(fecha_fabricacion)=MONTH(CURDATE()) GROUP BY DATE(fecha_fabricacion)");
-    while($rows = mysqli_fetch_assoc($resultadoa)) {
-$contador=0;
-$fecha = $rows['fecha_fabricacion'];
-
-setlocale(LC_TIME, 'es_CO.UTF-8');
-
-
-$resultadoas = $mysqli->query("SELECT * FROM usuarios WHERE id='$id'");
-    $rowss = mysqli_fetch_assoc($resultadoas);
-$nombre_tapicero = $rowss['nombres']." ".$rowss['apaterno'];
- $fechas =  "<b>".strtoupper(strftime("%A, %d de %B de %Y", strtotime($rows['fecha_fabricacion'])))."</b>";
-$dias_trabajados+=1;
-
-
-
-$resultado = $mysqli->query("SELECT * FROM pedidos where tapicero_id=$id and DATE(fecha_fabricacion) = DATE('$fecha') ORDER BY plazas");
-
-while($row = mysqli_fetch_assoc($resultado)) {
-
-$contador+=1;
-
-    $modelo = $row['modelo'];
-$plazas = $row['plazas'];
-
-if($plazas == "1" || $plazas == "1 1/2"){
-    if($modelo == "Botone"){ $pago = 4000; $total+=4000;    }
-    if($modelo == "Liso"){ $pago = 4000; $total+=4000;  }
-    if($modelo == "Liso 1.35"){ $pago = 5000; $total+=5000;  }
-    if($modelo == "Liso con costuras"){ $pago = 4000; $total+=4000; }
-    if($modelo == "Liso con costuras 1.35"){ $pago = 5000; $total+=5000; }
-    if($modelo == "Liso con Orejas"){ $pago = 7000; $total+=7000; }  //revisar
-    if($modelo == "Liso con Orejas y tachas"){ $pago = 8000; $total+=8000; } //revisar   
-    if($modelo == "Capitone"){  $pago = 10000; $total+=10000;   }
-    if($modelo == "Capitone orejas"){ $pago = 14000; $total+=14000; }
-    if($modelo == "Capitone orejas y tachas"){ $pago = 16000; $total+=16000; }
-    if($modelo == "Botone 3 corridas de botones"){  $pago = 5000; $total+=5000; }
-    if($modelo == "Botone 4 corridas de botones"){  $pago = 7000; $total+=7000; }
-    if($modelo == "Base de Cama"){  $pago = 4000; $total+=4000; }
-
     
-}
+    $resultadoas = $conexion->prepare("SELECT * FROM usuarios WHERE id=:id");
+    $resultadoas->bindParam(':id', $id, PDO::PARAM_INT);
+    $resultadoas->execute();
+    $rowss = $resultadoas->fetch(PDO::FETCH_ASSOC);
+    
+    $resultadoa = $conexion->prepare("SELECT * FROM pedidos WHERE tapicero_id = :id AND MONTH(fecha_fabricacion)=MONTH(CURDATE()) GROUP BY DATE(fecha_fabricacion)");
+    $resultadoa->bindParam(':id', $id, PDO::PARAM_INT);
+    $resultadoa->execute();
+    
+    while($rows = $resultadoa->fetch(PDO::FETCH_ASSOC)) {
+        $contador=0;
+        $fecha = $rows['fecha_fabricacion'];
+        $total = 0;
 
-if($modelo == "Banqueta Simple"){
+        setlocale(LC_TIME, 'es_CO.UTF-8');
 
-$pago = 5000; $total+=5000;
+        $resultadoas = $conexion->prepare("SELECT * FROM usuarios WHERE id=:id");
+        $resultadoas->bindParam(':id', $id, PDO::PARAM_INT);
+        $resultadoas->execute();
+        $rowss = $resultadoas->fetch(PDO::FETCH_ASSOC);
+        
+        $nombre_tapicero = $rowss['nombres']." ".$rowss['apaterno'];
+        $fechas = "<b>".strtoupper(strftime("%A, %d de %B de %Y", strtotime($rows['fecha_fabricacion'])))."</b>";
+        $dias_trabajados+=1;
 
+        $resultado = $conexion->prepare("SELECT * FROM pedidos WHERE tapicero_id=:id AND DATE(fecha_fabricacion) = DATE(:fecha) ORDER BY plazas");
+        $resultado->bindParam(':id', $id, PDO::PARAM_INT);
+        $resultado->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+        $resultado->execute();
+
+        while($row = $resultado->fetch(PDO::FETCH_ASSOC)) {
+            $contador+=1;
+            $modelo = $row['modelo'];
+            $plazas = $row['plazas'];
+
+            if($plazas == "1" || $plazas == "1 1/2"){
+                if($modelo == "Botone"){ $pago = 4000; $total+=4000; }
+                if($modelo == "Liso"){ $pago = 4000; $total+=4000; }
+                if($modelo == "Liso 1.35"){ $pago = 5000; $total+=5000; }
+                if($modelo == "Liso con costuras"){ $pago = 4000; $total+=4000; }
+                if($modelo == "Liso con costuras 1.35"){ $pago = 5000; $total+=5000; }
+                if($modelo == "Liso con Orejas"){ $pago = 7000; $total+=7000; }
+                if($modelo == "Liso con Orejas y tachas"){ $pago = 8000; $total+=8000; }
+                if($modelo == "Capitone"){ $pago = 10000; $total+=10000; }
+                if($modelo == "Capitone orejas"){ $pago = 14000; $total+=14000; }
+                if($modelo == "Capitone orejas y tachas"){ $pago = 16000; $total+=16000; }
+                if($modelo == "Botone 3 corridas de botones"){ $pago = 5000; $total+=5000; }
+                if($modelo == "Botone 4 corridas de botones"){ $pago = 7000; $total+=7000; }
+                if($modelo == "Base de Cama"){ $pago = 4000; $total+=4000; }
+            }
+
+            if($modelo == "Banqueta Simple"){
+                $pago = 5000; $total+=5000;
+            }
+
+            if($plazas == "2" || $plazas == "Full" || $plazas == "Queen"){
+                if($modelo == "Botone"){ $pago = 5000; $total+=5000;}
+                if($modelo == "Liso"){ $pago = 5000; $total+=5000; }
+                if($modelo == "Liso 1.35"){ $pago = 6000; $total+=6000; }
+                if($modelo == "Liso con costuras"){ $pago = 5000; $total+=5000; }
+                if($modelo == "Liso con costuras 1.35"){ $pago = 6000; $total+=6000; }
+                if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
+                if($modelo == "Capitone orejas y tachas"){ $pago = 20000; $total+=20000; }
+                if($modelo == "Capitone"){ $pago = 15000; $total+=15000;}
+                if($modelo == "Botone 3 corridas de botones"){ $pago = 6000; $total+=6000; }
+                if($modelo == "Botone 4 corridas de botones"){ $pago = 9000; $total+=9000; }
+                if($modelo == "Base de Cama"){ $pago = 6000; $total+=6000; }
+            }
+            
+            if($plazas == "King" || $plazas == "Super King"){
+                if($modelo == "Botone"){ $pago = 6000; $total+=6000; }
+                if($modelo == "Liso"){ $pago = 6000; $total+=6000; }
+                if($modelo == "Liso 1.35"){ $pago = 7000; $total+=7000; }
+                if($modelo == "Liso con costuras"){ $pago = 6000; $total+=6000;}
+                if($modelo == "Liso con costuras 1.35"){ $pago = 7000; $total+=7000; }
+                if($modelo == "Capitone"){ $pago = 18000; $total+=18000; }
+                if($modelo == "Capitone orejas y tachas"){ $pago = 25000; $total+=25000; }
+                if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
+                if($modelo == "Botone 3 corridas de botones"){ $pago = 7000; $total+=7000; }
+                if($modelo == "Botone 4 corridas de botones"){ $pago = 10000; $total+=10000; }
+                if($modelo == "Base de Cama"){ $pago = 7000; $total+=7000; }
+            }
+        }
+        
+        $total_final+=$total;
     }
 
+    $sumasueldos+= $total_final;
+    echo "Días Trabajados: ".$dias_trabajados." - Total Semana: <b>$".$total_final."</b> - Tapicero: ".$nombre_tapicero.'<br>';
 
-if($plazas == "2" || $plazas == "Full" || $plazas == "Queen"){
-    if($modelo == "Botone"){ $pago = 5000;  $total+=5000;}
-    if($modelo == "Liso"){ $pago = 5000; $total+=5000;  }
-    if($modelo == "Liso 1.35"){ $pago = 6000; $total+=6000;  }
-    if($modelo == "Liso con costuras"){ $pago = 5000; $total+=5000; }
-    if($modelo == "Liso con costuras 1.35"){ $pago = 6000; $total+=6000; }
-    if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
-    if($modelo == "Capitone orejas y tachas"){ $pago = 20000; $total+=20000; }
-    if($modelo == "Capitone"){  $pago = 15000;  $total+=15000;}
-    if($modelo == "Botone 3 corridas de botones"){  $pago = 6000; $total+=6000; }
-    if($modelo == "Botone 4 corridas de botones"){  $pago = 9000; $total+=9000; }
-    if($modelo == "Base de Cama"){  $pago = 6000; $total+=6000; }
-}
-if($plazas == "King" || $plazas == "Super King"){
-    if($modelo == "Botone"){ $pago = 6000;  $total+=6000; }
-    if($modelo == "Liso"){ $pago = 6000;    $total+=6000;   }
-    if($modelo == "Liso 1.35"){ $pago = 7000; $total+=7000;  }
-    if($modelo == "Liso con costuras"){ $pago = 6000;       $total+=6000;}
-    if($modelo == "Liso con costuras 1.35"){ $pago = 7000; $total+=7000; }
-    if($modelo == "Capitone"){  $pago = 18000;  $total+=18000;  }
-     if($modelo == "Capitone orejas y tachas"){ $pago = 25000; $total+=25000; }
-     if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
-    if($modelo == "Botone 3 corridas de botones"){  $pago = 7000;   $total+=7000;   }
-    if($modelo == "Botone 4 corridas de botones"){  $pago = 10000;  $total+=10000;  }
-    if($modelo == "Base de Cama"){  $pago = 7000; $total+=7000; }
-}
-
-}
-$total_final+=$total;
-$total = 0;
-
-}
-
-$sumasueldos+= $total_final;
-echo "Días Trabajados: ".$dias_trabajados." - Total Semana: <b>$".$total_final."</b> - Tapicero: ".$nombre_tapicero.'<br>';
-
-$id+=1;
+    $id+=1;
 }
 echo 'Sueldos Tapiceros= '.$sumasueldos;
 
-$resultado = $mysqli->query("SELECT * FROM gastos where MONTH(fecha)=MONTH(CURDATE())");
+// Consulta de gastos mensuales
+$objeto = new Conexion();
+$conexion = $objeto->Conectar();
+$sumas = 0;
 
-while($row = mysqli_fetch_assoc($resultado)) {
+$resultado = $conexion->prepare("SELECT * FROM gastos WHERE MONTH(fecha)=MONTH(CURDATE())");
+$resultado->execute();
 
+while($row = $resultado->fetch(PDO::FETCH_ASSOC)) {
+    $sumas += $row['monto'];
+}
 
-                
-                $sumas+=$row['monto'];
-                
-                
-                
-               
-              
-
-        }
-        echo '<br> Gastos del mes: '.$sumas;
+echo '<br> Gastos del mes:' .$sumas;
 ?>
 <?php require_once "vistas/parte_inferior.php"?>

@@ -1,329 +1,159 @@
+<?php require_once "init.php" ?>
 <?php require_once "vistas/parte_superior.php" ?>
 
 <!--INICIO del cont principal-->
 
 <input type="button" onclick="printDiv('container')" value="imprimir div" /><br><br>
 
-<div class="row" style="margin:0 auto; text-align: center; ">
+<div class="row" style="margin:0 auto; text-align: center;">
     <div class="col-1">
         <form method="get" action="">
             <input type="hidden" name="id" value="1">
             <input type="submit" class="btn btn-primary" value="Jaime">
-
         </form>
     </div>
     <div class="col-1">
         <form method="get" action="">
             <input type="hidden" name="id" value="2">
             <input type="submit" class="btn btn-primary" value="Felipe">
-
         </form>
     </div>
-
-
     <div class="col-1">
         <form method="get" action="pagos_anterior.php">
-            <input type="hidden" name="id" value="<?php if (isset($_GET['id'])) {
-                                                        echo $_GET['id'];
-                                                    } ?>">
+            <input type="hidden" name="id" value="<?php if (isset($_GET['id'])) { echo $_GET['id']; } ?>">
             <input type="submit" class="btn btn-secondary" value="SEMANA ANTERIOR">
-
         </form>
-
-
-
     </div>
 </div>
 
-
-
-
 <div class="container" id="container">
-    <div><span style="font-size: 20px; font-weight: bold;">Planilla de pagos - Respaldos Chile</span> <?php echo "Semana del: " . $monday = date('Y-m-d', strtotime('monday this week')) . " al " . $monday = date('Y-m-d', strtotime('friday  this week')) . "<br><br>"; ?> </div>
-
-
+    <div>
+        <span style="font-size: 20px; font-weight: bold;">Planilla de pagos - Respaldos Chile</span>
+        <?php
+            echo "Semana del: " . date('Y-m-d', strtotime('monday this week')) . " al " . date('Y-m-d', strtotime('friday this week')) . "<br><br>";
+        ?>
+    </div>
 
     <?php
-
-
-
-
-
     if (isset($_GET['id'])) {
+        // Convertir a entero para evitar inyección SQL
+        $id = (int) $_GET['id'];
 
-        $id = $_GET['id'];
-
-        //$opcion = $_POST['opcion'];
-        $BD_SERVIDOR = "localhost";
-        $BD_USUARIO = "cre61650_respaldos21";
-        $BD_PASSWORD = "respaldos21/";
-        $BD_NOMBRE = "cre61650_agenda";
-
-
+        // Se incluye el archivo de conexión PDO
+        require_once "bd/conexion.php"; // Se espera que este archivo cree la variable $conexion (instancia de PDO)
+        $objeto = new Conexion();
+        $conexion = $objeto->Conectar();
         $pago = 0;
         $total = 0;
         $total_final = 0;
 
-
-        $mysqli = new mysqli($BD_SERVIDOR, $BD_USUARIO, $BD_PASSWORD, $BD_NOMBRE);
-
-        $mysqli->set_charset("utf8");
-
-
-        $resultadoas = $mysqli->query("SELECT * FROM usuarios WHERE id='$id'");
-        $rowss = mysqli_fetch_assoc($resultadoas);
+        // Obtener información del usuario
+        $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $rowss = $stmt->fetch(PDO::FETCH_ASSOC);
         $nombre_tapicero = $rowss['nombres'] . " " . $rowss['apaterno'];
 
-
         $dias_trabajados = 0;
-        $resultadoa = $mysqli->query("SELECT * FROM pedido_detalle pd INNER JOIN pedido_etapas pe ON pd.id = pe.idPedido WHERE pd.tapicero_id = $id AND pe.idProceso = 6 AND YEARWEEK(DATE_FORMAT(pe.fecha, '%Y-%m-%d'), 1) = YEARWEEK(CURDATE(), 1) GROUP BY DATE(pe.fecha)");
-        while ($rows = mysqli_fetch_assoc($resultadoa)) {
+
+        // Consulta para obtener las fechas (días trabajados) para la semana actual
+        $stmt2 = $conexion->prepare("SELECT * FROM pedido_detalle pd 
+                                     INNER JOIN pedido_etapas pe ON pd.id = pe.idPedido 
+                                     WHERE pd.tapicero_id = :id 
+                                       AND pe.idProceso = 6 
+                                       AND YEARWEEK(DATE_FORMAT(pe.fecha, '%Y-%m-%d'), 1) = YEARWEEK(CURDATE(), 1) 
+                                     GROUP BY DATE(pe.fecha)");
+        $stmt2->execute([':id' => $id]);
+
+        while ($rows = $stmt2->fetch(PDO::FETCH_ASSOC)) {
             $contador = 0;
             $fecha = $rows['fecha'];
-
             setlocale(LC_TIME, 'es_CO.UTF-8');
+            echo "<b>" . strtoupper(strftime("%A, %d de %B de %Y", strtotime($fecha))) . "</b><br>";
 
-            echo $fechas =  "<b>" . strtoupper(strftime("%A, %d de %B de %Y", strtotime($rows['fecha']))) . "</b>";
+            $dias_trabajados++;
 
-
-
-
-
-            $dias_trabajados += 1;
-
-
-            $resultado = $mysqli->query("SELECT * FROM pedido_detalle pd INNER JOIN pedido_etapas pe ON pd.id = pe.idPedido WHERE pd.tapicero_id= $id AND pe.idProceso = 6 and DATE(pe.fecha) = DATE('$fecha') GROUP BY pd.id ORDER BY pd.tamano");
-    ?>
-            <div class="table-responsive" style="margin:0;  ">
-
-
-
-                <table id="tablatapiceross" class="table table-striped table-bordered table-condensed" style=" font-size:0.8rem; ">
+            // Consulta para obtener los pedidos del día actual
+            $stmt3 = $conexion->prepare("SELECT * FROM pedido_detalle pd 
+                                         INNER JOIN pedido_etapas pe ON pd.id = pe.idPedido 
+                                         WHERE pd.tapicero_id = :id 
+                                           AND pe.idProceso = 6 
+                                           AND DATE(pe.fecha) = DATE(:fecha) 
+                                         GROUP BY pd.id 
+                                         ORDER BY pd.tamano");
+            $stmt3->execute([':id' => $id, ':fecha' => $fecha]);
+            ?>
+            <div class="table-responsive" style="margin:0;">
+                <table id="tablatapiceross" class="table table-striped table-bordered table-condensed" style="font-size:0.8rem;">
                     <thead class="text-center">
                         <tr>
                             <th style="width:1rem;">Nº</th>
                             <th style="width:1rem;">Id</th>
                             <th style="width:5rem;">Modelo</th>
-
                             <th style="width:1rem;">Tamano</th>
                             <th style="width:1rem;">Alt</th>
                             <th style="width:1rem;">Tela</th>
                             <th style="width:2rem;">Color</th>
                             <th style="width:2rem;">Fabricacion</th>
                             <th style="width:1rem;">Pago</th>
-
                         </tr>
                     </thead>
-
-
+                    <tbody>
                     <?php
-
-                    while ($row = mysqli_fetch_assoc($resultado)) {
-
-                        $contador += 1;
-
+                    while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                        $contador++;
                         $modelo = $row['modelo'];
                         $plazas = $row['tamano'];
 
-
-                        $resultado2 = $mysqli->query("SELECT * FROM pago_produccion pp INNER JOIN productos_venta pv ON pv.id = pp.producto_id WHERE pv.modelo = '$modelo' AND pp.tamano = '$plazas'");
-
-                        if ($resultado2) {
-                            if (mysqli_num_rows($resultado2) > 0) {
-                                while ($rowe = mysqli_fetch_assoc($resultado2)) {
-
-                                    $pago = $rowe['valor_pago'];
-                                    $total += $rowe['valor_pago'];
-                                }
-                            } else {
-                                // No hay resultados, puedes mostrar un mensaje o realizar alguna otra acción
-                                $pago = 0;
-                                $total += 0;
+                        // Consulta para obtener el pago correspondiente al modelo y tamano
+                        $stmt4 = $conexion->prepare("SELECT * FROM pago_produccion pp 
+                                                     INNER JOIN productos_venta pv ON pv.id = pp.producto_id 
+                                                     WHERE pv.modelo = :modelo AND pp.tamano = :plazas");
+                        $stmt4->execute([':modelo' => $modelo, ':plazas' => $plazas]);
+                        $pagos = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+                        if ($pagos && count($pagos) > 0) {
+                            foreach ($pagos as $rowe) {
+                                $pago = $rowe['valor_pago'];
+                                $total += $rowe['valor_pago'];
                             }
+                        } else {
+                            $pago = 0;
+                            $total += 0;
                         }
-
-                        /*
-
-
-if($plazas == "1" || $plazas == "1 1/2"){
-	if($modelo == "Botone"){ 	}
-	if($modelo == "Liso"){ $pago = 4000; $total+=4000;	}
-    if($modelo == "Liso 1.35"){ $pago = 5000; $total+=5000;  }
-	if($modelo == "Liso con costuras"){	$pago = 4000; $total+=4000;	}
-    if($modelo == "Liso con costuras 1.35"){ $pago = 5000; $total+=5000; }
-    if($modelo == "Liso con Orejas"){ $pago = 7000; $total+=7000; }  //revisar
-    if($modelo == "Liso con Orejas y tachas"){ $pago = 8000; $total+=8000; } //revisar   
-	if($modelo == "Capitone"){	$pago = 10000; $total+=10000;	}
-    if($modelo == "Capitone orejas"){ $pago = 14000; $total+=14000; }
-    if($modelo == "Capitone orejas y tachas"){ $pago = 16000; $total+=16000; }
-	if($modelo == "Botone 3 corridas de botones"){	$pago = 5000; $total+=5000;	}
-	if($modelo == "Botone 4 corridas de botones"){	$pago = 7000; $total+=7000;	}
-	if($modelo == "Base de Cama"){	$pago = 4000; $total+=4000;	}
-
-	
-}
-
-if($modelo == "Banqueta Simple"){
-
-$pago = 5000; $total+=5000;
-
-    }
-
-    if($modelo == "Banqueta Baul"){
-
-if($plazas == "120 cm x 45cm"){  $pago = 9000; $total+=9000; }
-if($plazas == "Seleccionar las plazas"){  $pago = 9000; $total+=9000; }
-
-    }
-
-     if($modelo == "Pouf Completo"){
-
-  $pago = 3000; $total+=3000; 
-
-    }
-
-    if($modelo == "Poltrona"){
-
-  $pago = 9000; $total+=9000; 
-
-    }
-
-      if($modelo == "Sofa Br Curvo" || $modelo == "Sofa Br cuadrado" ){
-
-if($plazas == "2"){  $pago = 18000; $total+=18000; }
-
-    }
-
-
-     if($modelo == "Living L Cuerpos"){
-
-if($plazas == "4"){  $pago = 20000; $total+=20000; }
-
-    }
- if($modelo == "Living 3 1+1"){
-
-  $pago = 25000; $total+=25000; 
-
-    }
-    if($modelo == "Sofa Atenas"){
-
-  $pago = 23000; $total+=23000; 
-
-    }
-
-     if($modelo == "Seccional Monaco Derecho"){
-
-  $pago = 20000; $total+=20000; 
-
-    }
-
-
-
-
-if($plazas == "2" || $plazas == "Full" || $plazas == "Queen"){
-    if($modelo == "Botone"){ $pago = 5000;  $total+=5000;}
-    if($modelo == "Liso"){ $pago = 5000; $total+=5000;  }
-    if($modelo == "Liso 1.35"){ $pago = 6000; $total+=6000;  }
-    if($modelo == "Liso con costuras"){ $pago = 5000; $total+=5000; }
-    if($modelo == "Liso con costuras 1.35"){ $pago = 6000; $total+=6000; }
-    if($modelo == "Liso con Orejas"){ $pago = 7000; $total+=7000; }
-    if($modelo == "Liso con Orejas y tachas"){ $pago = 9000; $total+=9000; }
-    if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
-    if($modelo == "Capitone orejas y tachas"){ $pago = 20000; $total+=20000; }
-    if($modelo == "Capitone"){  $pago = 15000;  $total+=15000;}
-    if($modelo == "Botone 3 corridas de botones"){  $pago = 6000; $total+=6000; }
-    if($modelo == "Botone 4 corridas de botones"){  $pago = 9000; $total+=9000; }
-    if($modelo == "Base de Cama"){  $pago = 6000; $total+=6000; }
-
-}
-
-if($plazas == "King" || $plazas == "Super King"){
-    if($modelo == "Botone"){ $pago = 6000;  $total+=6000; }
-    if($modelo == "Liso"){ $pago = 6000;    $total+=6000;   }
-    if($modelo == "Liso 1.35"){ $pago = 7000; $total+=7000;  }
-    if($modelo == "Liso con costuras"){ $pago = 6000;       $total+=6000;}
-    if($modelo == "Liso con costuras 1.35"){ $pago = 7000; $total+=7000; }
-     if($modelo == "Liso con Orejas"){ $pago = 8000; $total+=8000; }
-    if($modelo == "Capitone"){  $pago = 18000;  $total+=18000;  }
-     if($modelo == "Capitone orejas y tachas"){ $pago = 25000; $total+=25000; }
-     if($modelo == "Capitone orejas"){ $pago = 22000; $total+=22000; }
-    if($modelo == "Botone 3 corridas de botones"){  $pago = 7000;   $total+=7000;   }
-    if($modelo == "Botone 4 corridas de botones"){  $pago = 10000;  $total+=10000;  }
-    if($modelo == "Base de Cama"){  $pago = 7000; $total+=7000; }
-}
-
-
-if($plazas == "45"){
-
-if($modelo == "Poltrona"){  $pago = 9000; $total+=9000; }
-     }
-
-*/
-                    ?>
-
-
+                        ?>
                         <tr>
-
-
-
-
-
-                            <td style="height:10px; padding: 1px;border: 1px solid black; "><?php echo $contador ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black; "><?php echo $row['id'] ?></td>
-
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo "<b>" . $row['modelo'] . "</b>" ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo "<b>" . $row['tamano'] . "</b>" ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo $row['alturabase'] ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo $row['tipotela'] ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo $row['color'] ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo $row['fecha'] ?></td>
-                            <td style="height:10px; padding: 1px;border: 1px solid black;"><?php echo "<b>" . $pago . "</b>" ?></td>
-
-
-
-
-
-
-
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $contador ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $row['id'] ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo "<b>" . $row['modelo'] . "</b>" ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo "<b>" . $row['tamano'] . "</b>" ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $row['alturabase'] ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $row['tipotela'] ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $row['color'] ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo $row['fecha'] ?></td>
+                            <td style="height:10px; padding: 1px; border: 1px solid black;"><?php echo "<b>" . $pago . "</b>" ?></td>
                         </tr>
-
-
-                    <?php
-
-
-
-
+                        <?php
                     }
                     ?>
                     </tbody>
                 </table>
-
-        <?php
-            echo "Total del dia: $" . $total;
+            </div>
+            <?php
+            echo "Total del dia: $" . $total . "<br>";
             $total_final += $total;
             $total = 0;
-
-            echo "<br>";
         }
 
-
-
-
-
         echo "Días Trabajados: " . $dias_trabajados . " - Total Semana: <b>$" . $total_final . "</b> - Tapicero: " . $nombre_tapicero;
-    }  // fin isset
-        ?>
-            </div>
+    }
+    ?>
 </div>
+
 <script type="text/javascript">
     function printDiv(nombreDiv) {
         var contenido = document.getElementById(nombreDiv).innerHTML;
         var contenidoOriginal = document.body.innerHTML;
-
         document.body.innerHTML = contenido;
-
         window.print();
-
         document.body.innerHTML = contenidoOriginal;
     }
 </script>

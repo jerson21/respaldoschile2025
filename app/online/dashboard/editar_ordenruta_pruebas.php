@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php require_once "vistas/parte_superior.php" ?>
 
 
@@ -17,24 +18,27 @@
   rel="stylesheet">
 
 
-<?php
-
-
-
-$conn = mysqli_connect('localhost', 'cre61650_respaldos21', 'respaldos21/', 'cre61650_agenda');
-
-
-$id_ruta = $_GET['id'];
-
-$strsql = "SELECT * FROM rutas where id = $id_ruta";
-$rs = mysqli_query($conn, $strsql);
-
-
-while ($row = mysqli_fetch_array($rs)) {
-  $fecha_ruta = $row['fecha'];
-  $despachador = $row['despachador'];
-  $estado = $row['estado'];
-} ?>
+  <?php
+  // Se incluye la conexión PDO
+  require_once "bd/conexion.php";
+  $objeto = new Conexion();
+  $conexion = $objeto->Conectar();
+  
+  $id_ruta = $_GET['id'];
+  $sqlRuta = "SELECT * FROM rutas WHERE id = :id";
+  $stmtRuta = $conexion->prepare($sqlRuta);
+  $stmtRuta->execute([':id' => $id_ruta]);
+  if ($rowRuta = $stmtRuta->fetch(PDO::FETCH_ASSOC)) {
+    $fecha_ruta = $rowRuta['fecha'];
+    $despachador = $rowRuta['despachador'];
+    $estado = $rowRuta['estado'];
+  } else {
+    $fecha_ruta = "";
+    $despachador = "";
+    $estado = "";
+  }
+  ?>
+  
 
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">  -->
 <style type="text/css">
@@ -210,8 +214,8 @@ while ($row = mysqli_fetch_array($rs)) {
   src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
 <script type="text/javascript"
   src="https://cdn.datatables.net/searchbuilder/1.1.0/js/dataTables.searchBuilder.min.js"></script>
-<script type="text/javascript"
-  src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
+ <!--  <script type="text/javascript"
+  src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>  -->
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
 

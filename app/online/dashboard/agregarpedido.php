@@ -1,5 +1,7 @@
+<?php require_once "init.php" ?>
+
 <?php
-session_start();
+
 require_once "vistas/parte_superior.php" ?>
 
 <!--INICIO del cont principal-->

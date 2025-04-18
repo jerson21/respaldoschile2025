@@ -1,0 +1,182 @@
+/* Estilos mejorados para la barra de navegación */
+
+/* Barra de navegación principal */
+.topbar {
+    background: linear-gradient(90deg, #1a3d7c 0%, #2c5fb3 100%) !important;
+    height: 60px !important;
+    padding: 0 20px !important;
+    margin-bottom: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    border-bottom: none !important;
+}
+
+/* Título del panel */
+.topbar h1.h5 {
+    color: white !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Elementos de navegación */
+.topbar .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    transition: all 0.2s ease;
+}
+
+.topbar .nav-link:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Iconos en la barra de navegación */
+.topbar .nav-link i {
+    font-size: 1.1rem !important;
+    transition: transform 0.2s;
+}
+
+.topbar .nav-link:hover i {
+    transform: scale(1.1);
+}
+
+/* Contadores de notificaciones */
+.topbar .badge {
+    position: absolute;
+    top: 12px;
+    right: 7px;
+    font-size: 0.65rem !important;
+    padding: 0.25em 0.4em !important;
+    font-weight: 600 !important;
+    border-radius: 50%;
+}
+
+/* Buscador */
+.form-control {
+    height: 38px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 0.9rem;
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.input-group-append .btn {
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    background-color: #2c5fb3;
+    border-color: #2c5fb3;
+}
+
+/* Separador de la barra */
+.topbar-divider {
+    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+    height: 30px !important;
+    margin: 0 12px !important;
+}
+
+/* Información de usuario */
+.topbar .text-gray-600 {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.img-profile {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    height: 32px !important;
+    width: 32px !important;
+}
+
+/* Estilos para los dropdowns */
+.dropdown-menu {
+    border: none !important;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+    border-radius: 0.35rem !important;
+}
+
+.dropdown-header {
+    background-color: #1a3d7c !important;
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 0.8rem !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fc !important;
+}
+
+.dropdown-item:active {
+    background-color: #4e73df !important;
+}
+
+/* Iconos circulares en notificaciones */
+.icon-circle {
+    height: 2.5rem !important;
+    width: 2.5rem !important;
+    border-radius: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.icon-circle i {
+    font-size: 1rem !important;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 10px !important;
+    }
+    
+    #sidebarToggleTop {
+        margin-right: 0.5rem !important;
+    }
+}
+
+/* Mejora para el botón de toggle del sidebar */
+#sidebarToggleTop {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+#sidebarToggleTop:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilos para el selector de búsqueda */
+.navbar-search .input-group {
+    width: 300px;
+}
+
+/* Añadimos un poco de espacio debajo de la navbar para el contenido */
+#content {
+    padding-top: 1rem;
+}
+
+/* Mejorar espaciado general */
+.container-fluid {
+    padding: 1.5rem;
+}

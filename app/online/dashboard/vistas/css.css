@@ -1,0 +1,449 @@
+/* respaldoschile-ia-styles.css - Estilos personalizados para la interfaz con IA */
+
+:root {
+    --primary: #1a3d7c;
+    --primary-light: #2c5fb3;
+    --secondary: #34495e;
+    --accent: #3498db;
+    --success: #2ecc71;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --info: #3498db;
+    --light: #f5f8fa;
+    --dark: #2c3e50;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+}
+
+body {
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    background-color: #f5f8fa;
+    color: var(--gray-800);
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-size: 14px; /* Tamaño base de fuente más pequeño */
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+    transition: all 0.3s ease;
+    width: 16rem;
+    z-index: 1000;
+    position: fixed;
+    min-height: 100vh;
+    overflow-y: auto;
+    font-size: 0.9rem; /* Tamaño de fuente más pequeño para el sidebar */
+}
+
+.sidebar-brand {
+    padding: 1rem 0.5rem;
+    background: rgba(0, 0, 0, 0.1);
+    height: 60px; /* Altura fija para el área del logo */
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-brand-text {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: none; /* Ocultamos el texto */
+}
+
+.nav-item .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    position: relative;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    font-size: 0.9rem;
+}
+
+.nav-item .nav-link:hover, 
+.nav-item .nav-link:focus, 
+.nav-item .nav-link.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid var(--accent);
+}
+
+.nav-item .nav-link i {
+    margin-right: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.sidebar-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0.75rem 0;
+}
+
+.sidebar-heading {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    padding: 0.6rem 1rem;
+}
+
+.collapse-inner {
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.1);
+}
+
+.collapse-item {
+    padding: 0.6rem 1rem;
+    margin: 0 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    border-radius: 0.25rem;
+    transition: all 0.15s ease;
+}
+
+.collapse-item:hover {
+    background-color: var(--gray-200);
+    color: var(--primary);
+}
+
+/* NEW NAVBAR STYLES */
+.topbar {
+    height: 3.5rem; /* Altura reducida para el topbar */
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    margin-bottom: 0 !important; /* Eliminar margen inferior */
+    padding-bottom: 0 !important; /* Eliminar padding inferior */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+.topbar .nav-item .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0 0.6rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.topbar .nav-item .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.topbar .dropdown-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    background-color: #ffffff;
+}
+
+.topbar-divider {
+    width: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    height: calc(3.5rem - 2rem);
+    margin: auto 0.8rem;
+}
+
+.dropdown-header {
+    background-color: var(--primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-item {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-item:active, .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-light);
+}
+
+/* Panel de control en la barra */
+.topbar h1.h5 {
+    color: white;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Badges en el navbar */
+.topbar .badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.3rem;
+    font-size: 0.65rem;
+    padding: 0.25em 0.4em;
+    border-radius: 50%;
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Logo e indicadores de IA */
+.logo-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.logo-img {
+    height: 35px; /* Tamaño del logo reducido */
+}
+
+.ai-indicator {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 2px 8px;
+    margin-left: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.ai-pulse {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #4dc0fc;
+    margin-left: 4px;
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(77, 192, 252, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(77, 192, 252, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(77, 192, 252, 0);
+    }
+}
+
+/* Estructura principal */
+#wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+#content-wrapper {
+    background-color: #f8f9fc;
+    width: 100%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-left: 16rem;
+}
+
+#content {
+    flex: 1 0 auto;
+}
+
+.container-fluid {
+    padding: 1.2rem;
+}
+
+/* Estilos para cuando el sidebar está colapsado */
+.sidebar.toggled {
+    width: 6rem !important; /* Reducido a 6rem */
+}
+
+.sidebar.toggled .nav-item .nav-link span {
+    display: none;
+}
+
+.sidebar.toggled .nav-item .nav-link {
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+}
+
+.sidebar.toggled .nav-item .nav-link i {
+    margin-right: 0;
+    font-size: 1rem;
+}
+
+.sidebar.toggled .sidebar-brand .sidebar-brand-text {
+    display: none;
+}
+
+body.sidebar-toggled #content-wrapper {
+    margin-left: 6rem; /* Reducido a 6rem */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 6rem !important;
+    }
+    
+    .sidebar .nav-item .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-item .nav-link {
+        text-align: center;
+        padding: 0.6rem 0.5rem;
+    }
+    
+    .sidebar .nav-item .nav-link i {
+        margin-right: 0;
+        font-size: 1rem;
+    }
+    
+    .sidebar .sidebar-brand .sidebar-brand-text {
+        display: none;
+    }
+    
+    #content-wrapper {
+        margin-left: 6rem;
+    }
+}
+
+/* Para corregir posibles conflictos con sb-admin-2.min.css */
+.img-profile {
+    height: 2rem;
+    width: 2rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-nav .nav-item.dropdown .dropdown-toggle::after {
+    margin-left: 0.3rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-nav .nav-item.dropdown .dropdown-menu {
+    position: absolute;
+}
+
+/* Ajustes adicionales para garantizar compatibilidad */
+.bg-gradient-primary {
+    background-color: var(--primary);
+    background-image: linear-gradient(180deg, var(--primary) 10%, var(--secondary) 100%);
+    background-size: cover;
+}
+
+/* Eliminar el scroll horizontal */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Ajustar el tamaño del texto en la barra superior */
+.navbar-nav .nav-item .nav-link {
+    font-size: 0.85rem;
+}
+
+/* Ajuste para los iconos en el navbar */
+.topbar .nav-link i {
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.topbar .nav-link:hover i {
+    transform: scale(1.1);
+}
+
+/* Ajustes para botones del navbar */
+.topbar #sidebarToggleTop {
+    height: 2.3rem;
+    width: 2.3rem;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.topbar #sidebarToggleTop:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Ajustes para el nombre de usuario */
+.topbar .text-gray-600 {
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Efecto hover para elementos de dropdown */
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Ajuste a los badges */
+.badge {
+    font-size: 0.65rem;
+    padding: 0.2em 0.5em;
+}
+
+/* Ajustes al sidebar-toggle button */
+#sidebarToggle {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    font-size: 0.8rem;
+}
+
+/* Ajuste a dropdown menus */
+.dropdown-list {
+    padding: 0;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+.dropdown-list .dropdown-header {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+.dropdown-list .dropdown-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-list .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Iconos circulares en dropdowns */
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-circle i {
+    font-size: 1rem;
+}
+

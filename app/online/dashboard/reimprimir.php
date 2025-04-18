@@ -1,3 +1,4 @@
+<?php require_once "init.php" ?>
 <?php require_once "vistas/parte_superior.php";
 
 $_SESSION["s_usuario"];

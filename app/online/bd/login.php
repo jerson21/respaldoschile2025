@@ -41,12 +41,14 @@ $data = $resultado->fetch(PDO::FETCH_ASSOC);
 if ($data) {
     // Verificar la contraseña con password_verify()
     if (password_verify($password, $data['password'])) {
+        session_regenerate_id(true); // Previene la fijación de sesión
         $_SESSION["s_usuario"] = $usuario;
         $_SESSION["privilegios"] = $data['privilegios'];
-        $_SESSION["ultimo_acceso"] = time(); // Guarda el momento en que inició sesión
-
+        $_SESSION["ultimo_acceso"] = time();
+    
         echo json_encode(["status" => "success", "redirect" => "dashboard/"]);
-    } else {
+    }
+    else {
         echo json_encode(["status" => "error","error" => "Usuario o contraseña incorrectos."]);
     }
 } else {

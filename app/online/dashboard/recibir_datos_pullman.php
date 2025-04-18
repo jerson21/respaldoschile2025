@@ -38,16 +38,15 @@ $conexion = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Verificar si se ha enviado un formulario
-   $selected = $_POST["selected"];
+    $selected = isset($_POST["selected"]) ? $_POST["selected"] : '';
     $origen = "1310100101&SANTIAGO";
-    
     $pago = "PED";
-    $alto = $_POST["alto"];
-    $ancho = $_POST["ancho"];
-    $largo = $_POST["largo"];
-    $lugar = $_POST["lugar"];
-    $peso = $_POST["peso"];
-    $telefono = $_POST["telefono"];
+    $alto = isset($_POST["alto"]) ? $_POST["alto"] : '';
+    $ancho = isset($_POST["ancho"]) ? $_POST["ancho"] : '';
+    $largo = isset($_POST["largo"]) ? $_POST["largo"] : '';
+    $lugar = isset($_POST["lugar"]) ? $_POST["lugar"] : '';
+    $peso = isset($_POST["peso"]) ? $_POST["peso"] : '';
+    $telefono = isset($_POST["telefono"]) ? $_POST["telefono"] : '';
     // Agregar otros campos aquí
 
     // Crear datos para la solicitud cURL a pullmango.cl

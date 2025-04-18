@@ -1,213 +1,433 @@
+<?php require_once "init.php" ?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pedidos</title>
+  
+
+     <!-- Fuentes e íconos -->
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">  
+     <!-- Fuentes e íconos  -->
+  <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
+
+  <!-- Estilos principales -->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Librerías adicionales -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
+
+   <!-- <link rel="stylesheet" type="text/css" href="css/design_respaldoschile.css">  -->
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+
+  <style type="text/css">
+    #parpadea {
+
+      animation-name: parpadeo;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+
+
+      -webkit-animation-name: parpadeo;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-iteration-count: infinite;
+    }
+
+    @-moz-keyframes parpadeo {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #0096FF;
+      }
+
+    }
+
+    @-webkit-keyframes parpadeo {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #0096FF;
+      }
+    }
+
+    @keyframes parpadeo {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #0096FF;
+      }
+    }
+
+    #parpadea_ {
+
+      animation-name: parpadeo_;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+
+
+      -webkit-animation-name: parpadeo_;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-iteration-count: infinite;
+    }
+
+    @-moz-keyframes parpadeo_ {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #FFCE33;
+      }
+
+    }
+
+    @-webkit-keyframes parpadeo_ {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #FFCE33;
+      }
+    }
+
+    @keyframes parpadeo_ {
+      0% {}
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        background-color: #FFCE33;
+      }
+    }
+
+
+    .subir {
+      border: 1px solid #7F9EEE;
+      padding: 20px;
+      width: auto;
+      border-radius: 15px;
+      min-height: 150px;
+      margin: auto;
+      background: #C0E1F9;
+      margin-bottom: 5px;
+    }
+
+    .archivos {
+      border: 1px solid #89EA53;
+      padding: 10px;
+      width: auto;
+      min-height: 150px;
+      border-radius: 15px;
+      margin: auto;
+      background: #CCF8B4;
+    }
+  </style>
+    <style type="text/css">
+    #imagenes img {
+      -webkit-transition: all 1s ease;
+      /* Safari and Chrome */
+      -moz-transition: all 1s ease;
+      /* Firefox */
+      -ms-transition: all 1s ease;
+      /* IE 9 */
+      -o-transition: all 1s ease;
+      /* Opera */
+      transition: all 1s ease;
+    }
+
+    #imagenes:hover img {
+      -webkit-transform: scale(1.5);
+      /* Safari and Chrome */
+      -moz-transform: scale(1.5);
+      /* Firefox */
+      -ms-transform: scale(1.5);
+      /* IE 9 */
+      -o-transform: scale(1.5);
+      /* Opera */
+      transform: scale(1.5);
+    }
+
+    @-webkit-keyframes mover {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes mover {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-15px);
+      }
+    }
+  </style>
+
 <?php
-session_start();
-require_once "vistas/parte_superior.php" ?>
+  $num_orden = "";
 
-<style>
-    .form-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+  if (isset($_GET['num_orden'])) {
+    $num_orden = $_GET['num_orden'];
+  } ?>
+
+  <script type="text/javascript">
+    function mostrar(id) {
+      // SE DEBEN VINCULAR LOS EVENTOS Y FUNCIONES YA QUE ES DINAMICA LA CARGA DEL FORMULARIO. 
+      if (id == "respaldo") {
+        $("#formularios").load('formularios/respaldoform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "colchon") {
+        $("#formularios").load('formularios/colchonform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      
+      }
+      if (id == "base") {
+        $("#formularios").load('formularios/baseform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "patas") {
+        $("#formularios").load('formularios/patasform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "respaldo2") {
+        $("#formularios").load('formularios/respaldoform2.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "banquetas") {
+        $("#formularios").load('formularios/banquetaform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "fundas") {
+        $("#formularios").load('formularios/fundasform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "living") {
+        $("#formularios").load('formularios/livingform.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "velador") {
+        $("#formularios").load('formularios/velador_form.php?num_orden=<?php echo $num_orden; ?>', function() {
+          // Esta función callback se ejecuta después de que el contenido se ha cargado
+          $("#formularios").show();
+          vincularEventosASelect();
+        });
+
+      }
+      if (id == "") {
+
+        $("#formularios").hide();
+      }
+
 
     }
 
-    .form-group {
-        padding: 0 5px;
-        margin-bottom: 20px;
-    }
+    function mostrarprod(id) {
 
-    .overlay-iframe {
-        margin-top: 20px;
+      if (id == "respaldo") {
+        $("#formularios").load('administracion/formagregarcosto.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "colchon") {
+        $("#formularios").load('formularios/colchonform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "base") {
+        $("#formularios").load('formularios/baseform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "patas") {
+        $("#formularios").load('formularios/patasform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "respaldo2") {
+        $("#formularios").load('formularios/respaldoform2.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "banquetas") {
+        $("#formularios").load('formularios/banquetaform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "fundas") {
+        $("#formularios").load('formularios/fundasform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "living") {
+        $("#formularios").load('formularios/livingform.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
+      if (id == "velador") {
+        $("#formularios").load('formularios/velador_form.php?num_orden=<?php echo $num_orden; ?>');
+        $("#formularios").show();
+      }
     }
+  </script>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  -->
+ <style>
+        /* Basic styles for demonstration if SB Admin CSS isn't linked */
+        body { font-family: 'Inter', sans-serif; }
 
-    .btn-primary {
-        margin-top: 10px;
-        /* Ajusta según necesidad para alinear con el input de dirección */
-    }
-
-    /* Ajustes para mejorar la responsividad en dispositivos más pequeños */
-    @media (max-width: 768px) {
-        .form-row {
-            flex-direction: column;
+        /* Logo Animation */
+        @keyframes mover {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        .logo-animation {
+            margin-top: 20%;
+            width: 35%;
+            animation: mover 1s infinite alternate;
         }
 
-        .form-group {
-            padding: 0;
+        /* Disabled Link Style */
+        .disabled-link {
+            pointer-events: none; /* Disable click and other mouse events */
+            color: grey !important; /* Change color to look disabled, !important might be needed to override Bootstrap */
+            cursor: not-allowed; /* Change cursor */
+            position: relative; /* Needed for the pseudo-element positioning */
         }
-    }
 
-    .container2 {
-        max-width: 1000px;
-        padding-right: calc(var(--bs-gutter-x)* .5);
-        padding-left: calc(var(--bs-gutter-x)* .5);
-        margin-right: auto;
-        margin-left: auto;
-        padding: 25px;
-        background-color: white;
-        /* Contenedor blanco */
-        border: 10px solid rgba(255, 255, 255, 0);
-        /* Borde blanco transparente */
-        box-sizing: border-box;
-        /* incluir el borde en el tamaño total del contenedor */
-        border-radius: 5px;
-        /* redondea las esquinas */
+        .disabled-link:hover::after {
+            content: "En Proceso";
+            position: absolute;
+            left: 100%; /* Position to the right of the link */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%);
+            margin-left: 10px; /* Space between link and tooltip */
+            background-color: black;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            white-space: nowrap; /* Prevent text wrapping */
+            z-index: 10; /* Ensure tooltip is above other elements */
+        }
 
-    }
+        /* Add other necessary styles from SB Admin or your custom CSS */
+    </style>
+          <link rel="stylesheet" href="css/css_addpedido.css"> 
 
-    .outer-border {
-        max-width: 1000px;
-        margin-right: auto;
-        margin-left: auto;
-        /* ancho del contenedor + el doble del ancho del borde */
-        box-sizing: border-box;
-        /* incluir el borde en el tamaño total del contenedor */
+     <style>
+        /* Estilo mínimo para asegurar layout básico */
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column; /* Ayuda si el contenido es corto y quieres footer abajo */
+        }
+        .main-wrapper {
+             display: flex;
+             flex-grow: 1;
+        }
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column; /* Para manejar topbar y main content verticalmente */
+            overflow-x: auto; /* Permite scroll horizontal si el contenido es muy ancho */
+        }
+         main {
+            flex-grow: 1; /* Hace que el contenido principal ocupe el espacio restante */
+        }
+         /* Ajuste para que el collapse no empuje el contenido del sidebar */
+        .sidebar-nav .collapse .nav-link {
+            padding-left: 1.5rem; /* Ajusta según necesidad */
+        }
+         /* Estilo para el indicador de dropdown en sidebar */
+        .sidebar-nav .nav-link .fa-chevron-down {
+             transition: transform 0.2s ease-in-out;
+        }
+        .sidebar-nav .nav-link[aria-expanded="true"] .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+        .badge-notification {
+             position: absolute;
+             top: -5px;
+             right: -5px;
+             padding: .25em .5em;
+             font-size: .65em;
+        }
 
-        /* alto del contenedor + el doble del ancho del borde */
-        border: 10px solid rgba(255, 255, 255, 0.5);
-        /* Borde blanco con transparencia */
-        border-radius: 5px;
-        /* redondea las esquinas */
-        top: -10px;
-        /* Mueve el contenedor hacia arriba para que el borde inferior esté alineado con el borde del contenedor */
-        left: -10px;
-        /* Mueve el contenedor hacia la izquierda para que el borde derecho esté alineado con el borde del contenedor */
-        right: -25px;
-        /* Mueve el contenedor hacia la derecha para que el borde izquierdo esté alineado con el borde del contenedor */
-        bottom: -25px;
-        margin-bottom: 15px;
-    }
+    </style>
 
-    #formular fieldset:not(:first-of-type) {
-        display: none;
-    }
+</head>
 
-    .pedido-agregado {
-        display: flex;
-        justify-content: flex-start;
-        /* Alinea el contenido al inicio */
-        align-items: flex-start;
-        /* Alinea los items al inicio */
-        border: 1px solid #e0e0e0;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: auto;
-        /* Ajusta esto según necesites */
-        transition: box-shadow 0.3s ease-in-out;
-    }
+<body>
+<?php require_once "vistas/parte_superior.php" ?>
 
-
-    .pedido-precios {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .pedido-detalle h4,
-    .pedido-detalle p,
-    .pedido-precios .form-group {
-        margin: 2px 0;
-    }
-
-    .pedido-detalle h4 {
-        font-size: 1.1em;
-        color: #333;
-    }
-
-    .pedido-detalle p,
-    .form-group label {
-        font-size: 0.9em;
-        color: black;
-    }
-
-    .form-group {
-        display: flex;
-        /* Nuevo */
-        align-items: center;
-        /* Centra verticalmente el label y el input */
-        gap: 10px;
-        /* Espacio entre el label y el input */
-        margin-bottom: 8px;
-        /* Ajuste para el margen */
-    }
-
-    .pedido-precios .form-control {
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        height: 30px;
-        /* Hace los inputs más pequeños */
-        padding: 5px;
-        font-size: 0.8em;
-        transition: border-color 0.3s ease-in-out;
-    }
-
-    /* Ajuste adicional para reducir el ancho de los inputs y permitir más control */
-    .pedido-precios .form-group {
-        width: 80%;
-        /* Reducir el ancho de los inputs del precio y envío */
-    }
-
-    /* Para no expandir el div a todo el ancho */
-    .pedido-agregado {
-        max-width: 80%;
-        /* Ajusta este valor según prefieras */
-    }
-
-    .label {
-        white-space: nowrap;
-        /* Evita que la etiqueta se divida en líneas */
-        overflow: hidden;
-        /* Oculta el contenido que excede el ancho del elemento */
-        text-overflow: ellipsis;
-        /* Muestra puntos suspensivos si el texto es demasiado largo */
-    }
-
-    .form-control {
-        flex-grow: 1;
-        /* Permite que el input ocupe el espacio restante */
-    }
-
-    .cerrar-pedido {
-        cursor: pointer;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 5px;
-        font-weight: bold;
-        color: #333;
-        /* Puedes añadir más estilos para hacerlo más atractivo o visible */
-    }
-
-    .pedido-agregado {
-        position: relative;
-        /* Necesario para posicionar absolutamente el botón de cierre */
-        /* El resto de tus estilos */
-    }
-
-    .pedido-resumen {
-        max-width: 400px;
-        /* Ajusta esto según tus necesidades */
-        margin: 0 auto;
-        /* Centra el contenedor */
-        padding: 20px;
-        /* Espacio interior para que no esté pegado al borde */
-        background-color: #f9f9f9;
-        /* Fondo ligeramente gris para destacarlo, opcional */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        /* Sombra suave para darle profundidad, opcional */
-        border-radius: 5px;
-        /* Bordes redondeados, opcional */
-    }
-
-    .pedido-despacho,
-    .pedido-total {
-        margin-bottom: 15px;
-        /* Espacio entre los inputs */
-    }
-</style>
 <script>
     document.getElementById("content").style.background = " linear-gradient(135deg, #FFE6CC, #FFD9E5, #FFE5F0, #FFF2F7)";
 </script>
@@ -216,10 +436,103 @@ require_once "vistas/parte_superior.php" ?>
     <div class="container2">
         <h1>Modulo Ingreso Pedidos</h1>
 
-
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+       <style> .progress-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .progress-track {
+            position: relative;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+        
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #007aff, #5ac8fa);
+            border-radius: 12px;
+            transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .progress-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            filter: blur(5px);
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.5), rgba(90, 200, 250, 0.5));
+            border-radius: 12px;
+            transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+        
+        .progress-percentage {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: #1d1d1f;
+            transition: color 0.3s ease;
+        }
+        
+        .progress-steps {
+            font-size: 15px;
+            color: #86868b;
+            letter-spacing: -0.2px;
+        }
+        
+        .progress-label {
+            position: absolute;
+            left: 0;
+            font-size: 17px;
+            font-weight: 500;
+            color: #1d1d1f;
+            transition: 0.3s ease;
+            opacity: 0.8;
+        }
+         /* Dark mode support */
+         @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #f5f5f7;
+            }
+            
+            .progress-track {
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .progress-percentage {
+                color: #f5f5f7;
+            }
+            
+            .progress-label {
+                color: #f5f5f7;
+            }
+        }
+        </style>
+  <div class="progress-container">
+      
+            <div class="progress-track">
+                <div class="progress-glow"></div>
+                <div class="progress-fill"></div>
+            </div>
+            
         </div>
+
         <br>
 
 
@@ -572,961 +885,16 @@ $DateAndTime = date('Y-m-d h:i:s a', time()); ?>
 
 <!--FIN del cont principal-->
 
-<script>
-    // Función para mostrar los pedidos agregados en el Paso 3
 
-    let pedidos = [];
 
-    $(document).ready(function() {
 
 
-        function agregarPedido(pedido) {
-            pedidos.push(pedido); // Añade el nuevo pedido al array
-        }
+<script src="js/addpedido_logic.js"></script>
 
 
-
-
-
-        // Ejemplo de cómo se vería un pedido
-        function capturarDatosDelPedido() {
-            let pedido = {
-                producto: $("#modelo").val() ?? "", // Si $("#modelo").val() es undefined, usa "" como predeterminado
-                tamano: $("#plazas").val() ?? "",
-                material: $("#listatelas").val() ?? "",
-                color: $("#lista2").val() ?? "",
-                cantidad: $("#cantidad").val() ?? "",
-                alturaBase: $("#alturabase").val() ?? "",
-                detallesFabricacion: $("#detalles_fabricacion").val() ?? "",
-                boton: $('input[name="boton"]:checked').val() ?? "",
-                anclaje: $('input[name="anclaje"]:checked').val() ?? "",
-                anclajeMetal: $('input[name="anclajemetal"]:checked').val() ?? "",
-                precio: 0 // Este valor se establece manualmente, así que su manejo no cambia
-
-                // Agrega más campos según sea necesario
-            };
-            agregarPedido(pedido);
-            mostrarPedidosAgregados();
-        }
-
-        $('#pedidosAgregados').on('click', '.cerrar-pedido', function() {
-            // Obtener el índice del pedido a eliminar
-            const index = $(this).data('index');
-            // Elimina el pedido del array
-            pedidos.splice(index, 1);
-            // Vuelve a renderizar los pedidos actualizados
-            mostrarPedidosAgregados();
-        });
-
-
-        function mostrarPedidosAgregados() {
-            let pedidosHtml = pedidos.map((pedido, index) => `
-            <div class="pedido-agregado">
-                        <div class="cerrar-pedido" data-index="${index}">X</div>
-
-            <div class="pedido-detalle">
-                <h4>Pedido ${index + 1}</h4>
-                <p><b>Producto:</b> ${pedido.producto}  <b>Tamaño:</b> ${pedido.tamano} </p> 
-                <p><b>Material:</b>  ${pedido.material} <b>Color:</b> ${pedido.color}</p>
-                <p><b>Altura Base:</b>  ${pedido.alturaBase} </p>
-                <p><b>Detalles:</b> ${pedido.detallesFabricacion}</p>
-            </div>
-            <div class="pedido-precios">
-            <div class="form-group">
-            Valores:
-            </div>
-                <div class="form-group">
-                    <label for="precio-${index}"><b>Precio:</b> </label>
-                    <input type="number" class="form-control precio-input" name="precio[${index}]" id="precio-${index}" data-index="${index}"  placeholder="Precio">
-                </div>
-                <div class="form-group col-md-6">
-                <label><b>Cantidad:</b> </label><input class="form-control precio-input" value="${pedido.cantidad}" disabled></input>  
-                </div>
-            </div>
-        </div>
-            `).join('');
-
-            document.getElementById('pedidosAgregados').innerHTML = pedidosHtml;
-
-            // Añadir evento change a cada input de precio
-            $('.precio-input').on('change', function() {
-                let index = $(this).data('index');
-                let nuevoPrecio = parseFloat($(this).val()) || 0;
-                pedidos[index].precio = nuevoPrecio; // Actualiza el precio en el array
-                actualizarValorTotal(); // Recalcula el total
-            });
-
-            $('.valorDespacho').on('change', function() {
-
-                actualizarValorTotal(); // Recalcula el total
-            });
-
-
-
-
-
-
-
-        }
-
-
-        function actualizarValorTotal() {
-            let total = pedidos.reduce((acc, pedido) => acc + pedido.precio, 0);
-            let valorDespacho = parseFloat($('#valorDespacho').val()) || 0;
-            total += valorDespacho;
-            $('#valorTotal').val(total.toFixed(0)); // Actualiza el input de valor total
-        }
-
-
-
-        var current = 1,
-            current_step, next_step, steps;
-        steps = $("fieldset").length;
-
-        $(".next").click(function() {
-            current_step = $(this).parent();
-
-            // Si estamos en el paso de los datos del pedido (paso 2, asumiendo que current == 2 es paso 2)
-            if (current == 2 && validarPasoActual(current_step)) {
-                // Aquí preguntamos si quiere agregar otro pedido o continuar
-                swal.fire({
-                    title: '¿Desea agregar otro pedido?',
-                    text: "Puede agregar más productos a esta orden.",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, agregar otro',
-                    cancelButtonText: 'No, continuar al siguiente paso'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        capturarDatosDelPedido(); // Captura y almacena los datos del pedido actual
-
-                        $("#formularios").hide();
-                        $('#status').val('');
-                        // Aquí podrías clonar los campos de pedido, resetearlos para una nueva entrada o mostrar un nuevo conjunto de campos
-                        // No avanzamos a current++
-                    } else {
-                        $('#status').val('');
-                        $("#formularios").hide();
-                        capturarDatosDelPedido();
-                        mostrarPedidosAgregados();
-                        // El usuario elige continuar al siguiente paso
-                        next_step = $(this).parent().next();
-                        next_step.show();
-                        current_step.hide();
-                        setProgressBar(++current);
-                    }
-                });
-            } else if (validarPasoActual(current_step)) {
-                // Para cualquier otro paso que no requiera la confirmación especial
-                next_step = $(this).parent().next();
-                next_step.show();
-                current_step.hide();
-                setProgressBar(++current);
-            } else if (current == 3) {
-                console.log("pasa por aqui");
-                next_step = $(this).parent().next();
-                next_step.show();
-                current_step.hide();
-                setProgressBar(++current);
-            } else {
-                // Si no se validan los campos requeridos
-                swal.fire("", "Por favor, complete todos los campos requeridos antes de continuar.", "warning");
-            }
-
-        });
-
-        // Lógica para manejar el clic en el botón "anterior"
-        $(".previous").click(function() {
-            current_step = $(this).parent();
-            next_step = $(this).parent().prev();
-            next_step.show();
-            current_step.hide();
-            setProgressBar(--current);
-        });
-
-        setProgressBar(current);
-
-        function setProgressBar(curStep) {
-            var percent = parseFloat(100 / steps) * curStep;
-            percent = percent.toFixed();
-            $(".progress-bar")
-                .css("width", percent + "%")
-                .html(percent + "%");
-        }
-
-        // Función para validar el paso actual
-        function validarPasoActual(step) {
-            var isValid = true;
-
-            $(step).find("input[required], select[required], textarea[required]").each(function() {
-                if ($(this).val() === "") {
-                    isValid = false;
-                    // Opcional: resaltar campos no válidos
-                    $(this).addClass('is-invalid'); // Añade una clase para indicar visualmente el error
-                } else {
-                    $(this).removeClass('is-invalid'); // Asegúrate de quitar la clase si el campo es válido
-                }
-            });
-
-            return isValid;
-        }
-
-
-
-
-
-        // Función para actualizar la barra de progreso
-
-        // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
-
-
-
-        $("#formular").on('submit', function(evt) {
-            evt.preventDefault(); // Previene el comportamiento por defecto del formulario.
-            console.log("enviar");
-            // Convertir el array de pedidos a JSON y asignarlo a un input oculto.
-            var pedidosJson = JSON.stringify(pedidos);
-            $('#pedidosJson').val(pedidosJson);
-
-            // Determinar la dirección basándose en los campos del formulario.
-            var direccion = $("#street_name").val() == "" ?
-                $("#search_input").val() :
-                $("#street_name").val() + " " + $("#street_number").val() + ", " + $("#comunas").val() + " " + $("#dpto").val(); // Evitar el envío tradicional del formulario
-
-            if ($("#formular")[0].checkValidity()) {
-                $.ajax({
-                    url: "formularios/agregarpedido2024.php",
-                    type: "POST",
-                    data: $("#formular").serialize(),
-                    dataType: "json", // Esperando una respuesta en JSON
-                    success: function(res) {
-                        var div = document.getElementById('contenidoDinamico');
-                        // Creamos un nuevo contenido HTML
-                        var nuevoContenido = `
-                                                <h2>Pedido Ingresado Con Éxito!</h2>
-                                                <p>Tu información ha sido recibida correctamente.</p>
-                                                <a href='addpedido.php' class='btn btn-success btn-sm'>Agregar un nuevo pedido</a>
-                                            `; // Asignamos el nuevo contenido al div
-                        div.innerHTML = nuevoContenido;
-
-                        // Inspeccionar la respuesta
-                        if (res.success) {
-                            current_step = $("fieldset:visible");
-                            next_step = current_step.next("fieldset");
-                            if (next_step.length) {
-                                current_step.hide();
-                                next_step.show();
-                                setProgressBar(++current);
-                            }
-
-
-                            Swal.fire({
-                                title: 'Pedido Ingresado con éxito',
-                                html: `
-                            <img width='30%' src='img/okimg.png'><br> `,
-                                icon: 'success',
-                                showCancelButton: false,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Finalizar Pedido',
-                                confirmButtonColor: '#fd7e14',
-                                cancelButtonText: 'Cerrar',
-                                showCloseButton: true,
-                                focusConfirm: false,
-                                html:
-
-                                    ` Vendedor: ${res.vendedor}<br>
-                            Numero de Pedido: ${res.lastid}<br>
-                            Numero de Orden: ${res.nuevoregistroorden}                  <br>
-                            
-                            <div style='text-align: center; margin-bottom: 1.5rem;'>
-                            <button type='button' class='btn btn-success  btn-sm btnAddPagoMOD' data-id='${res.nuevoregistroorden}' style='--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;' >Ingresar Pagos</button>        </div> 
-                            
-
-                            <div style='text-align:center; '>
-                                <a href='addpedido.php' class='btn btn-success btn-sm'>Agregar un nuevo pedido</a>
-                            </div>
-                            
-                            `,
-
-                                allowOutsideClick: false
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Aquí puedes realizar la acción de finalización del pedido y enviar el correo
-                                    Swal.fire({
-                                        title: 'Pedido finalizado',
-                                        text: 'El pedido se ha finalizado correctamente',
-                                        icon: 'success',
-                                        html: `
-                            <div style='text-align:center; margin-top: 10px;'>
-                                <a href='reportes/pedido.php?id=${res.nuevoregistroorden}' class='btn btn-primary btn-sm'>Imprimir Comprobante</a> 
-                            </div> `,
-                                        showConfirmButton: true,
-                                        allowOutsideClick: false
-                                    }).then(() => {
-                                        window.location.href = `finalizar_pedido.php?id=${res.nuevoregistroorden}`;
-
-                                    });
-                                }
-                            });
-
-                            // 
-                        } else {
-                            var div = document.getElementById('contenidoDinamico');
-                            // Creamos un nuevo contenido HTML
-                            var nuevoContenido = `
-                                                <h2>Error ingresando pedido!</h2>
-                                                <p>Vuelva a intentarlo.</p>
-                                                <a href='addpedido.php' class='btn btn-success btn-sm'>Agregar un nuevo pedido</a>
-                                            `; // Asignamos el nuevo contenido al div
-                            div.innerHTML = nuevoContenido;
-                            current_step = $("fieldset:visible");
-                            next_step = current_step.next("fieldset");
-                            if (next_step.length) {
-                                current_step.hide();
-                                next_step.show();
-                                setProgressBar(++current);
-                            }
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error en AJAX:", status, error);
-                    }
-                });
-            }
-        });
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
-    function noPuntoComa(event) {
-
-        var e = event || window.event;
-        var key = e.keyCode || e.which;
-
-        if (key === 110 || key === 190 || key === 188) {
-
-            e.preventDefault();
-        }
-
-
-    }
-
-    function checkRut(rut) {
-        document.getElementById("iconoCheck").style.display = 'none';
-        document.getElementById("iconoCross").style.display = 'none';
-        // Despejar Puntos
-        var valor = rut.value.replace('.', '');
-        // Despejar Guión
-        valor = valor.replace('-', '');
-
-        // Aislar Cuerpo y Dígito Verificador
-        cuerpo = valor.slice(0, -1);
-        dv = valor.slice(-1).toUpperCase();
-
-        // Formatear RUN
-        rut.value = cuerpo + '-' + dv
-
-        // Si no cumple con el mínimo ej. (n.nnn.nnn)
-        if (cuerpo.length < 7) {
-            rut.setCustomValidity("RUT Incompleto");
-            return false;
-        }
-
-        // Calcular Dígito Verificador
-        suma = 0;
-        multiplo = 2;
-
-        // Para cada dígito del Cuerpo
-        for (i = 1; i <= cuerpo.length; i++) {
-
-            // Obtener su Producto con el Múltiplo Correspondiente
-            index = multiplo * valor.charAt(cuerpo.length - i);
-
-            // Sumar al Contador General
-            suma = suma + index;
-
-            // Consolidar Múltiplo dentro del rango [2,7]
-            if (multiplo < 7) {
-                multiplo = multiplo + 1;
-            } else {
-                multiplo = 2;
-            }
-
-        }
-
-        // Calcular Dígito Verificador en base al Módulo 11
-        dvEsperado = 11 - (suma % 11);
-
-        // Casos Especiales (0 y K)
-        dv = (dv == 'K') ? 10 : dv;
-        dv = (dv == 0) ? 11 : dv;
-
-        // Validar que el Cuerpo coincide con su Dígito Verificador
-        if (dvEsperado != dv) {
-            rut.setCustomValidity("RUT Inválido");
-            // Oculta el ícono si el RUT no es válido
-            document.getElementById("iconoCheck").style.display = 'none';
-            document.getElementById("iconoCross").style.display = 'block';
-            $("#msgvalido").html("");
-            var rut_valido = "si";
-            $("#msgerror").html("Rut invalido, por favor verificar antes de ingresar...");
-            rut.classList.add('input-incorrect');
-            return false;
-        }
-
-        // Si todo sale bien, eliminar errores (decretar que es válido)
-        rut.setCustomValidity('');
-        document.getElementById("iconoCheck").style.display = 'block';
-        document.getElementById("iconoCross").style.display = 'none';
-        rut.classList.remove('input-incorrect');
-        $("#msgvalido").html("Rut valido!");
-        $("#msgerror").html("");
-        rutcompleto = $("#rut").val();
-
-        consultarCliente(rutcompleto);
-        consultarpedidoexistente(rutcompleto);
-
-
-
-
-
-    }
-
-
-
-
-    function validarRut() {
-        var Fn = {
-            // Valida el rut con su cadena completa "XXXXXXXX-X"
-            validaRut: function(rutCompleto) {
-                rutCompleto = rutCompleto.replace("‐", "-");
-                if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto))
-                    return false;
-                var tmp = rutCompleto.split('-');
-                var digv = tmp[1];
-                var rut = tmp[0];
-                if (digv == 'K') digv = 'k';
-
-                return (Fn.dv(rut) == digv);
-            },
-            dv: function(T) {
-                var M = 0,
-                    S = 1;
-                for (; T; T = Math.floor(T / 10))
-                    S = (S + T % 10 * (9 - M++ % 6)) % 11;
-                return S ? S - 1 : 'k';
-            }
-        }
-        if (Fn.validaRut($("#rut").val())) {
-            $("#msgvalido").html("Rut valido!");
-            $("#msgerror").html("");
-            rutcompleto = $("#rut").val();
-
-            consultarCliente(rutcompleto);
-            consultarpedidoexistente(rutcompleto);
-
-
-        } else {
-            $("#msgvalido").html("");
-            var rut_valido = "si";
-            $("#msgerror").html("Rut invalido, por favor verificar antes de ingresar...");
-        }
-    }
-
-    function consultarpedidoexistente() {
-        var rut = rutcompleto;
-        $.ajax({
-            url: "formularios/existe_cliente.php",
-            type: "POST",
-            data: {
-                opcion: 2,
-                id: rutcompleto
-            },
-            success: function(data) {
-                if (data.trim().length > 0) { // Verifica si 'data' no está vacío
-                    $("#pedidoexistente").html(data);
-
-                    Swal.fire({
-                        title: 'Pendientes de fabricación',
-                        html: data, // Usa la variable 'data' para mostrar el contenido HTML en el Swal
-                        width: 900, // Ajusta el ancho según necesites
-                        padding: '3em',
-                        confirmButtonText: 'Aceptar', // Puedes personalizar el texto del botón de confirmación
-                        confirmButtonColor: '#3085d6',
-                        icon: 'warning',  // Ajusta el padding según necesites
-                        background: '#fff url(/images/trees.png)', // Cambia el fondo si lo deseas
-                        backdrop: `
-    rgba(0,0,123,0.4)
-    url("https://respaldoschile.cl/intranet/dashboard/img/nyan-cat.gif")
-    left top
-    no-repeat
-  ` // Puedes personalizar el fondo del modal aquí
-                    }).then((result) => {
-                        // Acciones a realizar cuando el usuario cierra el Swal, si es necesario
-                    });
-                } else {
-                    // Aquí puedes manejar el caso cuando 'data' esté vacío, si es necesario
-                    console.log("No hay datos para mostrar.");
-                }
-            },
-            error: function() {
-                alert("error");
-            }
-        });
-    }
-
-
-
-
-    function consultarCliente(rutcompleto) {
-        var rut = rutcompleto;
-        $externo = false;
-
-        $.ajax({
-
-
-            url: "formularios/existe_cliente.php",
-            type: "POST",
-            data: {
-                opcion: 1,
-                id: rutcompleto
-            },
-            success: function(data) {
-                const usuarios = JSON.parse(data);
-                console.log(data);
-
-                var nombre = usuarios[1];
-                var telefono = usuarios[2];
-                var correo = usuarios[3];
-                var direccion = usuarios[4];
-                var numero = usuarios[5];
-                var dpto = usuarios[6];
-                var instagram = usuarios[7];
-                var region = usuarios[8];
-                var comuna = usuarios[9];
-                //consulta si esque se extrajo desde rutificador.
-                var externo = usuarios[10];
-
-                if (usuarios.length === 0) {
-                    document.getElementById("name").value = "";
-                    document.getElementById("clienteexisterut").value = "";
-                    document.getElementById("telefono").value = "";
-                    document.getElementById("direccion").value = "";
-                    document.getElementById("email").value = "";
-                    document.getElementById("numero").value = "";
-                    document.getElementById("dpto").value = "";
-                    document.getElementById("instagram").value = "";
-                    document.getElementById("clienteexisterut").value = "";
-                    document.getElementById("comuna").innerHTML = "";
-                    document.getElementById("regiones").value = "";
-
-                } else {
-
-                    document.getElementById("name").value = nombre;
-                    if($externo == true){
-                        document.getElementById("clienteexisterut").value = "si";
-                    }else{
-                        document.getElementById("clienteexisterut").value = "";
-                    }
-                    
-                    document.getElementById("telefono").value = telefono;
-
-                    document.getElementById("email").value = correo;
-
-                    var direccion_completa = direccion + " " + numero + " " + comuna + " " + region;
-
-                    document.getElementById("search_input").value = direccion_completa;
-                    document.getElementById("street_name").value = direccion;
-
-                    document.getElementById("street_number").value = numero;
-                    document.getElementById("dpto").value = dpto;
-                    document.getElementById("instagram").value = instagram;
-
-                    document.getElementById("comunas").value = comuna;
-                    document.getElementById("regiones").value = region;
-                }
-
-            },
-            error: function() {
-
-                alert("error");
-
-            }
-
-        });
-
-    }
-</script>
-
-
-<script type="text/javascript">
-    function establecerVisibilidadImagen(id, visibilidad) {
-        var img = document.getElementById(id);
-        img.style.visibility = (visibilidad ? 'visible' : 'hidden');
-    }
-</script>
-<script type="text/javascript">
-    $('#listatelas').val(1);
-
-
-    // aqui validamos si recibe el checkbox retiro en tienda
-    var retiroTiendaCheckbox = document.getElementById('retiro_tienda');
-    var datosDireccionDiv = document.getElementById('direccionymapa');
-
-    retiroTiendaCheckbox.addEventListener('change', function() {
-        if (retiroTiendaCheckbox.checked) {
-            swal.fire("", "Cliente retira en tienda, debes especificar la fecha de retiro", "success");
-            datosDireccionDiv.style.display = 'none';
-            detalleretiro.style.display = 'block';
-        } else {
-            detalleretiro.style.display = 'none';
-            datosDireccionDiv.style.display = 'block';
-        }
-    });
-
-    // recargarLista(); 
-    function vincularEventosASelect() {
-        console.log("se captura cambio");
-        $('#listatelas').change(function() {
-
-            recargarLista();
-            recargarListaImg();
-
-        });
-
-
-        $("#select2lista").change(function() {
-
-
-        });
-
-        function recargarLista() {
-            $.ajax({
-                type: "POST",
-                url: "formularios/datos.php",
-                data: "colores=" + $('#listatelas').val(),
-
-                success: function(r) {
-
-                    $('#select2lista').html(r);
-
-                }
-            });
-        }
-
-        function recargarListaImg() {
-
-            $.ajax({
-
-                data: "color=" + $('#listatelas').val(),
-                url: 'formularios/ajax_colores.php',
-                type: 'post',
-                datatype: 'html',
-                success: function(datahtml) {
-
-
-                    $("#imagencolor").html(datahtml);
-
-
-                },
-                error: function() {
-                    alert("Error seleccionando el tipo de Tela");
-
-                }
-            });
-        }
-
-    }
-</script>
-
-
-
-<!-- SCRIPT DE GEOLOCALIZACION -->
-<script>
-    var poligonoCoordenadas = [{
-            lat: -33.4314581,
-            lng: -70.7902495
-        },
-        {
-            lat: -33.524328,
-            lng: -70.7993944
-        },
-        {
-            lat: -33.6349299,
-            lng: -70.7123172
-        },
-        {
-            lat: -33.6352154,
-            lng: -70.6007414
-        },
-        {
-            lat: -33.6060619,
-            lng: -70.5219445
-        },
-        {
-            lat: -33.5239525,
-            lng: -70.524526
-        },
-        {
-            lat: -33.442918,
-            lng: -70.519719
-        },
-        {
-            lat: -33.3887578,
-            lng: -70.5080475
-        },
-        {
-            lat: -33.3375201,
-            lng: -70.5007323
-        },
-        {
-            lat: -33.3512863,
-            lng: -70.7005396
-        },
-        {
-            lat: -33.3499957,
-            lng: -70.7510067
-        },
-        {
-            lat: -33.3644766,
-            lng: -70.7590746
-        },
-        {
-            lat: -33.3960115,
-            lng: -70.7760681
-        },
-        {
-            lat: -33.4314581,
-            lng: -70.7902495
-        }
-    ];
-
-    var geocoder = new google.maps.Geocoder();
-    var inputElement = document.getElementById('search_input');
-    var verificarButton = document.getElementById('verificar_button');
-
-    verificarButton.addEventListener('click', function() {
-        var direccion = inputElement.value.trim();
-        if (direccion !== '') {
-            verificarUbicacion(direccion);
-        }
-    });
-
-    function puntoDentroPoligono(point, polygon) {
-        var x = point.lng;
-        var y = point.lat;
-
-        var dentro = false;
-        for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-            var xi = polygon[i].lng;
-            var yi = polygon[i].lat;
-            var xj = polygon[j].lng;
-            var yj = polygon[j].lat;
-
-            var intersecta = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            if (intersecta) dentro = !dentro;
-        }
-
-        return dentro;
-    }
-
-    function verificarUbicacion(direccion) {
-        geocoder.geocode({
-            address: direccion
-        }, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
-                var ubicacion = results[0].geometry.location;
-                var lat = ubicacion.lat();
-                var lng = ubicacion.lng();
-                var point = {
-                    lat: lat,
-                    lng: lng
-                };
-                var dentroPoligono = puntoDentroPoligono(point, poligonoCoordenadas);
-                if (dentroPoligono) {
-                    inputElement.classList.remove('input-outside');
-                    inputElement.classList.add('input-inside');
-                    document.getElementById('result').textContent = 'La ubicación está dentro del rango de precio estandar.';
-                } else {
-                    inputElement.classList.remove('input-inside');
-                    inputElement.classList.add('input-outside');
-                    document.getElementById('result').textContent = 'La ubicación está fuera del precio estandar.';
-                }
-            } else {
-                inputElement.classList.remove('input-inside');
-                inputElement.classList.add('input-outside');
-                document.getElementById('result').textContent = 'No se pudo geocodificar la dirección.';
-            }
-        });
-    }
-</script>
-
-<script>
-    $(document).ready(function() {
-        var input = document.getElementById('search_input');
-
-
-
-        var searchInput = document.getElementById('search_input');
-        var locLatInput = document.getElementById('loc_lat');
-        var locLongInput = document.getElementById('loc_long');
-        var streetNumberInput = document.getElementById('street_number');
-        var streetNameInput = document.getElementById('street_name');
-        var comunaInput = document.getElementById('comunas');
-        var regionInput = document.getElementById('regiones');
-        var latitudeView = document.getElementById('latitude_view');
-        var longitudeView = document.getElementById('longitude_view');
-
-        var autocomplete = new google.maps.places.Autocomplete(searchInput, {
-            types: ['geocode']
-        });
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            var place = autocomplete.getPlace();
-            locLatInput.value = place.geometry.location.lat();
-            locLongInput.value = place.geometry.location.lng();
-
-            var streetNumber = "";
-            var streetName = "";
-            var comuna = "";
-            var region = "";
-            for (var i = 0; i < place.address_components.length; i++) {
-                var component = place.address_components[i];
-                if (component.types.includes('street_number')) {
-                    streetNumber = component.short_name;
-                } else if (component.types.includes('route')) {
-                    streetName = component.long_name;
-                } else if (component.types.includes('administrative_area_level_3')) {
-                    comuna = component.long_name;
-                } else if (component.types.includes('administrative_area_level_1')) {
-                    region = component.long_name;
-                }
-            }
-            streetNumberInput.value = streetNumber;
-            streetNameInput.value = streetName;
-            comunaInput.value = comuna;
-            regionInput.value = region;
-
-            latitudeView.textContent = place.geometry.location.lat();
-            longitudeView.textContent = place.geometry.location.lng();
-        });
-    });
-</script>
-
-
-
-<!-- revisar ya que es algo de autocompletar direccion -->
-<script type="text/javascript">
-    let autocomplete;
-    let address1Field;
-    let address2Field;
-    let postalField;
-
-    function initAutocomplete() {
-        address1Field = document.querySelector("#ship-address");
-        address2Field = document.querySelector("#address2");
-        postalField = document.querySelector("#postcode");
-        // Create the autocomplete object, restricting the search predictions to
-        // addresses in the US and Canada.
-        autocomplete = new google.maps.places.Autocomplete(address1Field, {
-            componentRestrictions: {
-                country: ["us", "ca"]
-            },
-            fields: ["address_components", "geometry"],
-            types: ["address"],
-        });
-        address1Field.focus();
-        // When the user selects an address from the drop-down, populate the
-        // address fields in the form.
-        autocomplete.addListener("place_changed", fillInAddress);
-    }
-
-    function fillInAddress() {
-        // Get the place details from the autocomplete object.
-        const place = autocomplete.getPlace();
-        let address1 = "";
-        let postcode = "";
-
-        // Get each component of the address from the place details,
-        // and then fill-in the corresponding field on the form.
-        // place.address_components are google.maps.GeocoderAddressComponent objects
-        // which are documented at http://goo.gle/3l5i5Mr
-        for (const component of place.address_components) {
-            const componentType = component.types[0];
-
-            switch (componentType) {
-                case "street_number": {
-                    address1 = `${component.long_name} ${address1}`;
-                    break;
-                }
-
-                case "route": {
-                    address1 += component.short_name;
-                    break;
-                }
-
-
-
-                case "postal_code_suffix": {
-                    postcode = `${postcode}-${component.long_name}`;
-                    break;
-                }
-                case "locality":
-                    document.querySelector("#locality").value = component.long_name;
-                    break;
-
-                case "administrative_area_level_1": {
-                    document.querySelector("#state").value = component.short_name;
-                    break;
-                }
-                case "country":
-                    document.querySelector("#country").value = component.long_name;
-                    break;
-            }
-        }
-        address1Field.value = address1;
-        postalField.value = postcode;
-        // After filling the form with address components from the Autocomplete
-        // prediction, set cursor focus on the second address line to encourage
-        // entry of subpremise information such as apartment, unit, or floor number.
-        address2Field.focus();
-    }
-</script>
-<script>
-    function validaForm() {
-        // Campos de texto
-        if ($("#name").val() == "") {
-
-            $("#name").focus(); // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
-            $("#name_error").html("Debe ingresar este campo");
-
-            return false;
-        }
-
-
-
-        // Checkbox
-
-
-        return true; // Si todo está correcto
-    }
+<script
+  loading="async"
+  src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAy1me0GgrNwevFOTCa8MQo2gNNt79JizI&callback=initMap">
 </script>
 <?php include("modal_validarpagos.php"); ?>
 <?php require_once "vistas/parte_inferior.php" ?>

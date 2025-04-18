@@ -1,33 +1,18 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
-$BD_SERVIDOR = "localhost";
-$BD_USUARIO = "cre61650_respaldos21";
-$BD_PASSWORD = "respaldos21/";
-$BD_NOMBRE = "cre61650_agenda";
+// Include the connection file
+include_once '../bd/conexion.php';
 
-$mysqli = new mysqli($BD_SERVIDOR, $BD_USUARIO, $BD_PASSWORD, $BD_NOMBRE);
+// Create connection object using your existing Conexion class
+$objeto = new Conexion();
+$conexion = $objeto->Conectar();
 
-if ($mysqli->connect_error) {
-    die("Conexión fallida: " . $mysqli->connect_error);
-}
-
-$mysqli->set_charset("utf8mb4");
-/*
-$modelo = isset($_POST['modelo']) ? ucfirst($_POST['modelo']) : "";
-$plazas = isset($_POST['plazas']) ? $_POST['plazas'] : "";
-$tipotela = isset($_POST['listatelas']) ? $_POST['listatelas'] : "";
-$color = isset($_POST['lista2']) ? $_POST['lista2'] : "";
-$alturabase = isset($_POST['alturabase']) ? $_POST['alturabase'] : "";
-$detalles_fabricacion = isset($_POST['detalles_fabricacion']) ? $_POST['detalles_fabricacion'] : "";
-$botones = isset($_POST['boton']) ? $_POST['boton'] : "";
-$anclaje = isset($_POST['anclaje']) ? $_POST['anclaje'] : "";
-*/
 $infoPedidos = "";
 if (isset($_POST['pedidosJson'])) {
     $pedidos = json_decode($_POST['pedidosJson'], true);
 
-    // Ahora puedes procesar $pedidos como un array en PHP
+    // Procesamos el array de pedidos
     foreach ($pedidos as $pedido) {
         foreach ($pedido as $key => $value) {
             $infoPedidos .= "<strong>" . ucfirst($key) . ":</strong> " . $value . "<br>";
@@ -36,6 +21,7 @@ if (isset($_POST['pedidosJson'])) {
     }
 }
 
+// Recogemos todos los datos del formulario
 $nombre = isset($_POST['name']) ? ucfirst($_POST['name']) : "";
 $correo = isset($_POST['email']) ? ucfirst($_POST['email']) : "";
 $rut = isset($_POST['rut']) ? $_POST['rut'] : "";
@@ -49,15 +35,24 @@ $valorDespacho = isset($_POST['valorDespacho']) ? $_POST['valorDespacho'] : "";
 
 //CONSULTAMOS SI VIENE VACIA LA DIRECCION Y LE ASIGNAMOS LOS VALORES DEL ULTIMO REGISTRO CON EL NUMERO DE ORDEN QUE RECIBIMOS.
 // si viene con el click de retiro en tienda no se realiza esta consulta.
-if ($_POST['street_name'] == "" and $retiro_tienda != "on") {
-    $resultado = $mysqli->query("SELECT direccion,numero,dpto,region,comuna FROM pedido_detalle WHERE num_orden = '$numero_orden'");
-    $fila = mysqli_fetch_array($resultado);
-
-    $direccion = ucfirst($fila['direccion']);
-    $numero =  $fila['numero']; //numero de direccion
-    $dpto =  $fila['dpto']; //numero de dpto o casa
-    $region =  $fila['region'];
-    $comuna =  $fila['comuna'];
+if ($_POST['street_name'] == "" && $retiro_tienda != "on") {
+    try {
+        $consulta = "SELECT direccion, numero, dpto, region, comuna FROM pedido_detalle WHERE num_orden = :numero_orden";
+        $stmt = $conexion->prepare($consulta);
+        $stmt->bindParam(':numero_orden', $numero_orden, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        if ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $direccion = ucfirst($fila['direccion']);
+            $numero = $fila['numero']; //numero de direccion
+            $dpto = $fila['dpto']; //numero de dpto o casa
+            $region = $fila['region'];
+            $comuna = $fila['comuna'];
+        }
+    } catch(PDOException $e) {
+        // Manejo de errores
+        echo "Error al consultar dirección: " . $e->getMessage();
+    }
 } else {
     $direccion = isset($_POST['street_name']) ? ucfirst($_POST['street_name']) : "";
     $numero = isset($_POST['street_number']) ? $_POST['street_number'] : "";
@@ -76,26 +71,19 @@ if ($retiro_tienda == "on") {
 
 $mododepago = isset($_POST['mododepago']) ? $_POST['mododepago'] : "";
 $comentarios = isset($_POST['message']) ? $_POST['message'] : "";
-
-
 $instagram = isset($_POST['instagram']) ? $_POST['instagram'] : "";
 $vendedor = isset($_POST['vendedor']) ? $_POST['vendedor'] : "";
 $precio = isset($_POST['precio']) ? $_POST['precio'] : "";
-
 $fecha_ingreso = isset($_POST['fecha_ingreso']) ? $_POST['fecha_ingreso'] : "";
 $fecha_entrega = isset($_POST['fecha_entrega']) ? $_POST['fecha_entrega'] : "";
 $clienteexiste = isset($_POST['clienteexisterut']) ? $_POST['clienteexisterut'] : "";
-
 $pagado = isset($_POST['pagado']) ? $_POST['pagado'] : "";
 $referencia = isset($_POST['referencia']) ? $_POST['referencia'] : "";
-
-
 
 $descomponerdireccion = explode(",", $_POST['direccion']);
 
 //SI EL FORMULARIO ES PARA AGREGAR PATAS
 if (isset($_POST['tipo_formulario']) && $_POST['tipo_formulario'] == "patas") {
-
     $cantidad = $_POST['cantidad'];
     $modelo = "Patas de cama";
     $tipotela = ucfirst($_POST['modelo']);
@@ -103,165 +91,191 @@ if (isset($_POST['tipo_formulario']) && $_POST['tipo_formulario'] == "patas") {
     $cantidad = 1;
 }
 
-
-
 // Determina el número de orden para el nuevo pedido.
-// Si ya existe un número de orden, lo utiliza. Si no, genera uno nuevo incrementando el último número de orden existente.
 if ($numero_orden != "") {
     $nuevoregistroorden = $numero_orden;
 } else {
-    if ($stmt = $mysqli->prepare("SELECT MAX(num_orden) AS num_orden FROM pedido")) {
+    try {
+        $consulta = "SELECT MAX(num_orden) AS num_orden FROM pedido";
+        $stmt = $conexion->prepare($consulta);
         $stmt->execute();
-
-        // Vincular la variable al resultado de la consulta
-        $stmt->bind_result($max_num_orden);
-
-        // Obtener los resultados
-        if ($stmt->fetch()) {
-            $nuevoregistroorden = trim($max_num_orden) + 1;
+        
+        if ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $nuevoregistroorden = trim($fila['num_orden']) + 1;
         }
-
-        // Cerrar el statement
-        $stmt->close();
+    } catch(PDOException $e) {
+        echo "Error al obtener número de orden: " . $e->getMessage();
     }
 }
-
-// Consulta el nombre del color en la base de datos basándose en el ID suministrado.
-// Este paso es importante para obtener detalles específicos del color que se usarán más adelante.
-/*$resultado = $mysqli->query("SELECT color FROM colores WHERE id = '$color'");
-$fila = mysqli_fetch_row($resultado);
-*/
 
 // FALTA FILTRAR QUE SI SE ESTA AGREGANDO UN NUEVO PEDIDO A LA ORDEN NO SE VUELVA A INGRESAR UN PEDIDO.
 $estadopedidod = 0;
 
-// Inserción de un nuevo pedido utilizando sentencias preparadas
-if ($stmt = $mysqli->prepare("INSERT INTO pedido (rut_cliente, fecha_ingreso, despacho, vendedor, metodo_entrega, estado) VALUES (?, ?, ?, ?, ?, ?)")) {
-    $stmt->bind_param("ssssss", $rut, $fecha_ingreso, $valorDespacho, $vendedor, $metodo_entrega, $estadopedidod);
+try {
+    // Iniciar transacción
+    $conexion->beginTransaction();
+    
+    // Total pagado como entero
+    $total_pagado = ($abono == "" || $abono === null) ? 0 : intval($abono);
+    
+    // PASO 1: Insertar en la tabla principal pedido
+    $consulta = "INSERT INTO pedido (rut_cliente, fecha_ingreso, despacho, total_pagado, vendedor, metodo_entrega, estado, orden_ext) 
+                VALUES (:rut, :fecha_ingreso, :valor_despacho, :total_pagado, :vendedor, :metodo_entrega, :estado, :orden_ext)";
+    
+    $stmt = $conexion->prepare($consulta);
+    
+    $orden_ext = "0"; // Valor predeterminado para orden_ext
+    
+    $stmt->bindParam(':rut', $rut, PDO::PARAM_STR);
+    $stmt->bindParam(':fecha_ingreso', $fecha_ingreso, PDO::PARAM_STR);
+    $stmt->bindParam(':valor_despacho', $valorDespacho, PDO::PARAM_STR);
+    $stmt->bindParam(':total_pagado', $total_pagado, PDO::PARAM_INT);
+    $stmt->bindParam(':vendedor', $vendedor, PDO::PARAM_STR);
+    $stmt->bindParam(':metodo_entrega', $metodo_entrega, PDO::PARAM_STR);
+    $stmt->bindParam(':estado', $estadopedidod, PDO::PARAM_STR); 
+    $stmt->bindParam(':orden_ext', $orden_ext, PDO::PARAM_STR);
+    
     $stmt->execute();
     
-// Asegúrate de que la cantidad de '?' coincida con el número de variables a enlazar.
-if ($stmt = $mysqli->prepare("INSERT INTO pedido_detalle (num_orden, direccion, numero, dpto, region, comuna, modelo, tamano, alturabase, tipotela, color, cantidad, precio, abono, mododepago, tipo_boton, anclaje, anclajeMetal,comentarios, detalles_fabricacion, fecha_ingreso, pagado, metodo_entrega, detalle_entrega, vendedor, estadopedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+    // Obtener el ID del pedido recién insertado
+    $lastid = $conexion->lastInsertId();
+    
+    // PASO 2: Insertar detalles del pedido - usando ? en lugar de parámetros nombrados
+    $consulta_detalle = "INSERT INTO pedido_detalle 
+                        (num_orden, direccion, numero, dpto, region, comuna, modelo, tamano, alturabase, tipotela, 
+                        color, cantidad, precio, abono, mododepago, tipo_boton, anclaje, anclajeMetal, 
+                        comentarios, detalles_fabricacion, fecha_ingreso, pagado, metodo_entrega, 
+                        detalle_entrega, vendedor, estadopedido, id_circuit, orden_ruta, atencion) 
+                        VALUES 
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt_detalle = $conexion->prepare($consulta_detalle);
+    
+    $id_circuit = '1'; // Valor predeterminado para id_circuit como varchar
+    $orden_ruta = 0; // Valor predeterminado para orden_ruta
+    $atencion = 0; // Valor predeterminado para atencion
     
     foreach ($pedidos as $pedido) {
-        // Aquí asumimos que 'cantidad', 'abono', 'comentarios', 'fecha_ingreso', 'pagado', 'mododepago', 'detalle_entrega', y 'vendedor' son iguales para todos los pedidos.
-        // Ajusta la cadena de tipos y las variables según tus datos exactos.
-        $stmt->bind_param('ssssssssssssidssssssssssss', 
-        $nuevoregistroorden, $direccion, $numero, $dpto, $region, $comuna, $pedido['producto'], $pedido['tamano'], $pedido['alturaBase'], $pedido['material'], 
-        $pedido['color'], $cantidad, $pedido['precio'], $abono, $mododepago, 
-        $pedido['boton'], $pedido['anclaje'], $pedido['anclajeMetal'], $comentarios, $pedido['detallesFabricacion'], 
-        $fecha_ingreso, $pagado, $metodo_entrega, $detalle_entrega, 
-        $vendedor, $estadopedidod);
-        if (!$stmt->execute()) {
-            echo "Falló la ejecución: (" . $stmt->error . ") " . $stmt->error;
-        }
-        $lastid = mysqli_insert_id($mysqli);
+        // Convertir abono a entero o usar 0 si está vacío
+        $abono_int = ($abono == "" || $abono === null) ? 0 : intval($abono);
+        
+        // Preparar un array con todos los valores en el orden correcto
+        $params = array(
+            $nuevoregistroorden,
+            $direccion,
+            $numero,
+            $dpto,
+            $region,
+            $comuna,
+            $pedido['producto'],
+            $pedido['tamano'],
+            $pedido['alturaBase'],
+            $pedido['material'],
+            $pedido['color'],
+            $cantidad,
+            $pedido['precio'],
+            $abono_int,
+            $mododepago,
+            $pedido['boton'],
+            $pedido['anclaje'],
+            $pedido['anclajeMetal'],
+            $comentarios,
+            $pedido['detallesFabricacion'],
+            $fecha_ingreso,
+            $pagado,
+            $metodo_entrega,
+            $detalle_entrega,
+            $vendedor,
+            $estadopedidod,
+            $id_circuit,
+            $orden_ruta,
+            $atencion
+        );
+        
+        // Ejecutar la consulta con el array de parámetros
+        $stmt_detalle->execute($params);
+        $lastid = $conexion->lastInsertId();
     }
-    $stmt->close();
-} else {
-    echo "Falló la preparación: (" . $mysqli->error . ") " . $mysqli->error;
+    
+    // Confirmar la transacción
+    $conexion->commit();
+    
+} catch(PDOException $e) {
+    // Revertir transacción en caso de error
+    if ($conexion->inTransaction()) {
+        $conexion->rollBack();
+    }
+    echo "Error en la inserción de pedido: " . $e->getMessage();
+    $lastid = 0;
 }
-}
+
 $mensajeError = "";
 
-
 // Verificar si el cliente existe en la base de datos
-
 $clienteExiste = false;
-$sql = "SELECT COUNT(*) FROM clientes WHERE rut = ?";
-if ($stmt = $mysqli->prepare($sql)) {
-    $stmt->bind_param("s", $rut);
+try {
+    $consulta = "SELECT COUNT(*) FROM clientes WHERE rut = :rut";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->bindParam(':rut', $rut, PDO::PARAM_STR);
     $stmt->execute();
-    $stmt->bind_result($count);
-    if ($stmt->fetch()) {
-        $clienteExiste = ($count > 0);
-    }
-    $stmt->close();
-} else {
-    $mensajeError = "Falló la preparación de la consulta de verificación del cliente: (" . $mysqli->errno . ") " . $mysqli->error;
-}
-
-// Si el cliente no existe en la base de datos, intenta insertar un nuevo registro con sus datos.
-// Si ya existe, actualiza su información con los nuevos datos proporcionados.
-if (!$clienteExiste) {
-    // Preparar la sentencia SQL para insertar
-  $sql = "INSERT INTO clientes(rut, nombre, telefono, instagram, correo) VALUES (?, ?, ?, ?, ?)";
-  if ($stmt = $mysqli->prepare($sql)) {
-      // Vincular los parámetros (s para string, i para integer, d para double, b para blobs)
-      $stmt->bind_param("sssss", $rut, $nombre, $telefono, $instagram, $correo);
-      
-      // Ejecutar la sentencia
-      if (!$stmt->execute()) {    
-          $mensajeError = "Falló el ingreso de CLIENTE: (" . $stmt->error . ")";
-          $operacionExitosa = false;
-      }      
-      // Cerrar la sentencia
-      $stmt->close();
-  } else {
-      // Manejar el error de preparación aquí
-      $mensajeError = "Falló la preparación de la inserción del CLIENTE: (" . $mysqli->error . ")";
-      $operacionExitosa = false;
-  }
-} else {
-  // Actualizar la información del cliente existente
-  $sql = "UPDATE clientes SET telefono = ?, nombre = ?, correo = ? WHERE rut = ?";
-  if ($stmt = $mysqli->prepare($sql)) {
-      // Vincular los parámetros
-      $stmt->bind_param("ssss", $telefono, $nombre, $correo, $rut);
-      
-      // Ejecutar la sentencia
-      if (!$stmt->execute()) {
-          // Manejar el error aquí
-          $mensajeError = "Falló la actualización de CLIENTE: (" . $stmt->error . ")";
-          $operacionExitosa = false;
-      }
-      
-      // Cerrar la sentencia
-      $stmt->close();
-  } else {
-      // Manejar el error de preparación aquí
-      $mensajeError = "Falló la preparación de la actualización del CLIENTE: (" . $mysqli->error . ")";
-      $operacionExitosa = false;
-  }
-}
-
-// Intenta insertar una nueva dirección para el cliente en la base de datos.
-// Si la inserción falla, muestra un mensaje de error.
-// Preparar la sentencia SQL con marcadores de posición (?)
-$sql = "INSERT INTO direccion_clientes(rut_cliente, direccion, numero, dpto, region, comuna, referencia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, '1')";
-
-// Preparar la declaración
-if ($stmt = $mysqli->prepare($sql)) {
-    // Vincular parámetros y ejecutar la declaración
-    $stmt->bind_param("sssssss", $rut, $direccion, $numero, $dpto, $region, $comuna, $referencia);
     
-    // Ejecutar la declaración
-    if ($stmt->execute()) {
-        //echo "Dirección ingresada correctamente para el cliente.";
-    } else {
-       // echo "Falló el ingreso de dirección nueva para el cliente: (" . $stmt->errno . ") " . $stmt->error;
-    }
-
-    // Cerrar la declaración
-    $stmt->close();
-} else {
-    //echo "Falló la preparación de la consulta: (" . $mysqli->errno . ") " . $mysqli->error;
+    $count = $stmt->fetchColumn();
+    $clienteExiste = ($count > 0);
+    
+} catch(PDOException $e) {
+    $mensajeError = "Error al verificar cliente: " . $e->getMessage();
 }
 
+// Si el cliente no existe, lo insertamos. Si existe, actualizamos sus datos.
+try {
+    if (!$clienteExiste) {
+        // Insertar nuevo cliente
+        $consulta = "INSERT INTO clientes(rut, nombre, telefono, instagram, correo) 
+                   VALUES (:rut, :nombre, :telefono, :instagram, :correo)";
+        $stmt = $conexion->prepare($consulta);
+        $stmt->bindParam(':rut', $rut, PDO::PARAM_STR);
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+        $stmt->bindParam(':instagram', $instagram, PDO::PARAM_STR);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->execute();
+    } else {
+        // Actualizar cliente existente
+        $consulta = "UPDATE clientes SET telefono = :telefono, nombre = :nombre, correo = :correo 
+                   WHERE rut = :rut";
+        $stmt = $conexion->prepare($consulta);
+        $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->bindParam(':rut', $rut, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+} catch(PDOException $e) {
+    $mensajeError = "Error en operación de cliente: " . $e->getMessage();
+}
 
+// Insertar dirección del cliente
+try {
+    $consulta = "INSERT INTO direccion_clientes(rut_cliente, direccion, numero, dpto, region, comuna, referencia, estado) 
+               VALUES (:rut, :direccion, :numero, :dpto, :region, :comuna, :referencia, '1')";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->bindParam(':rut', $rut, PDO::PARAM_STR);
+    $stmt->bindParam(':direccion', $direccion, PDO::PARAM_STR);
+    $stmt->bindParam(':numero', $numero, PDO::PARAM_STR);
+    $stmt->bindParam(':dpto', $dpto, PDO::PARAM_STR);
+    $stmt->bindParam(':region', $region, PDO::PARAM_STR);
+    $stmt->bindParam(':comuna', $comuna, PDO::PARAM_STR);
+    $stmt->bindParam(':referencia', $referencia, PDO::PARAM_STR);
+    $stmt->execute();
+} catch(PDOException $e) {
+    // Solo registrar el error, no interrumpir el proceso
+    $mensajeError .= " Error al insertar dirección: " . $e->getMessage();
+}
 
-
-
-// Formatea la dirección agregando el departamento o casa si está especificado PARA MOSTRARLO EN EL SWAL FIRE
+// Formatea la dirección para mostrarla en el SweetAlert
 if ($dpto != '') {
     $numero = $numero . ", Departamento/Casa: " . $dpto;
 }
-
-
-
-
-
- // Número de la nueva orden
 
 // Preparar la respuesta
 $response = array(
@@ -275,3 +289,4 @@ $response = array(
 // Devolver la respuesta en formato JSON
 echo json_encode($response);
 exit;
+?>

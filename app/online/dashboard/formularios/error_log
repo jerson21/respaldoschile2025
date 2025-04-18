@@ -1,4 +1,0 @@
-[15-Jun-2024 01:15:01 America/Santiago] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/cre61650/public_html/online/dashboard/formularios/agregarpedido2024.php:115
-Stack trace:
-#0 {main}
-  thrown in /home/cre61650/public_html/online/dashboard/formularios/agregarpedido2024.php on line 115

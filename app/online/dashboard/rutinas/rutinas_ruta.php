@@ -112,7 +112,16 @@ $consulta = $conexion->prepare("
 	    break;
 
 	    case "ver_rutas":
+// Parámetros de paginación (recibidos desde AJAX)
+$pagina = isset($_POST['pagina']) ? (int)$_POST['pagina'] : 1;
+$porPagina = isset($_POST['porPagina']) ? (int)$_POST['porPagina'] : 25; // Cuántos registros por página
 
+// Validar para evitar valores negativos o cero
+if ($pagina < 1) $pagina = 1;
+if ($porPagina < 1) $porPagina = 25;
+
+// Calcular el OFFSET para la consulta SQL
+$offset = ($pagina - 1) * $porPagina;
 
 	$consulta = $conexion->prepare("SELECT r.id as id_ruta ,r.estado as estado_ruta,r.*,count(pd.id) as cantidad_prod, pd.*, REPLACE(SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT pd.comuna ORDER BY pd.comuna ASC SEPARATOR ','), ',', 6), ',', ', ') as comuna FROM rutas r LEFT JOIN pedido_detalle pd ON pd.ruta_asignada = r.id GROUP BY r.id ORDER BY r.fecha desc");
 $consulta->execute();

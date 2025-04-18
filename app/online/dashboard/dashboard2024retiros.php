@@ -1,3 +1,4 @@
+<!-- ESTO ESTA INCRUSTADO EN EL DASHBOARD GENERAL POR ENDE NO DEBE LLEVAR HTML -->
 <div class="container">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
