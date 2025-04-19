@@ -21,6 +21,7 @@ npm install
 npm run dev
 ```
 4. Abrir en el navegador: http://localhost:3000
+5. Probar endpoint de test: http://localhost:3000/api/test (debe devolver JSON con mensaje y dbTest)
 
 ## Siguiente paso
  - Migrar módulos (Pedidos, Ventas, Dashboard) en ramas independientes dentro del directorio `backend`.
