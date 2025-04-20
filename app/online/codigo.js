@@ -13,35 +13,63 @@ $('#formLogin').submit(function(e) {
         return false; 
     } else {
         $.ajax({
-            url: "bd/login.php",
+            url: "http://localhost:3000/api/auth/login",
+            crossDomain: true,
             type: "POST",
-            dataType: "json", // Se asegura de recibir JSON
-            data: { usuario: usuario, password: password }, 
-            success: function(response) {               
+            dataType: "json",
+            data: { usuario: usuario, password: password },
+            success: function(response) {
                 if (response.status === "success") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Conexión exitosa!',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ingresar'
-                    }).then((result) => {
-                        if(result.value){
-                            window.location.href = response.redirect;
+                    // Guardar token para futuras solicitudes
+                    if (response.token) {
+                        localStorage.setItem("token", response.token);
+                    }
+                    // Ahora login en PHP para iniciar sesión en el dashboard legacy
+                    $.ajax({
+                        url: "/bd/login.php",
+                        type: "POST",
+                        dataType: "json",
+                        data: { usuario: usuario, password: password },
+                        xhrFields: { withCredentials: true }
+                    }).done(function(phpResp) {
+                        if (phpResp.status === "success") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Conexión exitosa!',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ingresar'
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.href = phpResp.redirect;
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error PHP',
+                                text: phpResp.error || 'Error en login PHP.'
+                            });
                         }
+                    }).fail(function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error PHP',
+                            text: 'No se pudo conectar con el servidor de login PHP.'
+                        });
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: response.error // Muestra el mensaje de error de login.php
+                        title: 'Error Auth',
+                        text: response.error
                     });
                 }
             },
             error: function() {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'No se pudo conectar con el servidor.'
+                    title: 'Error Auth',
+                    text: 'No se pudo conectar con el servidor de login.'
                 });
             }
         });

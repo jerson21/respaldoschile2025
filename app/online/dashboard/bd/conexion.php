@@ -1,7 +1,7 @@
 <?php
 class Conexion {
     public static function Conectar() {
-        $dotenv_path = __DIR__ . '/../../../.env';
+        $dotenv_path = __DIR__ . '/../../.env';
         if (!file_exists($dotenv_path)) {
             die("Error: El archivo .env es obligatorio y no se encontró.");
         }
@@ -39,7 +39,7 @@ class Conexion {
 
 class ConEcom {
     public static function Conectar2() {
-        define('servidor_ecom', 'localhost');  // Cambiado el nombre de las constantes
+        define('servidor_ecom', 'db');  // Cambiado el nombre de las constantes
         define('nombre_bd_ecom', 'cre61650_db_tiendadb');
         define('usuario_ecom', 'cre61650_respaldos21');
         define('password_ecom', 'respaldos21/');
