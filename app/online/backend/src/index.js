@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -241,21 +243,19 @@ const swaggerOptions = {
 };
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Middlewares
-// Parse JSON bodies
+// Middlewares básicos
+app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
-// Parse URL-encoded bodies (from HTML forms or jQuery.ajax default)
 app.use(express.urlencoded({ extended: true }));
-// Disable HTTP caching on GET requests to ensure fresh data after updates
+
+// Cache control
 app.use((req, res, next) => {
-  if (req.method === 'GET') {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  }
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   next();
 });
-// Enable CORS
-app.use(cors());
-// Serve API docs
+
+// Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Ruta para exportar el JSON de Swagger directamente
@@ -263,6 +263,7 @@ app.get('/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
+
 // Rutas
 app.use('/api', require('./routes/test'));
 // Auth routes
@@ -280,44 +281,16 @@ app.use('/api/tapiceros', require('./routes/tapiceros'));
 // Pagos routes
 app.use('/api/pagos', require('./routes/pagos'));
 
-// Ruta raíz opcional
-app.get('/', (req, res) => {
-  res.json({ message: 'RespaldosChile API', version: '1.0' });
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Servidor funcionando correctamente' });
 });
 
+// Manejo de errores
+app.use(errorHandler);
 
-
-
-// Iniciar servidor HTTP y WebSocket (Socket.io)
-const http = require('http');
-const server = http.createServer(app);
-
-// Configurar Socket.io
-const { Server } = require('socket.io');
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
-});
-
-// Manejar conexiones WebSocket
-io.on('connection', (socket) => {
-  console.log('New WebSocket client connected:', socket.id);
-  socket.on('joinTapiceroRoom', (tapiceroId) => {
-    const room = `tapicero-${tapiceroId}`;
-    socket.join(room);
-    console.log(`Socket ${socket.id} joined room ${room}`);
-  });
-  socket.on('disconnect', () => {
-    console.log('WebSocket client disconnected:', socket.id);
-  });
-});
-
-// Hacer io disponible en req.app para controladores
-app.set('io', io);
-
-// Iniciar servidor HTTP en lugar de app.listen
-server.listen(port, () => {
-  console.log(`Server (HTTP + WebSocket) running on port ${port}`);
+// Iniciar servidor
+app.listen(port, () => {
+  console.log(`Servidor corriendo en puerto ${port}`);
+  console.log(`Documentación API disponible en http://localhost:${port}/api-docs`);
 });
