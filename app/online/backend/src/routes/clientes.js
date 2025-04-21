@@ -1,4 +1,10 @@
 const express = require('express');
+/**
+ * @openapi
+ * tags:
+ *   - name: Clientes
+ *     description: Gestión de clientes
+ */
 const router = express.Router();
 const clientesController = require('../controllers/clientesController');
 const { authenticateToken } = require('../middlewares/auth');
@@ -8,6 +14,7 @@ const { authenticateToken } = require('../middlewares/auth');
  * /api/clientes:
  *   get:
  *     summary: Obtener todos los clientes.
+ *     tags: [Clientes]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -21,6 +28,7 @@ router.get('/', authenticateToken, clientesController.getAll);
  * /api/clientes/{rut}:
  *   get:
  *     summary: Obtener un cliente por RUT.
+ *     tags: [Clientes]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -42,6 +50,7 @@ router.get('/:rut', authenticateToken, clientesController.getByRut);
  * /api/clientes:
  *   post:
  *     summary: Crear un nuevo cliente.
+ *     tags: [Clientes]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -77,6 +86,7 @@ router.post('/', authenticateToken, clientesController.create);
  * /api/clientes/{rut}:
  *   put:
  *     summary: Actualizar un cliente.
+ *     tags: [Clientes]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -113,6 +123,7 @@ router.put('/:rut', authenticateToken, clientesController.update);
  * /api/clientes/{rut}:
  *   delete:
  *     summary: Eliminar un cliente.
+ *     tags: [Clientes]
  *     security:
  *       - bearerAuth: []
  *     parameters:

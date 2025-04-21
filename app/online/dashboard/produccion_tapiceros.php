@@ -6,42 +6,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Pedidos</title>
-  
 
-     <!-- Fuentes e íconos -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">  
-     <!-- Fuentes e íconos  -->
-  <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
 
-  <!-- Estilos principales -->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- Librerías adicionales -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
-
-   <!-- <link rel="stylesheet" type="text/css" href="css/design_respaldoschile.css">  -->
-
-  <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
-
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
 </head>
 
 <body>
 <?php require_once "vistas/parte_superior.php" ?>
-<!-- Puedes incluir estilos y scripts externos -->
-<style type="text/css">
+
+<style>
     .btn-circle.btn-sm {
         width: 40px;
         height: 40px;
@@ -50,21 +31,26 @@
         font-size: 8px;
         text-align: center;
     }
+    /* Estilo para estado 5 (Iniciado/En Proceso) */
+    .row-estado-5 {
+        background-color: #a0c8ff !important; /* Un azul claro */
+    }
+    /* Estilo para estado 6 (Terminado) */
+    .row-estado-6 {
+        background-color: #d4edda !important; /* Verde claro */
+    }
+    /* Estilo para anclaje especial */
+    .row-anclaje-especial {
+         background-color: #FFE8A0 !important; /* Amarillo/Naranja */
+    }
+
+    /* Asegurar que los estilos de estado tengan prioridad si ambos aplican */
+    .row-estado-6, .row-estado-5 {
+        /* Puedes ajustar la prioridad si es necesario, pero !important suele ser suficiente */
+    }
+
 </style>
 
-<script src="https://code.jquery.com/jquery-latest.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var pageRefresh = 10000; // 10 s
-        setInterval(function () {
-            refresh();
-        }, pageRefresh);
-    });
-
-    function refresh() { $('#contenido1').load(location.href + " #contenido1"); }
-</script>
-
-<!--INICIO del cont principal-->
 <div class="container">
     <h1>Producción Tapiceros - Respaldos Chile</h1>
     <div class="alert alert-info">
@@ -74,317 +60,291 @@
     </div>
 </div>
 
-<div id="contenido1" style="margin:0 auto; text-align: center;">
-    <?php
-    // Se incluye la conexión PDO mediante la clase Conexion
-    require_once "bd/conexion.php";
-    $objeto = new Conexion();
-    $conexion = $objeto->Conectar();
-    ?>
+<div id="contenido1" style="margin:0 auto; text-align: center;"></div>
 
-    <!-- TAPICERO 1 -->
-    <div style="background: white; border:solid thin; border-radius: 15px; border-color: #D1D1D1; width:700px; height: auto; display: inline-block; margin-top: 50px; padding: 5px;">
-        <h1>Tapicero 1</h1>
-        <table id="tablatapiceross" class="table table-striped table-bordered table-condensed" style="width:100%; font-size:0.8rem; padding: 5px;">
-            <thead class="text-center">
-                <tr>
-                    <?php echo "<div class='alert alert-success' role='alert' style='margin:0 auto; text-align:center;'>Pedidos en Fabricación</div>"; ?>
-                    <th style="width:2rem;">Id</th>
-                    <th style="width:7rem;">Modelo</th>
-                    <th style="width:4rem;">Tamaño</th>
-                    <th style="width:2rem;">Alt</th>
-                    <th style="width:4rem;">Tela</th>
-                    <th style="width:7rem;">Color</th>
-                    <th style="width:2rem;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Preparamos la consulta para Tapicero 1 (id = 1)
-                $stmt = $conexion->prepare("
-                    SELECT d.*, pd.*
-                    FROM pedido_detalle d
-                    INNER JOIN pedido_etapas pd ON d.id = pd.idPedido 
-                    WHERE d.tapicero_id = :tapicero
-                      AND (
-                          d.estadopedido IN (2, 5) 
-                          OR (DATE(pd.fecha) = CURDATE() AND pd.idproceso = 6)
-                      )
-                    GROUP BY d.id
-                    ORDER BY d.estadopedido DESC, d.tamano ASC, d.color ASC
-                ");
-                $stmt->execute([':tapicero' => 1]);
-                $contadorjaime = 0;
-                while ($dat = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    // Procesamos y formateamos los datos (convertir modelos, tamaños, colores, etc.)
-                    $modeloa = ltrim($dat['modelo']);
-                    $color = ", " . $dat['color'];
-                    $plazas = $dat['tamano'];
-                    $base = ", Base " . $dat['alturabase'];
-                    $tipo_boton = $dat['tipo_boton'];
-                    $anclaje = $dat['anclaje'];
-                    $comentario = "";
-                    // Si se requiere mostrar mensaje de "tela no lista"
-                    $cortada = "La tela aún no está lista. ";
-                    
-                    if ($modeloa == 'Botone') { $modeloa = "botoné Madrid, "; }
-                    if ($modeloa == 'Botone 4 corridas de botones') { $modeloa = "botoné 4 corridas de botones, "; }
-                    if ($modeloa == 'Botone 3 corridas de botones') { $modeloa = "botoné 3 corridas de botones, "; }
-                    if ($modeloa == 'Capitone') { $modeloa = "capitoné"; }
-                    
-                    if ($plazas == "1") { $plazas = "una plaza"; }
-                    if ($plazas == "1 1/2") { $plazas = "una plaza y media"; }
-                    if ($plazas == "2") { $plazas = "2 plazas"; }
-                    if ($plazas == "3") { $plazas = "3 cuerpos"; $base = ""; }
-                    if ($plazas == "4") { $plazas = "4 cuerpos"; $base = ""; }
-                    if ($plazas == "Seleccionar las plazas") { $plazas = ".Consultar tamaño."; $base = ""; }
-                    if ($tipo_boton == "B D") { $tipo_boton = ", Agregar botón Diamante"; }
-                    if ($anclaje == "si") { $anclaje = ", Ocupar esqueleto con Madera de anclaje"; }
-                    if ($anclaje == "patas") { $anclaje = ", Ocupar esqueleto con Patas de madera"; }
-                    if ($anclaje == "no") { $anclaje = ""; }
-                    if ($dat['alturabase'] == "1.90mt") { $base = " , Largo uno noventa"; }
-                    if ($dat['alturabase'] == "2Mt") { $base = " , Largo dos metros"; }
-                    if ($dat['comentarios'] != "") { $comentario = ". Leer pantalla para ver detalles."; }
-                    
-                    // Se puede quitar el mensaje de tela no lista si no es necesario:
-                    $cortada = "";
-                    
-                    if ($dat['modelo'] == "Liso con costuras") { $modeloa = "Liso Costuras Venecia, "; }
-                    if ($dat['modelo'] == "Capitone Con Orejas y Tachas") { $modeloa = "Capitoné Tokio Con Orejas y Tachas, "; }
-                    if ($dat['modelo'] == " Capitone Con Orejas") { $modeloa = "Capitoné Tokio Con Orejas, "; }
-                    if ($color == 'CAFE') { $color = ", café "; }
-                    if ($dat['color'] == 'AZUL PETROLEO') { $color = ", AZUL PETRÓLEO"; }
-                    if ($modeloa == "Botone Madrid") { $modeloa = "Botoné Madrid"; }
-                    
-                    $detalle = $cortada . " Solicitar tela para: " . $modeloa . ". " . $plazas . ", " . $dat['tipotela'] . " " . $color . $base . $tipo_boton . $anclaje . $comentario;
-                    
-                    $contadorjaime++;
-                    ?>
-                    <?php
-                    // Para cambiar el color de fondo según condiciones:
-                    if ($dat['anclaje'] == 'si' || $dat['anclaje'] == 'patas') {
-                        echo '<tr style="background-color: #FFE8A0;">';
-                    } elseif ($cortada != '') {
-                        echo '<tr style="background-color: #FFD2D2;">';
-                    } else {
-                        echo "<tr>";
-                    }
-                    ?>
-                        <td style="height:10px; padding: 1px;">
-                            <?php 
-                            echo $dat['id'];
-                            if ($dat['confirma'] == "1") {
-                                echo ' <button type="button" class="btn btn-success btn-circle btn-sm" style="width:5px; height:5px; padding:0; border-radius:50%;"></button>';
-                            } else {
-                                echo ' <button type="button" class="btn btn-danger btn-circle btn-sm" style="width:5px; height:5px; padding:0; border-radius:50%;"></button>';
-                            }
-                            ?>
-                        </td>
-                        <?php
-                        $tipo_botonMostrar = "";
-                        if ($dat['tipo_boton'] == 'B D') {
-                            $tipo_botonMostrar = "Diamante";
-                            echo '<td style="height:10px; line-height:15px; color:red; font-weight:bold;">' . $dat['modelo'] . " " . $tipo_botonMostrar . '</td>';
-                        } else {
-                            echo '<td style="height:10px; line-height:15px;">';
-                            echo $dat['modelo'] . " " . $tipo_botonMostrar;
-                            if ($dat['anclaje'] == 'si') { echo '<img width="15" src="img/anclaje.png">'; }
-                            if ($dat['anclaje'] == 'patas') { echo '<img width="15" src="img/patasmadera.jpg">'; }
-                            echo "<br><span style='font-size:10px; font-weight:bold; color:red;'>" . $dat['comentarios'] . " " . $dat['detalles_fabricacion'] . "</span>";
-                            echo '</td>';
-                        }
-                        ?>
-                        <td style="height:10px; line-height:15px; font-weight:bold; font-size:15px;">
-                            <?php echo $dat['tamano'] . $dat['tipo_boton']; ?>
-                        </td>
-                        <?php
-                        if ($dat['alturabase'] != 60) {
-                            echo '<td style="height:10px; line-height:15px; font-weight:bold; font-size:17px; color:red;">' . $dat['alturabase'] . '</td>';
-                        } else {
-                            echo '<td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;">' . $dat['alturabase'] . '</td>';
-                        }
-                        ?>
-                        <?php if ($dat['tipotela'] == "lino") { ?>
-                            <td style="height:10px; line-height:15px;"><?php echo strtoupper($dat['tipotela']); ?></td>
-                            <td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;"><?php echo strtoupper($dat['color']); ?></td>
-                        <?php } else { ?>
-                            <td style="height:10px; line-height:15px;font-size:16px;"><b><u><?php echo strtoupper($dat['tipotela']); ?></u></b></td>
-                            <td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;"><u><?php echo strtoupper($dat['color']); ?></u></td>
-                        <?php } ?>
-                        <td style="height:10px; padding:1px; text-align:center;">
-                            <?php
-                            if ($dat['estadopedido'] == "2") {
-                                $boton = ' <button type="button" class="btn btn-warning btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="2"></button>';
-                            }
-                            if ($dat['estadopedido'] == "5") {
-                                $boton = ' <button type="button" class="btn btn-info btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="5"></button>';
-                            }
-                            if ($dat['estadopedido'] == "6") {
-                                $boton = ' <button type="button" class="btn btn-success btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="6"></button>';
-                            }
-                            if ($dat['estadopedido'] == "8") {
-                                $boton = ' <i class="fas fa-truck"></i>';
-                            }
-                            echo $boton;
-                            ?>
-                        </td>
-                    </tr>
-                <?php } // fin while tapicero 1 ?>
-            </tbody>
-        </table>
-        <?php echo "<b>Cantidad: " . $contadorjaime . "</b>"; ?>
-    </div>
+<script src="//localhost:3000/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
+<script>
+// Base URL para la API Node.js y token JWT desde localStorage
+const API_BASE = 'http://localhost:3000/api';
+const TOKEN = localStorage.getItem('token') || '';
 
-    <!-- TAPICERO 2 -->
-    <div style="background: white; border:solid thin; border-radius: 15px; border-color: #D1D1D1; width:700px; height:auto; display:inline-block; margin-top:50px; padding:5px;">
-        <h1>Tapicero 2</h1>
-        <table id="tablatapiceross" class="table table-striped table-bordered table-condensed" style="width:100%; font-size:0.8rem; padding:5px;">
-            <thead class="text-center">
-                <tr>
-                    <?php echo "<div class='alert alert-success' role='alert' style='margin:0 auto; text-align:center;'>Pedidos en Fabricación</div>"; ?>
-                    <th style="width:2rem;">Id</th>
-                    <th style="width:7rem;">Modelo</th>
-                    <th style="width:4rem;">Tamaño</th>
-                    <th style="width:2rem;">Alt</th>
-                    <th style="width:4rem;">Tela</th>
-                    <th style="width:7rem;">Color</th>
-                    <th style="width:2rem;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $stmt2 = $conexion->prepare("
-                    SELECT d.*, pd.*
-                    FROM pedido_detalle d
-                    INNER JOIN pedido_etapas pd ON d.id = pd.idPedido 
-                    WHERE d.tapicero_id = :tapicero
-                      AND (
-                          d.estadopedido IN (2, 5) 
-                          OR (DATE(pd.fecha) = CURDATE() AND pd.idproceso = 6)
-                      )
-                    GROUP BY d.id
-                    ORDER BY d.estadopedido DESC, d.tamano ASC, d.color ASC
-                ");
-                $stmt2->execute([':tapicero' => 2]);
-                $contadorfelipe = 0;
-                while ($dat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                    $modeloa = ltrim($dat['modelo']);
-                    $color = ", " . $dat['color'];
-                    $plazas = $dat['tamano'];
-                    $base = ", Base " . $dat['alturabase'];
-                    $tipo_boton = $dat['tipo_boton'];
-                    $anclaje = $dat['anclaje'];
-                    $comentario = "";
-                    $cortada = "";
-                    
-                    if ($modeloa == 'Botone') { $modeloa = "botoné Madrid, "; }
-                    if ($modeloa == 'Botone 4 corridas de botones') { $modeloa = "botoné 4 corridas de botones, "; }
-                    if ($modeloa == 'Botone 3 corridas de botones') { $modeloa = "botoné 3 corridas de botones, "; }
-                    if ($modeloa == 'Capitone') { $modeloa = "capitoné"; }
-                    
-                    if ($plazas == "1") { $plazas = "una plaza"; }
-                    if ($plazas == "1 1/2") { $plazas = "una plaza y media"; }
-                    if ($plazas == "2") { $plazas = "2 plazas"; }
-                    if ($plazas == "3") { $plazas = "3 cuerpos"; $base = ""; }
-                    if ($plazas == "4") { $plazas = "4 cuerpos"; $base = ""; }
-                    if ($plazas == "Seleccionar las plazas") { $plazas = ".Consultar tamaño."; $base = ""; }
-                    if ($tipo_boton == "B D") { $tipo_boton = ", Agregar botón Diamante"; }
-                    if ($anclaje == "si") { $anclaje = ", Ocupar esqueleto con Madera de anclaje"; }
-                    if ($anclaje == "patas") { $anclaje = ", Ocupar esqueleto con Patas de madera"; }
-                    if ($anclaje == "no") { $anclaje = ""; }
-                    if ($dat['alturabase'] == "1.90mt") { $base = " , Largo uno noventa"; }
-                    if ($dat['alturabase'] == "2Mt") { $base = " , Largo dos metros"; }
-                    if ($dat['detalles_fabricacion'] != "") { $comentario = ". Leer pantalla para ver detalles."; }
-                    
-                    $detalle = $cortada . " Solicitar tela para: " . $modeloa . ". " . $plazas . ", " . $dat['tipotela'] . " " . $color . $base . $tipo_boton . $anclaje . $comentario;
-                    
-                    $contadorfelipe++;
-                    // Consulta para saber si existe proceso 3 para el pedido (ejemplo)
-                    $stmtProceso = $conexion->prepare("SELECT COUNT(*) AS existeProceso FROM pedido_etapas WHERE idPedido = :idPedido AND idproceso = 3");
-                    $stmtProceso->execute([':idPedido' => $dat['id']]);
-                    $filaProceso = $stmtProceso->fetch(PDO::FETCH_ASSOC);
-                    $telalista = ($filaProceso['existeProceso'] > 0) ? 1 : 0;
-                    ?>
-                    <?php
-                    if ($dat['anclaje'] == 'si' || $dat['anclaje'] == 'patas') {
-                        echo '<tr style="background-color: #FFE8A0;">';
-                    } elseif ($telalista == 0) {
-                        echo '<tr style="background-color: #FFF2F2 !important;">';
-                    } else {
-                        echo "<tr>";
-                    }
-                    ?>
-                        <td style="height:10px; padding:1px;">
-                            <?php 
-                            echo $dat['id'];
-                            if ($dat['confirma'] == "1") {
-                                echo ' <button type="button" class="btn btn-success btn-circle btn-sm" style="width:5px; height:5px; padding:0; border-radius:50%;"></button>';
-                            } else {
-                                echo ' <button type="button" class="btn btn-danger btn-circle btn-sm" style="width:5px; height:5px; padding:0; border-radius:50%;"></button>';
-                            }
-                            ?>
-                        </td>
-                        <?php
-                        $tipo_botonMostrar = "";
-                        if ($dat['tipo_boton'] == 'B D') {
-                            $tipo_botonMostrar = "Diamante";
-                            echo '<td style="height:10px; line-height:15px; color:red; font-weight:bold;">' . $dat['modelo'] . " " . $tipo_botonMostrar . '</td>';
-                        } else {
-                            echo '<td style="height:10px; line-height:15px;">';
-                            echo $dat['modelo'] . " " . $tipo_botonMostrar;
-                            if ($dat['anclaje'] == 'si') { echo '<img width="15" src="img/anclaje.png">'; }
-                            if ($dat['anclaje'] == 'patas') { echo '<img width="15" src="img/patasmadera.jpg">'; }
-                            echo "<br><span style='font-size:10px; font-weight:bold; color:red;'>" . $dat['comentarios'] . " " . $dat['detalles_fabricacion'] . "</span>";
-                            echo '</td>';
-                        }
-                        ?>
-                        <td style="height:10px; line-height:15px; font-weight:bold; font-size:15px;">
-                            <?php echo $dat['tamano'] . $dat['tipo_boton']; ?>
-                        </td>
-                        <?php
-                        if ($dat['alturabase'] != 60) {
-                            echo '<td style="height:10px; line-height:15px; font-weight:bold; font-size:17px; color:red;">' . $dat['alturabase'] . '</td>';
-                        } else {
-                            echo '<td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;">' . $dat['alturabase'] . '</td>';
-                        }
-                        ?>
-                        <?php if ($dat['tipotela'] == "lino") { ?>
-                            <td style="height:10px; line-height:15px;"><?php echo strtoupper($dat['tipotela']); ?></td>
-                            <td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;"><?php echo strtoupper($dat['color']); ?></td>
-                        <?php } else { ?>
-                            <td style="height:10px; line-height:15px;font-size:16px;"><b><u><?php echo strtoupper($dat['tipotela']); ?></u></b></td>
-                            <td style="height:10px; line-height:15px; font-weight:bold; font-size:17px;"><u><?php echo strtoupper($dat['color']); ?></u></td>
-                        <?php } ?>
-                        <td style="height:10px; padding:1px; text-align:center;">
-                            <?php
-                            if ($dat['estadopedido'] == "2") {
-                                $boton = ' <button type="button" class="btn btn-warning btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="2"></button>';
-                            }
-                            if ($dat['estadopedido'] == "5") {
-                                $boton = ' <button type="button" class="btn btn-info btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="5"></button>';
-                            }
-                            if ($dat['estadopedido'] == "6") {
-                                $boton = ' <button type="button" class="btn btn-success btn-circle btn-sm btnpedidolistofelipe" data-value="' . $detalle . '" data-estado="6"></button>';
-                            }
-                            if ($dat['estadopedido'] == "8") {
-                                $boton = ' <i class="fas fa-truck"></i>';
-                            }
-                            echo $boton;
-                            ?>
-                        </td>
-                    </tr>
-                <?php } // fin while tapicero 2 ?>
-            </tbody>
-        </table>
-        <?php echo "<b>Cantidad: " . $contadorfelipe . "</b>"; ?>
-    </div>
-</div>
+// Función para formatear los detalles del pedido para lectura y visualización
+function formatPedido(p) {
+    let modeloa = p.modelo.trim();
+    // Lógica de mapeo original para modelos
+    if (modeloa === 'Botone') modeloa = 'botoné Madrid, ';
+    if (modeloa === 'Botone 4 corridas de botones') modeloa = 'botoné 4 corridas de botones, ';
+    if (modeloa === 'Botone 3 corridas de botones') modeloa = 'botoné 3 corridas de botones, ';
+    if (modeloa === 'Capitone') modeloa = 'capitoné';
+
+    // Mapeo de tamaños a descripciones legibles
+    let plazasMap = {
+        '1': 'una plaza',
+        '1 1/2': 'una plaza y media',
+        '2': '2 plazas',
+        '3': '3 cuerpos',
+        '4': '4 cuerpos'
+    };
+    let plazas = plazasMap[p.tamano] || p.tamano; // Usa el mapeo o el valor original si no se encuentra
+    let base = (p.alturabase !== '60') ? `, Base ${p.alturabase}` : ''; // Añade info de base si no es 60
+    let tipo_boton = (p.tipo_boton === 'B D') ? ', Agregar botón Diamante' : ''; // Añade info de botón diamante
+    let anclaje = '';
+    if (p.anclaje === 'si') anclaje = ', Ocupar esqueleto con Madera de anclaje'; // Info de anclaje madera
+    if (p.anclaje === 'patas') anclaje = ', Ocupar esqueleto con Patas de madera'; // Info de anclaje patas
+
+    let comentario = p.comentarios ? '. Leer pantalla para ver detalles.' : ''; // Añade nota si hay comentarios
+
+    // Construye la cadena final
+    return `Solicitar tela para: ${modeloa}. ${plazas}, ${p.tipotela} ${p.color}${base}${tipo_boton}${anclaje}${comentario}`;
+}
+
+// Función para cambiar el estado de un detalle de pedido a través de la API
+function cambiarEstado(detalleId, pedidoId, nuevoEstado) {
+    // Enviar petición PUT con token de autenticación a la API
+    fetch(`${API_BASE}/pedidos/${pedidoId}/detalles/${detalleId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}` // Incluye el token JWT
+        },
+        body: JSON.stringify({ estadopedido: nuevoEstado }) // Envía el nuevo estado en el cuerpo
+    })
+    .then(res => {
+        if (!res.ok) {
+            // Si la respuesta no es exitosa (ej. 401, 404, 500), lanza un error
+            throw new Error(`Error HTTP ${res.status}: ${res.statusText}`);
+        }
+        return res.json(); // Procesa la respuesta JSON
+    })
+    .then(resp => {
+        if (resp.status === 'success') {
+            console.log(`Detalle ${detalleId} actualizado a estado ${nuevoEstado}`);
+            // *** CORRECCIÓN CLAVE: Volver a renderizar después de un cambio exitoso ***
+            // Esto asegura que la vista se actualice inmediatamente con los datos más recientes
+            // obtenidos de la API, sin depender exclusivamente del socket.
+            $('#contenido1').empty(); // Limpia el contenido actual
+            renderTapicero(1); // Vuelve a renderizar para el tapicero 1
+            renderTapicero(2); // Vuelve a renderizar para el tapicero 2
+            // *************************************************************************
+        } else {
+            // Maneja errores reportados por la API en el cuerpo de la respuesta
+            console.error('Error actualizando estado:', resp.error || 'Error desconocido');
+            Swal.fire('Error', resp.error || 'Hubo un problema al actualizar el estado.', 'error');
+        }
+    })
+    .catch(error => {
+        // Captura errores de red o errores lanzados en el primer .then
+        console.error('Error en la petición fetch:', error);
+        Swal.fire('Error de Conexión', 'No se pudo comunicar con el servidor API.', 'error');
+    });
+}
+
+// Función para renderizar la tabla de tareas para un tapicero específico
+function renderTapicero(id) {
+    // Obtener tareas con token JWT para autenticación desde la API
+    fetch(`${API_BASE}/tapiceros/${id}/tareas`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}` // Incluye el token JWT
+        }
+    })
+    .then(res => {
+        if (!res.ok) {
+             // Si la respuesta no es exitosa, lanza un error
+            throw new Error(`Error ${res.status}: ${res.statusText}`);
+        }
+        return res.json(); // Procesa la respuesta JSON
+    })
+    .then(data => {
+        let pedidos = data.data || []; // Obtiene la lista de pedidos (detalles)
+        let contador = 0;
+        // Inicia la construcción del HTML para la tabla del tapicero
+        let html = `<div style="background:white;border:1px solid #D1D1D1;border-radius:15px;width:700px;display:inline-block;margin:20px;padding:10px;">
+            <h1>Tapicero ${id}</h1>
+            <div class='alert alert-success text-center'>Pedidos en Fabricación</div>
+            <table class="table table-striped" style="font-size:.8rem;"><thead><tr>
+                <th>Id</th><th>Modelo</th><th>Tamaño</th><th>Alt</th><th>Tela</th><th>Color</th><th></th>
+            </tr></thead><tbody>`;
+
+        // Itera sobre cada pedido (detalle) para construir las filas de la tabla
+        pedidos.forEach(p => {
+            // *** NOTA sobre la visibilidad del estado 6: ***
+            // Aquí se renderizan todos los pedidos que la API devuelve.
+            // Si quieres que los pedidos en estado 6 de días anteriores no aparezcan,
+            // esa lógica de filtrado DEBE implementarse en la API que responde a
+            // ${API_BASE}/tapiceros/${id}/tareas. El cliente no tiene la fecha
+            // en que el estado cambió para filtrar por sí mismo.
+
+            contador++; // Incrementa el contador de pedidos mostrados
+            let detalle = formatPedido(p); // Formatea el detalle para lectura
+
+            // Determina las clases CSS para el estilo de la fila basado en el estado y anclaje
+            let rowClasses = '';
+            if (p.estadopedido == '6') {
+                rowClasses += ' row-estado-6'; // Clase para estado 6 (verde)
+            } else if (p.estadopedido == '5') {
+                 rowClasses += ' row-estado-5'; // *** CORRECCIÓN: Clase para estado 5 (azul) ***
+            }
+
+            // Aplica la clase de anclaje si corresponde, pero solo si no es estado 6 (el verde tiene prioridad visual en tu descripción)
+            // Si quieres que el anclaje amarillo se vea en estado 5, cambia la condición.
+             if ((p.anclaje === 'si' || p.anclaje === 'patas') && p.estadopedido !== '6') {
+                 rowClasses += ' row-anclaje-especial'; // Clase para anclaje especial (amarillo/naranja)
+             }
+
+
+            // Inicia la fila de la tabla con las clases de estilo determinadas
+            html += `<tr class="${rowClasses.trim()}">
+                <td>${p.id}</td>
+                <td>${p.modelo}</td>
+                <td>${p.tamano}</td>
+                <td>${p.alturabase}</td>
+                <td>${p.tipotela}</td>
+                <td>${p.color}</td>
+                <td class="text-center">`;
+
+            // Añade el botón o ícono según el estado actual del pedido
+            if (p.estadopedido == '2') {
+                // Botón amarillo para iniciar fabricación (estado 2 -> 5)
+                html += `<button class="btn btn-warning btn-circle btn-sm" onclick="leerYpopup(${p.id}, ${p.num_orden}, '${detalle.replace(/'/g, "\\'")}', '${p.estadopedido}')"></button>`;
+            } else if (p.estadopedido == '5') {
+                // Botón azul para finalizar fabricación (estado 5 -> 6)
+                html += `<button class="btn btn-info btn-circle btn-sm" onclick="leerYpopup(${p.id}, ${p.num_orden}, '${detalle.replace(/'/g, "\\'")}', '${p.estadopedido}')"></button>`;
+            } else if (p.estadopedido == '6') {
+                // Botón verde (indicando terminado hoy) - al hacer click no hace nada según tu lógica actual
+                 html += `<button class="btn btn-success btn-circle btn-sm" onclick="leerYpopup(${p.id}, ${p.num_orden}, '${detalle.replace(/'/g, "\\'")}', '${p.estadopedido}')"></button>`;
+            } else if (p.estadopedido == '8') {
+                // Ícono de camión para estado 8 (despachado)
+                html += `<i class="fas fa-truck"></i>`;
+            }
+            html += `</td></tr>`; // Cierra la celda de acción y la fila
+        });
+
+        // Cierra la tabla y el contenedor del tapicero, mostrando el contador
+        html += `</tbody></table><b>Cantidad: ${contador}</b></div>`;
+        $('#contenido1').append(html); // Añade el HTML generado al contenedor principal
+    })
+    .catch(error => {
+        // Captura errores en la petición fetch para obtener tareas
+        console.error(`Error obteniendo tareas para tapicero ${id}:`, error);
+        // Opcional: Mostrar un mensaje de error en la interfaz
+        $('#contenido1').append(`<div class="alert alert-danger">Error al cargar tareas para Tapicero ${id}.</div>`);
+    });
+}
+
+// Función para leer el detalle del pedido y mostrar un popup de confirmación
+function leerYpopup(detalleId, pedidoId, texto, estado) {
+    // Reemplaza comillas simples en el texto para evitar problemas en el string del onclick
+     const cleanText = texto.replace(/'/g, "\\'");
+
+    // Leer detalle mediante voz
+    const utter = new SpeechSynthesisUtterance(cleanText);
+    utter.lang = 'es-CL'; // Idioma español de Chile
+    utter.rate = 0.9; // Velocidad de lectura
+    window.speechSynthesis.cancel(); // Cancela cualquier lectura anterior
+    window.speechSynthesis.speak(utter); // Inicia la lectura
+
+    // Definir título del popup, texto del botón de confirmación y el próximo estado
+    let title, confirmText, nextEstado;
+    let showPopup = true; // Bandera para controlar si se muestra el popup
+
+    if (estado == '2') {
+        // Si el estado es 2 (pendiente de iniciar)
+        title = `Pedido ${pedidoId} - Iniciar fabricación`;
+        confirmText = 'Iniciar';
+        nextEstado = 5; // El próximo estado será 5 (iniciado)
+    } else if (estado == '5') {
+        // Si el estado es 5 (en fabricación)
+        title = `Pedido ${pedidoId} - Finalizar fabricación`;
+        confirmText = 'Finalizar';
+        nextEstado = 6; // El próximo estado será 6 (terminado)
+    } else {
+        // Si el estado es 6 o cualquier otro que no requiera acción desde el botón
+        // No mostramos el popup de confirmación, solo se lee el detalle.
+        showPopup = false;
+        console.log(`Pedido ${pedidoId} - Estado ${estado}: No requiere acción de cambio.`);
+    }
+
+    // Mostrar el popup de SweetAlert2 si showPopup es true
+    if (showPopup) {
+        Swal.fire({
+            title: title, // Título del popup
+            text: cleanText, // Texto del detalle del pedido
+            icon: 'info', // Ícono informativo
+            showCancelButton: true, // Muestra el botón de cancelar
+            confirmButtonText: confirmText, // Texto del botón de confirmar
+            cancelButtonText: 'Cancelar', // Texto del botón de cancelar
+            reverseButtons: true // Invierte el orden de los botones (Confirmar a la derecha)
+        }).then((result) => {
+            // Maneja el resultado de la interacción del usuario con el popup
+            if (result.isConfirmed) {
+                // Si el usuario hizo click en Confirmar
+                cambiarEstado(detalleId, pedidoId, nextEstado); // Llama a la función para cambiar el estado
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Si el usuario hizo click en Cancelar o cerró el popup
+                console.log('Acción cancelada por el usuario.');
+            }
+        });
+    }
+}
+
+// Inicializar Socket.io para recibir actualizaciones en tiempo real
+const socket = io('http://localhost:3000');
+
+// Evento que se dispara cuando el cliente se conecta al servidor Socket.io
+socket.on('connect', () => {
+  console.log('Conectado al servidor Socket.io');
+  // Unirse a las salas de los tapiceros 1 y 2 para recibir sus actualizaciones
+  socket.emit('joinTapiceroRoom', 1);
+  socket.emit('joinTapiceroRoom', 2);
+});
+// Escuchar actualizaciones de pedidos y recargar automáticamente
+socket.on('pedidoUpdated', (data) => {
+  console.log('pedidoUpdated recibido:', data);
+  $('#contenido1').empty();
+  renderTapicero(1);
+  renderTapicero(2);
+});
+
+// Evento que se dispara cuando se asigna una nueva tarea (o se actualiza una existente)
+// Este evento viene del servidor y nos indica que algo ha cambiado, forzando una re-renderización.
+// NOTA: Con la corrección en cambiarEstado, esta actualización por socket es más un respaldo
+// o para cambios hechos por otros usuarios/procesos, la actualización inmediata tras click
+// del usuario ya no depende solo de esto.
+// Evento que se dispara cuando se crea una nueva tarea (emitido ahora como 'taskCreated')
+socket.on('taskCreated', (task) => {
+  console.log('Evento taskCreated recibido:', task);
+  // Re-renderiza todas las tablas para reflejar la nueva tarea
+  $('#contenido1').empty();
+  renderTapicero(1);
+  renderTapicero(2);
+});
+
+// Evento que se dispara cuando se actualiza una tarea existente
+// Similar a newTaskAssigned, asegura que los cambios hechos por otros se reflejen.
+socket.on('taskUpdated', (task) => {
+   console.log('Evento taskUpdated recibido:', task);
+   // Re-renderiza todas las tablas para reflejar el cambio de estado
+   $('#contenido1').empty();
+   renderTapicero(1);
+   renderTapicero(2);
+});
+
+// Render inicial al cargar la página
+$(document).ready(() => {
+    console.log('Documento listo, renderizando inicialmente.');
+    renderTapicero(1); // Renderiza tareas para tapicero 1
+    renderTapicero(2); // Renderiza tareas para tapicero 2
+});
+</script>
 
 <?php
-date_default_timezone_set('America/Santiago');
-echo $DateAndTime = date('m-d-Y h:i:s a', time());
+// Muestra la fecha y hora actual (zona horaria configurada en el servidor PHP)
+date_default_timezone_set('America/Santiago'); // Asegura la zona horaria si no está en php.ini
+echo date('d-m-Y h:i:s a');
 ?>
-
-<!--FIN del cont principal-->
 
 <?php require_once "vistas/parte_inferior.php" ?>

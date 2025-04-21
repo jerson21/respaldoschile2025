@@ -1,4 +1,4 @@
-<?php require_once "init.php" ?>
+<?php require "init.php";?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -6,433 +6,776 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Pedidos</title>
-  
 
-     <!-- Fuentes e íconos -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">  
-     <!-- Fuentes e íconos  -->
-  <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/c5b4401310.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://www.respaldoschile.cl/assets/img/favicon.png" rel="icon">
 
-  <!-- Estilos principales -->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-  <!-- Librerías adicionales -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
 
-   <!-- <link rel="stylesheet" type="text/css" href="css/design_respaldoschile.css">  -->
+    <style>
+        /* Estilos personalizados para botones - Ajustados para mejor interacción táctil y consistencia */
+        .btn-circle.btn-sm,
+        .btn-confirmar.btn-sm { /* Aplicar estos estilos también al botón de confirmación */
+            width: 36px; /* Ligeramente más grande para mejor tacto */
+            height: 36px; /* Ligeramente más grande */
+            padding: 0; /* Quitar padding */
+            border-radius: 50%; /* Hacerlo completamente circular */
+            font-size: 0.85rem; /* Texto/icono ligeramente más grande */
+            text-align: center;
+            display: inline-flex; /* Usar flexbox para centrar icono */
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Prevenir encogimiento en espacios reducidos */
+        }
 
-  <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+        /* Color específico para Desasignar */
+        .btn-desasignar {
+             /* Mantener verde */
+             background-color: #1cc88a; /* Éxito de SB Admin 2 */
+             border-color: #1cc88a;
+             color: white;
+        }
 
+        /* Color específico para Asignar */
+        .btn-asignar-tapicero {
+             /* Mantener amarillo advertencia */
+             background-color: #f6c23e; /* Advertencia de SB Admin 2 */
+             border-color: #f6c23e;
+             color: #333; /* Asegurar texto legible sobre amarillo */
+        }
+
+        /* Colores de Botones de Estado (movidos de estilos en línea) */
+        .btn-estado-pedido {
+             min-width: 100px; /* Dar a los botones de estado un ancho mínimo */
+             text-align: center;
+        }
+        .btn-estado-aceptado { /* Corresponde a estadopedido 1 */
+             background-color: #e4e6f0; /* Gris claro */
+             border-color: #e4e6f0;
+             color: #444;
+        }
+        .btn-estado-por-fabricar { /* Corresponde a estadopedido 2, sin tapicero */
+             background-color: #f6c23e; /* Amarillo advertencia */
+             border-color: #f6c23e;
+             color: #333;
+        }
+         .btn-estado-en-fabricacion { /* Corresponde a estadopedido 2, con tapicero */
+             background-color: #36b9cc; /* Azul info */
+             border-color: #36b9cc;
+             color: white;
+        }
+         .btn-estado-listo { /* Corresponde a estadopedido 3 */
+             background-color: #36b9cc; /* Azul info */
+             border-color: #36b9cc;
+             color: white;
+        }
+        .btn-estado-reagendar { /* Corresponde a estadopedido 9 */
+             background-color: #f6c23e; /* Amarillo advertencia */
+             border-color: #f6c23e;
+             color: #333;
+        }
+        .btn-estado-asignado-ruta { /* Corresponde a estadopedido 4 */
+            background-color: #FF338A; /* Tu color específico */
+            border-color: #FF338A;
+            color: white;
+        }
+         .btn-estado-entregado { /* Corresponde a estadopedido 5 */
+            background-color: #ABFF71; /* Tu color específico */
+            border-color: #ABFF71;
+             color: #333; /* Ajustar color de texto si es necesario */
+        }
+
+        /* Ajustes de tabla responsiva */
+        .table-responsive-modern {
+            overflow-x: auto; /* Asegurar scroll horizontal si es necesario */
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            width: 100%; /* Usar ancho completo del contenedor */
+            border: 1px solid #e3e6f0;
+            padding-bottom: 1px; /* Arreglar posible problema de borde con tablas rayadas */
+            background-color: transparent;
+             border: none; /* Quitar borde aquí, la tarjeta lo proporcionará */
+             box-shadow: none; /* Quitar sombra aquí */
+        }
+
+        .table-modern {
+            margin-bottom: 0;
+            border: none;
+        }
+
+        .table-modern th,
+        .table-modern td {
+            white-space: nowrap; /* Prevenir ajuste de texto en celdas */
+            padding: 0.75rem 1rem; /* Padding ajustado para mejor espaciado */
+            vertical-align: middle; /* Alinear verticalmente contenido de celda */
+             border-top: 1px solid #e3e6f0; /* Borde sutil entre filas */
+             color: #333; /* Color de texto por defecto para cuerpo de tabla */
+        }
+        .table-modern th {
+             padding-top: 1rem;
+             padding-bottom: 1rem;
+             border-bottom: 2px solid #e3e6f0; /* Borde más grueso bajo encabezado */
+             color: #5a5c69; /* Color de texto de encabezado por defecto */
+        }
+
+         /* Estilo para la columna 'Orden' */
+         .table-modern th:nth-child(2),
+         .table-modern td:nth-child(2) {
+             min-width: 60px; /* Ancho mínimo para la columna 'Orden' */
+             width: 80px; /* Ancho preferido, permite encogerse */
+             max-width: 100px; /* Ancho máximo */
+             overflow: hidden; /* Ocultar desbordamiento si el contenido es muy ancho */
+             text-overflow: ellipsis; /* Añadir puntos suspensivos si el texto se trunca (requiere overflow: hidden) */
+         }
+
+
+        /* Estilo de Leyenda */
+        .legend-alert {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem; /* Más espacio bajo la leyenda */
+            border: 1px solid transparent;
+            border-radius: 0.35rem; /* Coincidir con border-radius del contenedor */
+            color: #004085; /* Color de texto alert-info por defecto */
+            background-color: #cce5ff; /* Fondo alert-info por defecto */
+            border-color: #b8daff; /* Borde alert-info por defecto */
+            text-align: left; /* Alinear texto de leyenda a la izquierda */
+            font-size: 0.9rem;
+        }
+        .legend-alert img {
+            vertical-align: middle; /* Alinear iconos con texto */
+             margin-right: 5px; /* Espacio después del icono */
+        }
+        .legend-alert b {
+             margin-left: 10px; /* Espacio antes del texto en negrita */
+        }
+
+        /* --- Estilos de Tarjeta --- */
+        .card-modern {
+            margin-top: 2rem; /* Espacio sobre cada sección de tarjeta */
+            border: 1px solid rgba(0, 0, 0, .125); /* Borde por defecto de Bootstrap */
+            border-radius: 0.35rem;
+            box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15);
+            background-color: #fff; /* Fondo de tarjeta por defecto */
+        }
+
+        .card-modern .card-header {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: rgba(0, 0, 0, .03); /* Fondo de encabezado por defecto */
+            border-bottom: 1px solid rgba(0, 0, 0, .125);
+            color: #858796; /* Texto de encabezado por defecto */
+            font-weight: bold;
+        }
+
+        /* Estilo para Tarjeta "Pedidos sin asignar a ruta" */
+        .card-no-route {
+            border-left: 4px solid #e74a3b; /* Borde izquierdo rojo */
+        }
+         .card-no-route .card-header {
+             background-color: #e74a3b; /* Fondo rojo */
+             color: white; /* Texto blanco */
+             border-bottom: 1px solid #e74a3b;
+         }
+
+
+        /* Estilo para Tarjetas de Ruta (Tema más claro) */
+        .card-route {
+            background-color: #fff; /* Fondo blanco */
+            border-left: 4px solid #36b9cc; /* Mantener borde izquierdo azul info */
+            color: #333; /* Color de texto oscuro para contenido del cuerpo de la tarjeta fuera de la tabla */
+             box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); /* Mantener sombra sutil */
+        }
+        .card-route .card-header {
+            background-color: #e9ecef; /* Encabezado gris/azul claro */
+            color: #36b9cc; /* Texto azul info */
+            border-bottom: 1px solid #d1d3e2; /* Ajustar color de borde de encabezado */
+            font-size: 1.1rem; /* Texto de encabezado ligeramente más grande */
+        }
+         /* Asegurar que la tabla dentro de la tarjeta tenga texto legible */
+         .card-route .table-modern th {
+             color: #5a5c69; /* Color de texto de encabezado por defecto */
+             border-bottom-color: #e3e6f0; /* Color de borde por defecto */
+         }
+         .card-route .table-modern td {
+             color: #333; /* Color de texto por defecto para celdas de cuerpo */
+             border-top-color: #e3e6f0; /* Color de borde por defecto */
+         }
+
+         /* Ajustar fondo rayado para tarjeta clara - usar rayas por defecto de Bootstrap */
+         .card-route .table-modern.table-striped tbody tr:nth-of-type(odd) {
+             background-color: rgba(0,0,0,.05); /* Raya por defecto de Bootstrap */
+         }
+         .card-route .table-modern.table-hover tbody tr:hover {
+             background-color: rgba(0,0,0,.075); /* Efecto hover por defecto de Bootstrap */
+         }
+
+         /* --- Animación de Resaltado de Fila (Asignar) --- */
+        @keyframes highlight-assign-glow {
+            0% { box-shadow: 0 0 12px 4px rgba(246, 194, 62, 0.8); } /* Empezar con brillo amarillo */
+            100% { box-shadow: none; } /* Desvanecer brillo */
+        }
+
+        .row-highlight-assign {
+            animation: highlight-assign-glow 2s ease-out forwards; /* Aplicar animación por 2 segundos */
+            position: relative; /* Necesario para box-shadow en tr */
+            z-index: 1; /* Traer fila ligeramente adelante si es necesario */
+            /* Cambio de color de fondo eliminado, confiando solo en el brillo */
+        }
+
+        /* --- Resaltado de Actualización de Socket --- */
+        @keyframes highlight-update-glow {
+            0% { box-shadow: 0 0 10px 3px rgba(54, 185, 204, 0.7); } /* Empezar con brillo azul */
+            100% { box-shadow: none; } /* Desvanecer brillo */
+        }
+        .row-highlight-update {
+            animation: highlight-update-glow 1.5s ease-out forwards;
+            position: relative; /* Necesario para box-shadow en tr */
+            z-index: 1; /* Traer fila ligeramente adelante si es necesario */
+        }
+
+    </style>
 </head>
 
 <body>
-<?php require_once "vistas/parte_superior.php";
-include 'bd/conexion.php'; ?>
-<style>
-    .table-cell-centered {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        /* Asegúrate de que las celdas tengan una altura definida si es necesario */
-    }
-</style>
-<!--INICIO del cont principal-->
-<div class="container" style=" max-width: 400rem; width: 200rem; ">
-    <h1>Produccion tapiceros</h1>
+<?php include 'bd/conexion.php'; ?>
 
+<?php require_once "vistas/parte_superior.php"; ?>
 
-
-    <?php
-
-
-    $objeto1 = new Conexion();
-    $conexion = $objeto1->Conectar();
-    $consulta = "SELECT * FROM pedido p
-                INNER JOIN pedido_detalle d on p.num_orden = d.num_orden 
-                INNER JOIN clientes c on p.rut_cliente = c.rut where d.estadopedido = 2 GROUP BY d.ruta_asignada";
-    $resultado = $conexion->prepare($consulta);
-    $resultado->execute();
-
-    $resultados = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-
-
-
-    //$conexion ->set_charset("utf8");
-
-
-    ?>
-
-
-    <div class="container">
-        <div class="row">
-
-        </div>
-    </div>
-    <br>
-    <div class="container" style="float:left; padding: 0; ">
-        <div class="row">
-            <div class="col-lg-12">
-
-
-
-
-                <?php
-
-                // var_dump($resultados);
-                foreach ($resultados as $row) {
-                    $ruta = $row['ruta_asignada'];
-                    $consulta = $conexion->prepare("SELECT fecha FROM rutas WHERE id = :ruta");
-                    $consulta->bindParam(":ruta", $ruta, PDO::PARAM_INT);
-                    $consulta->execute();
-
-
-                    $rows = $consulta->fetch(PDO::FETCH_ASSOC);
-
-
-                    setlocale(LC_TIME, 'es_ES.UTF-8');
-
-                    //$fecha = strftime("%A, %d de %B de %Y", strtotime($rows['fecha'])); DEPRECATED
-
-
-                    if (!isset($rows['fecha'])) {
-                        $fecha = "Fecha no disponible";
-                    } else {
-
-                        $fechaObj = DateTime::createFromFormat('Y-m-d', $rows['fecha']);
-                        if ($fechaObj !== false) {
-                            $dias_semana = array('domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado');
-                            $meses = array('', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
-
-                            $fecha = $dias_semana[$fechaObj->format('w')] . ', ' . $fechaObj->format('d') . ' de ' . $meses[$fechaObj->format('n')] . ' de ' . $fechaObj->format('Y');
-                        }
-                    }
-
-
-
-
-
-                ?>
-
-
-                    <div class="table-responsive" style="margin:0; width: 100rem;">
-
-
-
-                        <table id="tablatapiceross" class="table table-striped table-bordered table-condensed" style="width:100%; font-size:0.8rem; ">
-                            <thead class="text-center">
-                                <tr>
-
-                                    <?php
-
-                                    if ($ruta == '') {
-                                        echo "<div class='alert alert-danger' role='alert' style='margin:0 auto; text-align:center;'>Pedidos sin asignar a ruta</div>";
-                                    } else {
-                                        echo "<div class='alert alert-warning' role='alert' style='margin:0 auto; text-align:center;'><b>" . $ruta . ".</b> " . $fecha;
-                                        "</div>";
-                                    }      ?>
-                                    <th style="width:2rem;">Id</th>
-                                    <th style="width:3rem;">Rut Cliente</th>
-                                    <th style="width:7rem;">Modelo</th>
-                                    <th style="width:3rem;">Plazas</th>
-                                    <th style="width:2rem;">Alt</th>
-                                    <th style="width:2rem;">Tela</th>
-                                    <th style="width:5rem;">Color</th>
-                                    <th style="width:7rem;">Direccion</th>
-                                    <th style="width:2rem;">Nº</th>
-                                    <th style="width:5rem;">Comuna</th>
-                                    <th style="width:3rem;">Detalles</th>
-                                    <th style="width:3rem;">Costura</th>
-
-                                    <th style="width:7rem;">Estado Pedido</th>
-                                    <th style="width:1rem;">Cliente</th>
-                                    <th style="width:4rem;">Tapicero 1</th>
-                                    <th style="width:4rem;">Tapicero 2</th>
-                                    <th style="width:4rem;">Tapicero 3</th>
-                                </tr>
-                            </thead>
-
-                            <?php
-
-
-                            $consulta2 = $conexion->prepare("SELECT * FROM pedido p
-                INNER JOIN pedido_detalle d on p.num_orden = d.num_orden 
-                LEFT JOIN (SELECT idPedido,fecha ,idProceso, GROUP_CONCAT(idProceso) AS eTapas
-                FROM pedido_etapas
-                WHERE idProceso != 1
-                GROUP BY idPedido) etapas ON d.id = etapas.idPedido
-                INNER JOIN clientes c on p.rut_cliente = c.rut where estadopedido = 2 and ruta_asignada = :ruta");
-                            $consulta2->bindParam(":ruta", $ruta, PDO::PARAM_INT);
-                            $consulta2->execute();
-
-
-
-
-
-                            while ($dat = $consulta2->fetch(PDO::FETCH_ASSOC)) {
-
-                                $etapas = explode(',', $dat['eTapas']);
-                                $existeEtapa1 = in_array('3', $etapas);
-
-                            ?>
-
-
-                                <tr>
-
-
-                                    <td style="height:10px; padding: 1px; "><?php echo $dat['id'] ?></td>
-                                    <td style="height:10px; padding: 1px; "><?php echo $dat['rut_cliente'] ?></td>
-
-
-
-
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['modelo']; ?>
-                                        <?php if ($dat['anclaje'] == 'si') { ?>
-                                            <img width="15" src="img/anclaje.png">
-                                        <?php }
-                                        if ($dat['anclaje'] == 'patas') { ?>
-                                            <img width="15" src="img/patasmadera.jpg">
-                                        <?php } ?>
-                                        <br>
-                                        <span style="font-size: 10px; font-weight: bold; color:red;"><?php echo $dat['comentarios']; ?></span>
-                                    </td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['tamano'] . "  <b>" . $dat['tipo_boton'] . "</b>"; ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['alturabase'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['tipotela'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['color'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['direccion'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['numero'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['comuna'] ?></td>
-                                    <td style="height:10px; padding: 1px;"><?php echo $dat['detalles_fabricacion'] ?></td>
-                                    <?php if ($existeEtapa1) { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;">
-                                            <!-- Icono de ticket en azul y más grande -->
-                                            <i class="fa-solid fa-check fa-1x" style="color:green;"></i>
-                                        </td>
-                                    <?php } else { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;">
-                                            <!-- Icono de x en rojo y más grande -->
-                                            <i class="fas fa-times fa-1x" style="color: red;"></i>
-                                        </td>
-                                    <?php } ?>
-
-
-                                    <td style="height:10px; padding: 1px;"><?php if ($dat['estadopedido'] == "1") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-secondary btnEditarestado' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Aceptado</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "2" && $dat['tapicero_id'] == "" or $dat['tapicero_id'] == "0") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-warning btnEditarestado' id='parpadea_' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Por Fabricar</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "2" && $dat['tapicero_id'] > "0") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-info btnEditarestado' id='parpadea' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>En Fabricacion</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "0") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-warning btnEditarestado' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>No Aceptado</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "3") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-info btnEditarestado' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Pedido Listo</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "9") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-warning btnEditarestado' style='font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Reagendar</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "4") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-warning btnEditarestado' style=' background-color: #FF338A;font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Asignado a Ruta</button></div>";
-                                                                            } elseif ($dat['estadopedido'] == "5") {
-                                                                                echo "<div class='text-center' ><div class='btn-group'><button class='btn btn-warning btnEditarestado' style=' background-color: #ABFF71;font-size:0.8rem;max-height:1.5rem; line-height:12px;'>Entregado</button></div>";
-                                                                            }
-
-
-
-                                                                            ?>
-
-                                    </td>
-                                    <style type="text/css">
-                                        .btn-circle.btn-sm {
-                                            width: 40px;
-                                            height: 40px;
-                                            padding: 6px 0px;
-                                            border-radius: 20px;
-                                            font-size: 8px;
-                                            text-align: center;
-                                        }
-
-                                        .btn-circles.btn-sm {
-                                            width: 20px;
-                                            height: 20px;
-                                            padding: 3px 0px;
-                                            border-radius: 20px;
-                                            font-size: 8px;
-                                            text-align: center;
-                                        }
-                                    </style>
-
-
-
-                                    <td style="height:10px; padding: 1px; text-align: center;"><?php if ($dat['confirma'] == "1") { ?>
-                                            <button type="button" class="btn btn-info btn-circles btn-sm"></button>
-                                        <?php } else { ?>
-                                            <button type="button" class="btn btn-danger btn-circles btn-sm"></button>
-                                        <?php } ?>
-                                    </td>
-
-                                    <?php if ($dat['tapicero_id'] == '' or $dat['tapicero_id'] == '0') { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-warning btn-circle btn-sm btnjaime"></button></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-warning btn-circle btn-sm btnfelipe"></button></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-warning btn-circle btn-sm btntapicero3"></button></td>
-
-                                    <?php  }
-                                    if ($dat['tapicero_id']  == '1') { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-success btn-circle btn-sm btndesasignar"></button></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-
-                                    <?php  }
-                                    if ($dat['tapicero_id']  == '2') { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-success btn-circle btn-sm btndesasignar"></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-
-                                    <?php  }
-                                    if ($dat['tapicero_id']  == '3') { ?>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"></td>
-                                        <td style="height:10px; padding: 1px; text-align: center;"><button type="button" class="btn btn-success btn-circle btn-sm btndesasignar"></td>
-                                    <?php } ?>
-
-                                </tr>
-                        <?php
-
-                            }
-                        }
-                        ?>
-                        </tbody>
-                        </table>
-                    </div>
-
-
-            </div>
-        </div>
+<div class="container-fluid mt-3"> <h1 class="h3 mb-4 text-gray-800">Pedidos Asignados a Ruta y Pendientes - Respaldos Chile</h1> <div class="alert legend-alert"> <img width="15" src="img/patasmadera.jpg" alt="Icono de patas de madera"> Patas de madera -
+        <img width="15" src="img/anclaje.png" alt="Icono de madera interior para anclaje"> Madera interior para anclaje -
+        <b> B D </b> Boton Diamante
     </div>
 
-    <!--Modal para CRUD Editar estado de compra-->
-    <div class="modal fade" id="modalCRUD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="editarestado">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="id" class="col-form-label">Cod:</label>
-                            <input type="text" class="form-control" id="id" readonly>
-                        </div>
-                        <div class="form-group">
-                            <select name="estado" id="estado" class="form-control">
-                                <option value="" disabled selected>Selecciona Estado</option>
-                                <option value="1">Aceptar Compra</option>
-                                <option value="2">Enviar a Fabricación</option>
-                                <option value="3">Pedido Listo</option>
-                                <option value="9">Reagendar</option>
-                            </select>
-                        </div>
+    <div id="contenido1">
+        <?php
+        $objeto1 = new Conexion();
+        $conexion = $objeto1->Conectar();
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="btnGuardar" class="btn btn-dark">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        // Función para determinar la clase y texto del botón de estado - SINTAXIS PHP CORREGIDA
+         function getEstadoButtonHtml($estadoPedido, $tapiceroId) {
+             $estadoBtnClass = 'btn-secondary';
+             $estadoBtnText = "Estado {$estadoPedido}"; // Por defecto
+
+             // Usar $ para variable en PHP
+             $procesoNames = [
+                 1 => 'Aceptado', 2 => 'Env. Fabricación', 3 => 'Tela Cortada', 4 => 'Corte/Esqueleto',
+                 5 => 'Fabricando', 6 => 'Fabricado', 7 => 'Despacho Iniciado', 8 => 'Cargado Camion',
+                 9 => 'Reagendar', 10 => 'Dev. Error Fab', 11 => 'Dev. Disconf.', 12 => 'Dev. Falla Carga',
+                 13 => 'Dev. Otro', 14 => 'Dev. Garantia', 15 => 'Dev. Cte No Contesta', 16 => 'Cliente Confirma',
+                 17 => 'Cliente Solicita Fact.', 18 => 'Eliminado', 19 => 'Reagendar', 20 => 'Re-emitido'
+              ];
+
+
+             switch ($estadoPedido) { // Asegurar comparación es string si la BD envía string
+                 case '1':
+                     $estadoBtnClass = 'btn-estado-aceptado';
+                     $estadoBtnText = 'Aceptado';
+                     break;
+                 case '2':
+                     $estadoBtnClass = empty($tapiceroId) ? 'btn-estado-por-fabricar' : 'btn-estado-en-fabricacion';
+                     $estadoBtnText = empty($tapiceroId) ? 'Por Fabricar' : 'En Fabricacion';
+                     break;
+                 case '3':
+                     $estadoBtnClass = 'btn-estado-listo';
+                     $estadoBtnText = 'Pedido Listo';
+                     break;
+                 case '9':
+                     $estadoBtnClass = 'btn-estado-reagendar';
+                     $estadoBtnText = 'Reagendar';
+                     break;
+                 case '4':
+                     $estadoBtnClass = 'btn-estado-asignado-ruta';
+                     $estadoBtnText = 'Asignado a Ruta';
+                     break;
+                 case '5':
+                     $estadoBtnClass = 'btn-estado-entregado';
+                     $estadoBtnText = 'Fabricando Ahora';
+                     break;
+                 default:
+                     $estadoBtnClass = 'btn-secondary'; // U otro estilo por defecto
+                     $estadoBtnText = $procesoNames[$estadoPedido] ?? "Estado {$estadoPedido}"; // Usar coalescencia nula para fallback más limpio
+                     break;
+             }
+             return "<button class='btn {$estadoBtnClass} btn-sm btn-estado-pedido'>{$estadoBtnText}</button>";
+         }
+
+
+        // Función auxiliar para renderizar una fila de pedido
+        function renderPedidoRow($dat) {
+            $etapas = !empty($dat['eTapas']) ? explode(',', $dat['eTapas']) : [];
+            // Verificar si existe Etapa 3 (Tela Cortada) O Etapa 4 (Corte/Armado Esqueleto) O Etapa 5 (Fabricando) O Etapa 6 (Fabricado)
+            // ya que se relacionan con el proceso de fabricación/costura más allá de los pasos iniciales.
+            $isFabricationStarted = in_array('3', $etapas);
+
+
+            // Determinar clase del botón de confirmación
+            $confirmaClass = $dat['confirma'] == '1' ? 'btn-info' : 'btn-danger';
+
+             // Obtener HTML para el botón de estado
+            $estadoButtonHtml = getEstadoButtonHtml($dat['estadopedido'], $dat['tapicero_id']);
+
+            // Combinar partes de la dirección
+            $fullAddress = trim($dat['direccion'] . ($dat['numero'] ? ' #' . $dat['numero'] : '') . ($dat['comuna'] ? ', ' . $dat['comuna'] : ''));
+            if (empty($fullAddress)) $fullAddress = 'Dirección no especificada';
+
+
+            echo "<tr data-pedido-id='{$dat['id']}'>"; // Añadir atributo data para fácil selección de fila
+            echo "<td>{$dat['id']}</td>";
+            echo "<td>{$dat['num_orden']}</td>"; // Columna ORDEN
+            echo "<td>{$dat['rut_cliente']}</td>";
+            echo "<td>{$dat['modelo']}";
+            if ($dat['anclaje'] == 'si') echo " <img width='15' src='img/anclaje.png' alt='Icono de anclaje'>";
+            if ($dat['anclaje'] == 'patas') echo " <img width='15' src='img/patasmadera.jpg' alt='Icono de patas de madera'>";
+            echo "<br><span class='small text-danger fw-bold'>{$dat['comentarios']}</span></td>";
+            echo "<td>{$dat['tamano']} <b class='text-primary'>{$dat['tipo_boton']}</b></td>";
+            echo "<td>{$dat['alturabase']}</td>";
+            echo "<td>{$dat['tipotela']}</td>";
+            echo "<td>{$dat['color']}</td>";
+            echo "<td>{$fullAddress}</td>"; // Columna Dirección combinada
+            echo "<td>{$dat['detalles_fabricacion']}</td>";
+              // Verificación de Costura actualizada: Verificar cualquier etapa relacionada con fabricación
+            echo "<td class='text-center'>";
+            echo $isFabricationStarted
+                ? "<i class='fas fa-check text-success' title='Fabricación Iniciada/Completa'></i>" // Tooltip actualizado
+                : "<i class='fas fa-times text-danger' title='Fabricación Pendiente'></i>"; // Tooltip actualizado
+            echo "</td>";
+
+            // Estado pedido - Usar clases y texto determinados
+            echo "<td>{$estadoButtonHtml}</td>";
+
+            // Cliente
+            echo "<td>{$dat['cliente_nombre']}</td>";
+            // Botón de confirmación (usando clase determinada)
+            echo "<td class='text-center'><button class='btn {$confirmaClass} btn-confirmar btn-sm'></button></td>";
+
+            // Botones tapicero para asignar/desasignar, uno por columna
+            for ($t = 1; $t <= 3; $t++) {
+                if ($dat['tapicero_id'] == $t) {
+                    // Botón verde para desasignar al tapicero correspondiente
+                    echo "<td class='text-center'><button class='btn btn-success btn-circle btn-sm btn-desasignar' data-id='{$dat['id']}' data-tap='{$t}' title='Desasignar Tapicero {$t}'><i class='fas fa-user-check'></i></button></td>";
+                } else {
+                    // Botón amarillo para asignar a este tapicero
+                    echo "<td class='text-center'><button class='btn btn-warning btn-circle btn-sm btn-asignar-tapicero' data-id='{$dat['id']}' data-tap='{$t}' title='Asignar Tapicero {$t}'><i class='fas fa-user-plus'></i></button></td>";
+                }
+            }
+            echo "</tr>";
+        }
+
+        // Obtenemos rutas únicas con pedidos en estado 2, 4, 5
+         $consulta = "SELECT DISTINCT d.ruta_asignada
+                      FROM pedido_detalle d
+                      WHERE d.estadopedido IN (2, 4, 5) AND d.ruta_asignada IS NOT NULL AND d.ruta_asignada != '' ORDER BY d.ruta_asignada ASC";
+        $resultado = $conexion->prepare($consulta);
+        $resultado->execute();
+        $rutasConPedidos = $resultado->fetchAll(PDO::FETCH_ASSOC);
+
+        // Manejar pedidos sin ruta asignada en estado 2, 4, 5
+        $consultaSinRuta = $conexion->prepare(
+            "SELECT p.*, d.*, c.nombre AS cliente_nombre, etapas.eTapas
+             FROM pedido p
+             INNER JOIN pedido_detalle d ON p.num_orden = d.num_orden
+             LEFT JOIN (
+                 SELECT idPedido, GROUP_CONCAT(idProceso) AS eTapas
+                 FROM pedido_etapas
+                 WHERE idProceso != 1
+                 GROUP BY idPedido
+             ) etapas ON d.id = etapas.idPedido
+             INNER JOIN clientes c ON p.rut_cliente = c.rut
+             WHERE d.estadopedido IN (2, 4, 5) AND (d.ruta_asignada IS NULL OR d.ruta_asignada = '')"
+        );
+        $consultaSinRuta->execute();
+        $pedidosSinRuta = $consultaSinRuta->fetchAll(PDO::FETCH_ASSOC);
+
+        // Definición de encabezado de tabla (ajustado para dirección combinada y Num Orden acortado)
+        $tableHeaderHtml = "
+            <thead><tr>
+                <th>Id</th>
+                <th>Orden</th> <th>Rut Cliente</th>
+                <th>Modelo</th>
+                <th>Plazas</th>
+                <th>Alt</th>
+                <th>Tela</th>
+                <th>Color</th>
+                <th>Direccion</th> <th>Detalles</th>
+                <th>Costura</th>
+                <th>Estado Pedido</th>
+                <th>Cliente</th>
+                <th>Confirma</th>
+                <th>Tapicero 1</th>
+                <th>Tapicero 2</th>
+                <th>Tapicero 3</th>
+            </tr></thead>";
+
+
+        // Mostrar tabla de pedidos sin ruta si existen (usando estructura de tarjeta)
+        if (!empty($pedidosSinRuta)) {
+            echo "<div class='card card-modern card-no-route'>"; // Usar clases de tarjeta modernas
+            echo "<div class='card-header'><b>Pedidos sin asignar a ruta</b></div>"; // Usar card-header
+            echo "<div class='card-body p-0'>"; // Usar card-body sin padding
+
+            echo "<div class='table-responsive-modern'>
+                    <table class='table table-striped table-hover table-sm table-modern'>
+                    {$tableHeaderHtml}
+                    <tbody>";
+            foreach ($pedidosSinRuta as $dat) {
+                renderPedidoRow($dat);
+            }
+            echo "</tbody></table></div>";
+
+            echo "</div></div>"; // Cerrar card-body y card
+        }
+
+
+        // Iterar sobre las rutas con pedidos (usando estructura de tarjeta)
+        foreach ($rutasConPedidos as $row) {
+            $ruta = $row['ruta_asignada'];
+
+            // Obtenemos fecha de la ruta
+            $stmtF = $conexion->prepare("SELECT fecha FROM rutas WHERE id = :ruta");
+            $stmtF->bindParam(":ruta", $ruta, PDO::PARAM_INT);
+            $stmtF->execute();
+            $rows = $stmtF->fetch(PDO::FETCH_ASSOC);
+
+            if (!empty($rows['fecha'])) {
+                // Intentar crear objeto DateTime
+                $fechaObj = DateTime::createFromFormat('Y-m-d', $rows['fecha']);
+                 if ($fechaObj) { // Verificar si la creación fue exitosa
+                     // Definir nombres de días y meses en español
+                     $dias_semana = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+                     $meses = ['', 'enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+                     // Formatear la fecha en español
+                     $fecha = $dias_semana[$fechaObj->format('w')] . ', ' . $fechaObj->format('d') . ' de ' . $meses[$fechaObj->format('n')] . ' de ' . $fechaObj->format('Y');
+                 } else {
+                      // Manejar fecha inválida si createFromFormat falla
+                      $fecha = "Fecha Inválida";
+                 }
+            } else {
+                $fecha = "Fecha no disponible";
+            }
+
+            // Encabezado de la ruta (usando card-header)
+            echo "<div class='card card-modern card-route'>"; // Usar clases de tarjeta modernas estilo AI
+            echo "<div class='card-header'><b>Ruta {$ruta}.</b> {$fecha}</div>"; // Usar card-header
+            echo "<div class='card-body p-0'>"; // Usar card-body sin padding
+
+            // Consultar detalles por ruta y estados relevantes (2, 4, 5)
+            $consulta2 = $conexion->prepare(
+                "SELECT p.*, d.*, c.nombre AS cliente_nombre, etapas.eTapas
+                 FROM pedido p
+                 INNER JOIN pedido_detalle d ON p.num_orden = d.num_orden
+                 LEFT JOIN (
+                     SELECT idPedido, GROUP_CONCAT(idProceso) AS eTapas
+                     FROM pedido_etapas
+                     WHERE idProceso != 1
+                     GROUP BY idPedido
+                 ) etapas ON d.id = etapas.idPedido
+                 INNER JOIN clientes c ON p.rut_cliente = c.rut
+                 WHERE d.estadopedido IN (2, 4, 5) AND d.ruta_asignada = :ruta"
+            );
+            $consulta2->bindParam(":ruta", $ruta, PDO::PARAM_INT);
+            $consulta2->execute();
+
+            echo "<div class='table-responsive-modern'>
+                    <table class='table table-striped table-hover table-sm table-modern'>
+                    {$tableHeaderHtml} <tbody>";
+
+            while ($dat = $consulta2->fetch(PDO::FETCH_ASSOC)) {
+                renderPedidoRow($dat);
+            }
+
+            echo "</tbody></table></div>";
+
+            echo "</div></div>"; // Cerrar card-body y card
+        }
+
+        ?>
     </div>
-
-    <!--Modal para CRUD EDITAR PEDIDO-->
-    <div class="modal fade" id="modalEditarPedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog centered modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="editarpedido">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="id" class="col-form-label">Cod:</label>
-                            <input type="text" class="form-control" id="ide" name="ide" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="id" class="col-form-label">Rut:</label>
-                            <input type="text" class="form-control" id="rut" name="rut">
-                        </div>
-                        <div class="row gy-4">
-                            <div class="col-lg-4">
-                                <label for="modelo" class="col-form-label">Modelo:</label>
-                                <input type="text" class="form-control" id="modelo" name="modelo">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="plazas" class="col-form-label">Plazas:</label>
-                                <input type="text" class="form-control" id="plazas" name="plazas">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="tela" class="col-form-label">Tela:</label>
-                                <input type="text" class="form-control" id="tela" name="tela">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Color:</label>
-                                <input type="text" class="form-control" id="color" name="color">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Altura:</label>
-                                <input type="text" class="form-control" id="alturabase" name="alturabase">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Telefono:</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono">
-                            </div>
-                        </div>
-                        <div class="row gy-4">
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Direccion:</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Num:</label>
-                                <input type="text" class="form-control" id="numero" name="numero">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="color" class="col-form-label">Comuna:</label>
-                                <input type="text" class="form-control" id="comuna" name="comuna">
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="btnGuardar" class="btn btn-dark">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
 </div>
-<!--FIN del cont principal-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.all.min.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+    // URL base de tu backend Node.js en Docker
+    const API_BASE_URL = 'http://localhost:3000/api'; // <-- Apuntando a tu backend en 3000
+    // Obtener el token JWT del localStorage
+    const TOKEN = localStorage.getItem('token') || ''; // <-- Obteniendo el token
+
+    // Función auxiliar (versión JS de PHP getEstadoButtonHtml) - Mantener sincronizada con versión PHP
+     function generateEstadoButtonHtml(estadoPedido, tapiceroId) {
+         let estadoBtnClass = 'btn-secondary';
+         let estadoBtnText = `Estado ${estadoPedido}`; // Por defecto
+
+          const procesoNames = {
+             1 : 'Aceptado', 2 : 'Env. Fabricación', 3 : 'Tela Cortada', 4 : 'Corte/Esqueleto',
+             5 : 'Fabricando', 6 : 'Fabricado', 7 : 'Despacho Iniciado', 8 : 'Cargado Camion',
+             9 : 'Reagendar', 10 : 'Dev. Error Fab', 11 : 'Dev. Disconf.', 12 : 'Dev. Falla Carga',
+             13 : 'Dev. Otro', 14 : 'Dev. Garantia', 15 : 'Dev. Cte No Contesta', 16 : 'Cliente Confirma',
+             17 : 'Cliente Solicita Fact.', 18 : 'Eliminado', 19 : 'Reagendar', 20 : 'Re-emitido'
+          };
+
+
+         switch (String(estadoPedido)) { // Asegurar comparación es string si la BD envía string
+             case '1':
+                 estadoBtnClass = 'btn-estado-aceptado';
+                 estadoBtnText = 'Aceptado';
+                 break;
+             case '2':
+                 // Si tapiceroId tiene un valor (no es null, undefined, 0, '', false), está asignado
+                 estadoBtnClass = tapiceroId ? 'btn-estado-en-fabricacion' : 'btn-estado-por-fabricar';
+                 estadoBtnText = tapiceroId ? 'En Fabricacion' : 'Por Fabricar';
+                 break;
+             case '3':
+                 estadoBtnClass = 'btn-estado-listo';
+                 estadoBtnText = 'Pedido Listo';
+                 break;
+             case '9':
+                 estadoBtnClass = 'btn-estado-reagendar';
+                 estadoBtnText = 'Reagendar';
+                 break;
+             case '4':
+                 estadoBtnClass = 'btn-estado-asignado-ruta';
+                 estadoBtnText = 'Asignado a Ruta';
+                 break;
+             case '5':
+                 estadoBtnClass = 'btn-estado-entregado';
+                 estadoBtnText = 'Fabricando Ahora';
+                 break;
+             default:
+                 estadoBtnClass = 'btn-secondary';
+                 estadoBtnText = procesoNames[estadoPedido] || `Estado ${estadoPedido}`;
+                 break;
+         }
+         return `<button class='btn ${estadoBtnClass} btn-sm btn-estado-pedido'>${estadoBtnText}</button>`;
+     }
+
+
+    // Función para actualizar la fila visualmente basada en los datos proporcionados
+    function updatePedidoRow(pedidoId, newData) {
+        const $row = $(`#contenido1 table tbody tr[data-pedido-id='${pedidoId}']`);
+
+        if ($row.length === 0) {
+            console.warn(`Fila para pedido ID ${pedidoId} no encontrada para actualización.`);
+            return;
+        }
+         console.log(`[updatePedidoRow] Actualizando fila para pedido ID: ${pedidoId}`, newData);
+
+        const cellIndexMap = {
+             id: 0, orden: 1, rut_cliente: 2, modelo: 3, plazas: 4, alt: 5, tela: 6,
+             color: 7, direccion: 8, detalles: 9, costura: 10, estado_pedido: 11,
+             cliente: 12, confirma: 13, tapicero_1: 14, tapicero_2: 15, tapicero_3: 16
+        };
+
+        // Determinar el estado y tapicero a usar para las actualizaciones
+        let estadoFinal = newData.estadopedido;
+        let tapiceroFinal = newData.tapicero_id; // Puede ser undefined si no viene
+
+        // *** Lógica Mejorada para determinar estado y tapicero final ***
+        if (newData.action === 'assigned') {
+             console.log(" - Detectada acción 'assigned'.");
+             // tapiceroFinal ya debería tener el valor de newData.tapicero_id
+             if (estadoFinal === undefined) {
+                 estadoFinal = '2'; // Asumir estado 'En Fabricacion' si no viene
+                 console.log(" - Estado no venía en 'assigned', asumiendo estado '2'.");
+             }
+        } else if (newData.action === 'unassigned') {
+            console.log(" - Detectada acción 'unassigned'.");
+            tapiceroFinal = null; // Forzar tapicero a null
+            if (estadoFinal === undefined) {
+                estadoFinal = '2'; // Asumir estado 'Por Fabricar' si no viene
+                console.log(" - Estado no venía en 'unassigned', asumiendo estado '2'.");
+            }
+        }
+
+        // 1. Actualizar Botón de Estado (si tenemos un estado final determinado)
+        if (estadoFinal !== undefined) {
+            // Usar tapiceroFinal (puede ser el ID asignado o null si es unassigned)
+            const estadoButtonHtml = generateEstadoButtonHtml(estadoFinal, tapiceroFinal);
+            const $estadoCell = $row.find('td').eq(cellIndexMap.estado_pedido);
+             console.log(` - Intentando actualizar celda de estado (índice ${cellIndexMap.estado_pedido}) con HTML: ${estadoButtonHtml}`);
+             $estadoCell.html(estadoButtonHtml);
+             console.log(` - Celda de estado actualizada (Estado: ${estadoFinal}, Tapicero: ${tapiceroFinal})`);
+        } else {
+             console.log(" - No se determinó un 'estadoFinal', no se actualiza botón de estado.");
+        }
+
+
+        // 2. Actualizar Botones de Tapicero (si tapicero_id está definido o la acción es unassigned)
+        //    Usaremos 'tapiceroFinal' que ya tiene el valor correcto (ID o null)
+        if (newData.tapicero_id !== undefined || newData.action === 'unassigned') {
+             console.log(` - Actualizando botones de tapicero. Tapicero final considerado: ${tapiceroFinal}`);
+
+            for(let i = 1; i <= 3; i++) {
+                const cellIndex = cellIndexMap.tapicero_1 + i - 1;
+                const $tapBtnCell = $row.find('td').eq(cellIndex);
+                let newButtonHtml = '';
+
+                 // Compara i con tapiceroFinal (que será null si es unassigned)
+                 if (tapiceroFinal != null && String(tapiceroFinal) === String(i)) {
+                     // Botón verde "Desasignar"
+                     newButtonHtml = `<button class='btn btn-success btn-circle btn-sm btn-desasignar' data-id='${pedidoId}' data-tap='${i}' title='Desasignar Tapicero ${i}'><i class='fas fa-user-check'></i></button>`;
+                 } else {
+                     // Botón amarillo "Asignar" (también si tapiceroFinal es null)
+                     newButtonHtml = `<button class='btn btn-warning btn-circle btn-sm btn-asignar-tapicero' data-id='${pedidoId}' data-tap='${i}' title='Asignar Tapicero ${i}'><i class='fas fa-user-plus'></i></button>`;
+                 }
+
+                 console.log(`   - Tapicero ${i}: Intentando actualizar celda (índice ${cellIndex}) con HTML: ${newButtonHtml}`);
+                 $tapBtnCell.html(newButtonHtml); // Actualiza HTML de la celda
+            }
+            console.log(` - Botones de tapicero procesados.`);
+        } else {
+             // Este log ahora solo aparecerá si NO se recibe tapicero_id Y la acción NO es unassigned
+             console.log(" - No se actualizan botones de tapicero (tapicero_id no definido y acción no es 'unassigned').");
+        }
+
+        // 3. Actualizar otros campos (si vienen en newData y es necesario)
+        // ... (ejemplos comentados) ...
+
+
+        console.log(`[updatePedidoRow] Fila para pedido ID ${pedidoId} procesada.`); // Mensaje final de la función
+    }
+
+
+    // Conectar a Socket.IO y escuchar actualizaciones
+    try {
+        const socket = io('http://localhost:3000');
+
+        socket.on('pedidoUpdated', (data) => {
+            console.log('Socket.IO: Actualización de pedido recibida', data);
+            // Verificar si existen datos Y si existe la propiedad 'pedidoId'
+            if (data && data.pedidoId) {
+                // Llamar a updatePedidoRow con el ID y los datos recibidos
+                updatePedidoRow(data.pedidoId, data);
+
+                // Lógica de resaltado visual (brillo azul)
+                 const $row = $(`#contenido1 table tbody tr[data-pedido-id='${data.pedidoId}']`);
+                 if ($row.length > 0) {
+                    $row.removeClass('row-highlight-assign row-highlight-update');
+                    $row.addClass('row-highlight-update');
+                    setTimeout(() => {
+                        $row.removeClass('row-highlight-update');
+                    }, 1500);
+                 }
+            } else {
+                console.warn('Socket.IO: Actualización recibida sin datos o sin pedidoId válido:', data);
+            }
+        });
+
+         socket.on('connect', () => { console.log('Socket.IO: Conectado'); });
+         socket.on('disconnect', () => { console.log('Socket.IO: Desconectado'); });
+         socket.on('connect_error', (err) => { console.error('Error de conexión Socket.IO:', err); });
+
+    } catch (e) {
+        console.error('Error conectando a Socket.IO:', e);
+    }
+
+
+    $(function(){ // Equivalente a $(document).ready()
+        // Asignar tapicero a pedido con confirmación
+        $('#contenido1').on('click', '.btn-asignar-tapicero', function() {
+            const $btn = $(this);
+            const pedidoId = $btn.data('id');
+            const tapiceroId = $btn.data('tap');
+            const $row = $btn.closest('tr');
+
+            Swal.fire({
+                title: `Asignar pedido ${pedidoId} al tapicero ${tapiceroId}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, asignar',
+                cancelButtonText: 'Cancelar',
+                 customClass: { confirmButton: 'btn btn-success mx-1', cancelButton: 'btn btn-danger mx-1' },
+                 buttonsStyling: false,
+                 reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `${API_BASE_URL}/tapiceros/${tapiceroId}/pedidos/${pedidoId}`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        headers: { 'Authorization': `Bearer ${TOKEN}` }
+                    }).done(function(res) {
+                        if (res.status === 'success') {
+                            Swal.fire('¡Asignado!', 'El pedido fue asignado correctamente.', 'success');
+                             // Actualización local INMEDIATA (puede ser sobrescrita por evento socket si llega)
+                             // Es importante que esta data coincida con lo que enviará el socket
+                             updatePedidoRow(pedidoId, {
+                                 action: 'assigned', // Añadir acción para que updateRow la detecte
+                                 estadopedido: '2', // Asumir estado 2 al asignar
+                                 tapicero_id: tapiceroId
+                             });
+
+                             // Animación de resaltado
+                             $row.removeClass('row-highlight-assign row-highlight-update');
+                             $row.addClass('row-highlight-assign');
+                             setTimeout(() => { $row.removeClass('row-highlight-assign'); }, 2000);
+
+                        } else {
+                            Swal.fire('Error', res.error || 'No se pudo asignar tapicero', 'error');
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error AJAX:", textStatus, errorThrown, jqXHR.responseText);
+                        Swal.fire('Error', 'Error de conexión con la API o error del servidor', 'error');
+                    });
+                }
+            });
+        });
+
+        // Desasignar tapicero de pedido con confirmación
+        $('#contenido1').on('click', '.btn-desasignar', function() {
+            const $btn = $(this);
+            const pedidoId = $btn.data('id');
+            const $row = $btn.closest('tr');
+
+            Swal.fire({
+                title: `Desasignar tapicero del pedido ${pedidoId}?`,
+                text: "Esto cambiará el estado a 'Por Fabricar'.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, desasignar',
+                cancelButtonText: 'Cancelar',
+                 customClass: { confirmButton: 'btn btn-warning mx-1', cancelButton: 'btn btn-secondary mx-1' },
+                 buttonsStyling: false,
+                 reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `${API_BASE_URL}/tapiceros/unassigned/pedidos/${pedidoId}`,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        headers: { 'Authorization': `Bearer ${TOKEN}` }
+                    }).done(function(res) {
+                        if (res.status === 'success') {
+                            Swal.fire('¡Desasignado!', 'El pedido fue desasignado.', 'success');
+                             // Actualización local INMEDIATA
+                             updatePedidoRow(pedidoId, {
+                                 // Pasar explícitamente la acción para que el updateRow la maneje
+                                 action: 'unassigned',
+                                 estadopedido: '2', // Asumir estado 2 al desasignar
+                                 tapicero_id: null // Tapicero es null (aunque no se use directamente si action es unassigned)
+                             });
+                             // El backend debería enviar evento socket.io confirmando (idealmente con tapicero_id: null)
+                        } else {
+                            Swal.fire('Error', res.error || 'No se pudo desasignar tapicero', 'error');
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                         console.error("Error AJAX:", textStatus, errorThrown, jqXHR.responseText);
+                         Swal.fire('Error', 'Error de conexión con la API o error del servidor', 'error');
+                    });
+                }
+            });
+        });
+
+    }); // Fin document ready
+</script>
+
 <?php require_once "vistas/parte_inferior.php" ?>
+</body>
+</html>

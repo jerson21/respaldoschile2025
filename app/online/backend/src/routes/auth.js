@@ -5,6 +5,9 @@ const { authenticateToken } = require('../middlewares/auth');
 
 /**
  * @openapi
+ * tags:
+ *   - name: Auth
+ *     description: Autenticación de usuarios
  * /api/auth/login:
  *   post:
  *     summary: Autentica un usuario y retorna un token JWT.
@@ -42,16 +45,47 @@ const { authenticateToken } = require('../middlewares/auth');
  *       '500':
  *         description: Error en el servidor.
  */
-/**
- * POST /api/auth/login
- */
 router.post('/login', authController.login);
 /**
- * POST /api/auth/logout
+ * @openapi
+ * /api/auth/logout:
+ *   post:
+ *     summary: Cierra la sesión y elimina el token JWT en el cliente.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logout exitoso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
  */
 router.post('/logout', authController.logout);
 /**
- * GET /api/auth/me
+ * @openapi
+ * /api/auth/me:
+ *   get:
+ *     summary: Obtiene los datos del usuario autenticado.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Información del usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 data:
+ *                   type: object
  */
 router.get('/me', authenticateToken, authController.me);
 

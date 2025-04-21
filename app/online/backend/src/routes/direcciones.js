@@ -1,4 +1,10 @@
 const express = require('express');
+/**
+ * @openapi
+ * tags:
+ *   - name: Direcciones
+ *     description: Gestión de direcciones de clientes
+ */
 const router = express.Router();
 const ctrl = require('../controllers/direccionesController');
 const { authenticateToken } = require('../middlewares/auth');
@@ -8,6 +14,7 @@ const { authenticateToken } = require('../middlewares/auth');
  * /api/direcciones:
  *   get:
  *     summary: Obtener direcciones de clientes.
+ *     tags: [Direcciones]
  *     security:
  *       - bearerAuth: []
  *     parameters:

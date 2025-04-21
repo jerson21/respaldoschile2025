@@ -1,4 +1,10 @@
 const express = require('express');
+/**
+ * @openapi
+ * tags:
+ *   - name: Test
+ *     description: Endpoint de prueba de salud
+ */
 const router = express.Router();
 const testController = require('../controllers/testController');
 
@@ -6,6 +12,7 @@ const testController = require('../controllers/testController');
  * @openapi
  * /api/test:
  *   get:
+ *     tags: [Test]
  *     summary: Verifica que el servidor y la base de datos están operativos.
  *     description: Retorna un mensaje y el resultado de la prueba de base de datos.
  *     responses:

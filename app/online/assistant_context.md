@@ -1,24 +1,18 @@
-- Recursos implementados:
-  - Autenticación: login, logout, me (+ middleware JWT).
-  - Clientes: modelo, controlador y rutas CRUD (`/api/clientes`).
-  - Direcciones: modelo, controlador y rutas CRUD (`/api/direcciones`).
-  - Detalles de pedido: sub-recurso modelo, controlador y rutas CRUD (`/api/pedidos/{pedidoId}/detalles`).
-    - GET `/api/direcciones?rut=<rut>` o GET `/api/direcciones` para listar.
-    - GET `/api/direcciones/:id`, POST, PUT, DELETE con JWT.
+ - Recursos implementados:
+   - Autenticación: login, logout, me (+ middleware JWT).
+   - Clientes: modelo, controlador y rutas CRUD (`/api/clientes`).
+   - Direcciones: modelo, controlador y rutas CRUD (`/api/direcciones`).
+   - Detalles de pedido: sub-recurso modelo, controlador y rutas CRUD (`/api/pedidos/{pedidoId}/detalles`).
+     - GET `/api/pedidos/{pedidoId}/detalles`, GET `/api/pedidos/{pedidoId}/detalles/:id`, POST, PUT, DELETE con JWT y validación.
+   - Rutas: modelo, controlador y rutas CRUD (`/api/rutas`), incluido sub-recurso para asignar y desasignar pedidos (`/api/rutas/:id/pedidos`).
+   - Pagos: modelo, controlador y rutas CRUD (`/api/pagos`), con validación de entrada (express-validator).
 
 - Próximos recursos:
   - Pedidos: listado, detalle, creación, actualización, eliminación.
-  - Detalles de pedido: sub-recurso `/api/pedidos/:num_orden/detalles`.
-  - Rutas: CRUD y asignación de pedidos.
-  - Pagos: CRUD de pagos.
-
-- Próximos recursos:
-  - Direcciones: CRUD similar a Clientes.
-  - Pedidos: listado, detalle, creación, actualización, eliminación.
-  - Detalles de pedido: sub-recurso `/api/pedidos/:num_orden/detalles`.
-  - Rutas: CRUD y asignación de pedidos.
-  - Pagos: CRUD de pagos.
-y# Contexto de la aplicación
+  - Adaptación del frontend legacy para consumir `/api/rutas` y `/api/pagos`.
+  - Completar documentación OpenAPI (Swagger) de todos los nuevos endpoints.
+  - QA y pruebas automatizadas (unitarias e integración).
+## Contexto de la aplicación
 
 ## Estructura actual
 - Raíz del proyecto:
@@ -77,3 +71,38 @@ Migrar toda la lógica del dashboard (PHP) a un backend organizado en Node.js, e
 - Documentación y QA:
   - Completar documentación OpenAPI (Swagger) con todos los nuevos endpoints.
   - Configurar pruebas automáticas (unitarias o de integración) para los endpoints críticos.
+
+## Cómo probar en Postman
+
+- Paso 0: Preparar entorno
+  - Levanta el servidor Node.js (`npm start` o `docker-compose up`) y asegúrate de que esté escuchando en `http://localhost:3000` (o el puerto configurado).
+  - En Postman crea un _Environment_ con variable `base_url = http://localhost:3000/api`.
+
+- Paso 1: Autenticación y obtención de token
+  1. Crea petición `POST {{base_url}}/auth/login`.
+     - Headers: `Content-Type: application/json`
+     - Body (raw, JSON):
+       {
+         "usuario": "tu_usuario",
+         "password": "tu_contraseña"
+       }
+  2. Envía la petición y copia el campo `token` de la respuesta.
+  3. Define variable de entorno `auth_token` con ese valor.
+
+- Paso 2: Probar endpoints protegidos
+  - En pestaña Authorization elige tipo Bearer Token e ingresa `{{auth_token}}`.
+  - O bien, añade header:
+    - `Authorization: Bearer {{auth_token}}`
+
+- Paso 3: Ejemplos de peticiones
+  - `GET {{base_url}}/auth/me` — info del usuario.
+  - **Clientes**: `GET {{base_url}}/clientes` / `POST {{base_url}}/clientes` (JSON según schema).
+  - **Pedidos**: `GET {{base_url}}/pedidos` / `POST {{base_url}}/pedidos` (JSON `PedidoInput`).
+  - **Detalles de pedido**: `GET {{base_url}}/pedidos/{{id}}/detalles`.
+
+- Paso 4: Logout (opcional)
+  - `POST {{base_url}}/auth/logout` — devuelve `status` y `message`.
+
+- Consejo:
+  - Importa el spec de Swagger en Postman (`http://localhost:3000/api-docs`).
+  - Renueva `auth_token` al expirar (p.ej. 1 hora).
