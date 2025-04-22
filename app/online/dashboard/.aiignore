@@ -1,0 +1,19 @@
+
+        # librerías de terceros
+        Libraries/**
+        firmas/fpdf/**
+        reportes/fpdf/**
+        Libraries/**
+        # assets estáticos
+        public/vendor/**
+        node_modules/**
+        assets/**
+        main3.js
+        js/demo/**
+        vistas\parte_superior_2.php
+        rutinas\webhooks.php
+        rutinas\phpinfo.php
+        bootstrap/*
+        jquery/*
+        backend/node_modules/*
+        backend/package-lock.json

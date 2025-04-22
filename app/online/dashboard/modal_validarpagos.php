@@ -747,28 +747,6 @@
 
 
 
-                        <!--    <div class="row gy-2">
-                            <div class="col-lg-8">
-                                <label for="comentarios" class="col-form-label">Observaciones internas:</label>
-                                <input type="text" class="form-control form-control-sm" id="comentarios" name="comentarios">
-                            </div>
-
-                        </div>
-
-                        <div style="margin-bottom: 5px;margin-top: 10px;">
-                            <button type="button" class="btn btn-primary" id="toggleDetailsBtn" onclick="toggleDetails()">Mostrar detalles</button>
-                            <script type="text/javascript">
-                                var num_orden = $("#num_orden").val();
-                            </script>
-                            <button type="button" id="botonPDF" class="btn btn-success botonPDF">Generar PDF</button>
-                            <br><br>
-                            <small class="text-muted">*MENSAJE INFORMATIVO:.</small>
-                        </div>
-
-                        <div id="detailsContainer" style="display: none; font-size: 14px; ">
-                                --> <!-- Aquí se agregarán los detalles de forma dinámica 
-                        </div>
-                                -->
 
                     </div>
 

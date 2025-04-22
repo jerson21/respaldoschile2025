@@ -1,0 +1,9 @@
+
+        # librerías de terceros
+        Libraries/phpmailer/**
+        firmas/fpdf/**
+        reportes/fpdf/**
+        # assets estáticos
+        public/vendor/**
+        node_modules/**
+        assets/**
